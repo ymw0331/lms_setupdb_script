@@ -5207,7 +5207,6 @@ ALTER TABLE o_userrating
 ADD CONSTRAINT FKF26C8375236F20X 
 FOREIGN KEY (creator_id) REFERENCES o_bs_identity (id);
 
--- Creating indexes
 CREATE INDEX rtn_id_idx ON o_userrating (resid);
 CREATE INDEX rtn_name_idx ON o_userrating (resname);
 CREATE INDEX rtn_rating_idx ON o_userrating (rating);
@@ -5217,8 +5216,6 @@ ALTER TABLE o_userrating
 ADD ressubpath_prefix AS LEFT(ressubpath, 255);
 -- Create an index on the computed column
 CREATE INDEX rtn_subpath_idx ON o_userrating (ressubpath_prefix);
-
-
 
 
 -- Comment Table
@@ -5702,3 +5699,741 @@ CREATE INDEX forum_pseudonym_idx ON o_forum_pseudonym (p_pseudonym);
 CREATE INDEX projectbroker_project_broker_idx ON o_projectbroker_project (projectbroker_fk);
 CREATE INDEX projectbroker_project_id_idx ON o_projectbroker_project (project_id);
 CREATE INDEX o_projectbroker_customfields_idx ON o_projectbroker_customfields (fk_project_id);
+
+
+
+-- info messages
+ALTER TABLE o_info_message ADD CONSTRAINT FKF85553465A4FA5DC FOREIGN KEY (fk_author_id) REFERENCES o_bs_identity (id);
+ALTER TABLE o_info_message ADD CONSTRAINT FKF85553465A4FA5EF FOREIGN KEY (fk_modifier_id) REFERENCES o_bs_identity (id);
+
+CREATE INDEX imsg_resid_idx ON o_info_message (resid);
+
+ALTER TABLE o_info_message_to_group ADD CONSTRAINT o_info_message_to_group_msg_idx FOREIGN KEY (fk_info_message_id) REFERENCES o_info_message (info_id);
+ALTER TABLE o_info_message_to_group ADD CONSTRAINT o_info_message_to_group_group_idx FOREIGN KEY (fk_group_id) REFERENCES o_gp_business (group_id);
+
+ALTER TABLE o_info_message_to_cur_el ADD CONSTRAINT o_info_message_to_cur_el_msg_idx FOREIGN KEY (fk_info_message_id) REFERENCES o_info_message (info_id);
+ALTER TABLE o_info_message_to_cur_el ADD CONSTRAINT o_info_message_to_cur_el_curel_idx FOREIGN KEY (fk_cur_element_id) REFERENCES o_cur_curriculum_element (id);
+
+-- db course
+ALTER TABLE o_co_db_entry ADD CONSTRAINT FK_DB_ENTRY_TO_IDENT FOREIGN KEY (idprofile) REFERENCES o_bs_identity (id);
+
+CREATE INDEX o_co_db_course_idx ON o_co_db_entry (courseid);
+CREATE INDEX o_co_db_cat_idx ON o_co_db_entry (category);
+CREATE INDEX o_co_db_name_idx ON o_co_db_entry (name);
+
+-- open meeting
+ALTER TABLE o_om_room_reference ADD CONSTRAINT idx_omroom_to_bgroup FOREIGN KEY (businessgroup) REFERENCES o_gp_business (group_id);
+CREATE INDEX idx_omroom_residname ON o_om_room_reference (resourcetypename, resourcetypeid);
+
+-- Adobe Connect
+ALTER TABLE o_aconnect_meeting ADD CONSTRAINT aconnect_meet_entry_idx FOREIGN KEY (fk_entry_id) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_aconnect_meeting ADD CONSTRAINT aconnect_meet_grp_idx FOREIGN KEY (fk_group_id) REFERENCES o_gp_business (group_id);
+
+ALTER TABLE o_aconnect_user ADD CONSTRAINT aconn_ident_idx FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
+
+-- Bigbluebutton
+ALTER TABLE o_bbb_meeting ADD CONSTRAINT bbb_meet_entry_idx FOREIGN KEY (fk_entry_id) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_bbb_meeting ADD CONSTRAINT bbb_meet_grp_idx FOREIGN KEY (fk_group_id) REFERENCES o_gp_business (group_id);
+ALTER TABLE o_bbb_meeting ADD CONSTRAINT bbb_meet_template_idx FOREIGN KEY (fk_template_id) REFERENCES o_bbb_template (id);
+ALTER TABLE o_bbb_meeting ADD CONSTRAINT bbb_meet_creator_idx FOREIGN KEY (fk_creator_id) REFERENCES o_bs_identity (id);
+ALTER TABLE o_bbb_meeting ADD CONSTRAINT bbb_meet_serv_idx FOREIGN KEY (fk_server_id) REFERENCES o_bbb_server (id);
+ALTER TABLE o_bbb_meeting ADD CONSTRAINT bbb_dir_idx UNIQUE (b_directory);
+
+ALTER TABLE o_bbb_attendee ADD CONSTRAINT bbb_attend_ident_idx FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
+ALTER TABLE o_bbb_attendee ADD CONSTRAINT bbb_attend_meet_idx FOREIGN KEY (fk_meeting_id) REFERENCES o_bbb_meeting (id);
+
+ALTER TABLE o_bbb_recording ADD CONSTRAINT bbb_record_meet_idx FOREIGN KEY (fk_meeting_id) REFERENCES o_bbb_meeting (id);
+
+-- Teams
+ALTER TABLE o_teams_meeting ADD CONSTRAINT teams_meet_entry_idx FOREIGN KEY (fk_entry_id) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_teams_meeting ADD CONSTRAINT teams_meet_grp_idx FOREIGN KEY (fk_group_id) REFERENCES o_gp_business (group_id);
+ALTER TABLE o_teams_meeting ADD CONSTRAINT teams_meet_creator_idx FOREIGN KEY (fk_creator_id) REFERENCES o_bs_identity (id);
+
+ALTER TABLE o_teams_user ADD CONSTRAINT teams_user_ident_idx FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
+
+ALTER TABLE o_teams_attendee ADD CONSTRAINT teams_att_ident_idx FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
+ALTER TABLE o_teams_attendee ADD CONSTRAINT teams_att_user_idx FOREIGN KEY (fk_teams_user_id) REFERENCES o_teams_user (id);
+ALTER TABLE o_teams_attendee ADD CONSTRAINT teams_att_meet_idx FOREIGN KEY (fk_meeting_id) REFERENCES o_teams_meeting (id);
+
+-- tag
+CREATE UNIQUE INDEX idx_tag_name_idx ON o_tag_tag (t_display_name);
+
+-- ToDo
+ALTER TABLE o_todo_task ADD CONSTRAINT todo_task_coll_idx FOREIGN KEY (fk_collection) REFERENCES o_todo_task (id);
+CREATE INDEX idx_todo_origin_id_idx ON o_todo_task (t_origin_id);
+CREATE INDEX idx_todo_tag_todo_idx ON o_todo_task_tag (fk_todo_task);
+CREATE INDEX idx_todo_tag_tag_idx ON o_todo_task_tag (fk_tag);
+
+-- mail
+ALTER TABLE o_mail ADD CONSTRAINT FKF86663165A4FA5DC FOREIGN KEY (fk_from_id) REFERENCES o_mail_recipient (recipient_id);
+CREATE INDEX idx_mail_meta_id_idx ON o_mail (meta_mail_id);
+
+ALTER TABLE o_mail_recipient ADD CONSTRAINT FKF86663165A4FA5DG FOREIGN KEY (fk_recipient_id) REFERENCES o_bs_identity (id);
+
+ALTER TABLE o_mail_to_recipient ADD CONSTRAINT FKF86663165A4FA5DE FOREIGN KEY (fk_mail_id) REFERENCES o_mail (mail_id);
+ALTER TABLE o_mail_to_recipient ADD CONSTRAINT FKF86663165A4FA5DD FOREIGN KEY (fk_recipient_id) REFERENCES o_mail_recipient (recipient_id);
+
+ALTER TABLE o_mail_attachment ADD CONSTRAINT FKF86663165A4FA5DF FOREIGN KEY (fk_att_mail_id) REFERENCES o_mail (mail_id);
+CREATE INDEX idx_mail_att_checksum_idx ON o_mail_attachment (datas_checksum);
+
+-- Creating a computed column for datas_path with a maximum length of 100 characters
+ALTER TABLE o_mail_attachment ADD datas_path_computed AS LEFT(datas_path, 100) PERSISTED;
+CREATE INDEX idx_mail_path_idx ON o_mail_attachment (datas_path_computed);
+
+CREATE INDEX idx_mail_att_siblings_idx ON o_mail_attachment (datas_checksum, mimetype, datas_size, datas_name);
+
+-- instant messaging
+ALTER TABLE o_im_message ADD CONSTRAINT idx_im_msg_to_fromid FOREIGN KEY (fk_from_identity_id) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_im_msg_res_idx ON o_im_message (msg_resid, msg_resname);
+CREATE INDEX idx_im_msg_channel_idx ON o_im_message (msg_resid, msg_resname, msg_ressubpath, msg_channel);
+
+ALTER TABLE o_im_message ADD CONSTRAINT im_msg_bbb_idx FOREIGN KEY (fk_meeting_id) REFERENCES o_bbb_meeting (id);
+ALTER TABLE o_im_message ADD CONSTRAINT im_msg_teams_idx FOREIGN KEY (fk_teams_id) REFERENCES o_teams_meeting (id);
+
+ALTER TABLE o_im_notification ADD CONSTRAINT idx_im_not_to_toid FOREIGN KEY (fk_to_identity_id) REFERENCES o_bs_identity (id);
+ALTER TABLE o_im_notification ADD CONSTRAINT idx_im_not_to_fromid FOREIGN KEY (fk_from_identity_id) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_im_chat_res_idx ON o_im_notification (chat_resid, chat_resname);
+CREATE INDEX idx_im_chat_typed_idx ON o_im_notification (fk_to_identity_id, chat_type);
+
+ALTER TABLE o_im_roster_entry ADD CONSTRAINT idx_im_rost_to_id FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_im_rost_res_idx ON o_im_roster_entry (r_resid, r_resname);
+CREATE INDEX idx_im_rost_sub_idx ON o_im_roster_entry (r_resid, r_resname, r_ressubpath);
+
+ALTER TABLE o_im_preferences ADD CONSTRAINT idx_im_prfs_to_id FOREIGN KEY (fk_from_identity_id) REFERENCES o_bs_identity (id);
+
+-- efficiency statements
+ALTER TABLE o_as_eff_statement ADD CONSTRAINT eff_statement_id_cstr FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+CREATE INDEX eff_statement_repo_key_idx ON o_as_eff_statement (course_repo_key);
+CREATE INDEX idx_eff_stat_course_ident_idx ON o_as_eff_statement (fk_identity, course_repo_key);
+
+-- course infos
+ALTER TABLE o_as_user_course_infos ADD CONSTRAINT user_course_infos_id_cstr FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+CREATE INDEX user_course_infos_res_cstr ON o_as_user_course_infos (fk_resource_id);
+ALTER TABLE o_as_user_course_infos ADD CONSTRAINT user_course_infos_res_cstr FOREIGN KEY (fk_resource_id) REFERENCES o_olatresource (resource_id);
+ALTER TABLE o_as_user_course_infos ADD CONSTRAINT user_course_infos_unique UNIQUE (fk_identity, fk_resource_id);
+
+ALTER TABLE o_as_entry ADD CONSTRAINT as_entry_to_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+ALTER TABLE o_as_entry ADD CONSTRAINT as_entry_to_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_as_entry ADD CONSTRAINT as_entry_to_refentry_idx FOREIGN KEY (fk_reference_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_as_entry ADD CONSTRAINT as_entry_to_coach_idx FOREIGN KEY (fk_coach) REFERENCES o_bs_identity (id);
+
+CREATE INDEX idx_as_entry_to_id_idx ON o_as_entry (a_assessment_id);
+CREATE INDEX idx_as_entry_start_idx ON o_as_entry (a_date_start);
+CREATE INDEX idx_as_entry_subident_idx ON o_as_entry (a_subident, fk_entry, fk_identity);
+CREATE INDEX idx_as_entry_re_status_idx ON o_as_entry (fk_entry, a_status);
+
+ALTER TABLE o_as_score_accounting_trigger ADD CONSTRAINT satrigger_to_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+CREATE INDEX idx_satrigger_bs_group_idx ON o_as_score_accounting_trigger (e_business_group_key);
+CREATE INDEX idx_satrigger_org_idx ON o_as_score_accounting_trigger (e_organisation_key);
+CREATE INDEX idx_satrigger_curele_idx ON o_as_score_accounting_trigger (e_curriculum_element_key);
+CREATE INDEX idx_satrigger_userprop_idx ON o_as_score_accounting_trigger (e_user_property_value, e_user_property_name);
+
+-- Assessment message
+ALTER TABLE o_as_message ADD CONSTRAINT as_msg_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+
+ALTER TABLE o_as_message_log ADD CONSTRAINT as_msg_log_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+ALTER TABLE o_as_message_log ADD CONSTRAINT as_msg_log_msg_idx FOREIGN KEY (fk_message) REFERENCES o_as_message (id);
+
+-- disadvantage compensation
+ALTER TABLE o_as_compensation ADD CONSTRAINT compensation_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+ALTER TABLE o_as_compensation ADD CONSTRAINT compensation_crea_idx FOREIGN KEY (fk_creator) REFERENCES o_bs_identity (id);
+ALTER TABLE o_as_compensation ADD CONSTRAINT compensation_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+
+CREATE INDEX comp_log_entry_idx ON o_as_compensation_log (fk_entry_id);
+CREATE INDEX comp_log_ident_idx ON o_as_compensation_log (fk_identity_id);
+
+-- Grade
+CREATE UNIQUE INDEX idx_grsys_ident ON o_gr_grade_system (g_identifier);
+ALTER TABLE o_gr_grade_scale ADD CONSTRAINT grscale_to_entry_idx FOREIGN KEY (fk_grade_system) REFERENCES o_gr_grade_system (id);
+ALTER TABLE o_gr_performance_class ADD CONSTRAINT perf_to_grsys_idx FOREIGN KEY (fk_grade_system) REFERENCES o_gr_grade_system (id);
+ALTER TABLE o_gr_grade_scale ADD CONSTRAINT grscale_to_grsys_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_gr_breakpoint ADD CONSTRAINT grbp_to_grsys_idx FOREIGN KEY (fk_grade_scale) REFERENCES o_gr_grade_scale (id);
+
+-- gotomeeting
+ALTER TABLE o_goto_organizer ADD CONSTRAINT goto_organ_owner_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_goto_organ_okey_idx ON o_goto_organizer (g_organizer_key);
+CREATE INDEX idx_goto_organ_uname_idx ON o_goto_organizer (g_username);
+
+ALTER TABLE o_goto_meeting ADD CONSTRAINT goto_meet_repoentry_idx FOREIGN KEY (fk_entry_id) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_goto_meeting ADD CONSTRAINT goto_meet_busgrp_idx FOREIGN KEY (fk_group_id) REFERENCES o_gp_business (group_id);
+ALTER TABLE o_goto_meeting ADD CONSTRAINT goto_meet_organizer_idx FOREIGN KEY (fk_organizer_id) REFERENCES o_goto_organizer (id);
+
+ALTER TABLE o_goto_registrant ADD CONSTRAINT goto_regis_meeting_idx FOREIGN KEY (fk_meeting_id) REFERENCES o_goto_meeting (id);
+ALTER TABLE o_goto_registrant ADD CONSTRAINT goto_regis_ident_idx FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
+
+-- video
+ALTER TABLE o_vid_transcoding ADD CONSTRAINT fk_resource_id_idx FOREIGN KEY (fk_resource_id) REFERENCES o_olatresource (resource_id);
+CREATE INDEX vid_status_trans_idx ON o_vid_transcoding (vid_status);
+CREATE INDEX vid_transcoder_trans_idx ON o_vid_transcoding (vid_transcoder);
+ALTER TABLE o_vid_metadata ADD CONSTRAINT vid_meta_rsrc_idx FOREIGN KEY (fk_resource_id) REFERENCES o_olatresource (resource_id);
+
+ALTER TABLE o_vid_to_organisation ADD CONSTRAINT vid_entry_to_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_vid_to_organisation ADD CONSTRAINT vid_entry_to_org_idx FOREIGN KEY (fk_organisation) REFERENCES o_org_organisation (id);
+
+-- video task
+ALTER TABLE o_vid_task_session ADD CONSTRAINT vid_sess_to_repo_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_vid_task_session ADD CONSTRAINT vid_sess_to_vid_entry_idx FOREIGN KEY (fk_reference_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_vid_task_session ADD CONSTRAINT vid_sess_to_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+ALTER TABLE o_vid_task_session ADD CONSTRAINT vid_sess_to_as_entry_idx FOREIGN KEY (fk_assessment_entry) REFERENCES o_as_entry (id);
+
+ALTER TABLE o_vid_task_selection ADD CONSTRAINT vid_sel_to_session_idx FOREIGN KEY (fk_task_session) REFERENCES o_vid_task_session (id);
+
+-- calendar
+ALTER TABLE o_cal_use_config ADD CONSTRAINT cal_u_conf_to_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_cal_u_conf_cal_id_idx ON o_cal_use_config (c_calendar_id);
+CREATE INDEX idx_cal_u_conf_cal_type_idx ON o_cal_use_config (c_calendar_type);
+
+ALTER TABLE o_cal_import ADD CONSTRAINT cal_imp_to_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_cal_imp_cal_id_idx ON o_cal_import (c_calendar_id);
+CREATE INDEX idx_cal_imp_cal_type_idx ON o_cal_import (c_calendar_type);
+
+CREATE INDEX idx_cal_imp_to_cal_id_idx ON o_cal_import_to (c_to_calendar_id);
+CREATE INDEX idx_cal_imp_to_cal_type_idx ON o_cal_import_to (c_to_calendar_type);
+
+-- mapper
+CREATE INDEX o_mapper_uuid_idx ON o_mapper (mapper_uuid);
+
+
+-- qti 2.1
+ALTER TABLE o_qti_assessmenttest_session ADD CONSTRAINT qti_sess_to_repo_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_qti_assessmenttest_session ADD CONSTRAINT qti_sess_to_course_entry_idx FOREIGN KEY (fk_reference_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_qti_assessmenttest_session ADD CONSTRAINT qti_sess_to_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+ALTER TABLE o_qti_assessmenttest_session ADD CONSTRAINT qti_sess_to_as_entry_idx FOREIGN KEY (fk_assessment_entry) REFERENCES o_as_entry (id);
+
+ALTER TABLE o_qti_assessmentitem_session ADD CONSTRAINT qti_itemsess_to_testsess_idx FOREIGN KEY (fk_assessmenttest_session) REFERENCES o_qti_assessmenttest_session (id);
+CREATE INDEX idx_item_identifier_idx ON o_qti_assessmentitem_session (q_itemidentifier);
+
+ALTER TABLE o_qti_assessment_response ADD CONSTRAINT qti_resp_to_testsession_idx FOREIGN KEY (fk_assessmenttest_session) REFERENCES o_qti_assessmenttest_session (id);
+ALTER TABLE o_qti_assessment_response ADD CONSTRAINT qti_resp_to_itemsession_idx FOREIGN KEY (fk_assessmentitem_session) REFERENCES o_qti_assessmentitem_session (id);
+CREATE INDEX idx_response_identifier_idx ON o_qti_assessment_response (q_responseidentifier);
+CREATE INDEX idx_item_ext_ref_idx ON o_qti_assessmentitem_session (q_externalrefidentifier);
+
+ALTER TABLE o_qti_assessment_marks ADD CONSTRAINT qti_marks_to_repo_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_qti_assessment_marks ADD CONSTRAINT qti_marks_to_course_entry_idx FOREIGN KEY (fk_reference_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_qti_assessment_marks ADD CONSTRAINT qti_marks_to_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+
+-- Practice
+ALTER TABLE o_practice_resource ADD CONSTRAINT pract_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_practice_resource ADD CONSTRAINT pract_test_entry_idx FOREIGN KEY (fk_test_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_practice_resource ADD CONSTRAINT pract_item_coll_idx FOREIGN KEY (fk_item_collection) REFERENCES o_qp_item_collection (id);
+ALTER TABLE o_practice_resource ADD CONSTRAINT pract_poll_idx FOREIGN KEY (fk_pool) REFERENCES o_qp_pool (id);
+ALTER TABLE o_practice_resource ADD CONSTRAINT pract_rsrc_share_idx FOREIGN KEY (fk_resource_share) REFERENCES o_olatresource(resource_id);
+
+ALTER TABLE o_practice_global_item_ref ADD CONSTRAINT pract_global_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity(id);
+
+CREATE INDEX idx_pract_global_id_uu_idx ON o_practice_global_item_ref (fk_identity, p_identifier);
+
+-- portfolio
+ALTER TABLE o_pf_binder ADD CONSTRAINT pf_binder_resource_idx FOREIGN KEY (fk_olatresource_id) REFERENCES o_olatresource (resource_id);
+ALTER TABLE o_pf_binder ADD CONSTRAINT pf_binder_group_idx FOREIGN KEY (fk_group_id) REFERENCES o_bs_group (id);
+ALTER TABLE o_pf_binder ADD CONSTRAINT pf_binder_course_idx FOREIGN KEY (fk_entry_id) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_pf_binder ADD CONSTRAINT pf_binder_template_idx FOREIGN KEY (fk_template_id) REFERENCES o_pf_binder (id);
+
+ALTER TABLE o_pf_section ADD CONSTRAINT pf_section_group_idx FOREIGN KEY (fk_group_id) REFERENCES o_bs_group (id);
+ALTER TABLE o_pf_section ADD CONSTRAINT pf_section_binder_idx FOREIGN KEY (fk_binder_id) REFERENCES o_pf_binder (id);
+ALTER TABLE o_pf_section ADD CONSTRAINT pf_section_template_idx FOREIGN KEY (fk_template_reference_id) REFERENCES o_pf_section (id);
+
+ALTER TABLE o_ce_page ADD CONSTRAINT pf_page_group_idx FOREIGN KEY (fk_group_id) REFERENCES o_bs_group (id);
+ALTER TABLE o_ce_page ADD CONSTRAINT pf_page_section_idx FOREIGN KEY (fk_section_id) REFERENCES o_pf_section (id);
+ALTER TABLE o_ce_page ADD CONSTRAINT pf_page_body_idx FOREIGN KEY (fk_body_id) REFERENCES o_ce_page_body (id);
+ALTER TABLE o_ce_page ADD CONSTRAINT page_preview_metadata_idx FOREIGN KEY (fk_preview_metadata) REFERENCES o_vfs_metadata(id);
+
+ALTER TABLE o_media ADD CONSTRAINT pf_media_author_idx FOREIGN KEY (fk_author_id) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_category_rel_resid_idx ON o_media (p_business_path);
+
+ALTER TABLE o_media_tag ADD CONSTRAINT media_tag_media_idx FOREIGN KEY (fk_media) REFERENCES o_media (id);
+ALTER TABLE o_media_tag ADD CONSTRAINT media_tag_tag_idx FOREIGN KEY (fk_tag) REFERENCES o_tag_tag (id);
+
+ALTER TABLE o_media_to_tax_level ADD CONSTRAINT media_tax_media_idx FOREIGN KEY (fk_media) REFERENCES o_media (id);
+ALTER TABLE o_media_to_tax_level ADD CONSTRAINT media_tax_tax_idx FOREIGN KEY (fk_taxonomy_level) REFERENCES o_tax_taxonomy_level (id);
+
+ALTER TABLE o_media_to_group ADD CONSTRAINT med_to_group_media_idx FOREIGN KEY (fk_media) REFERENCES o_media (id);
+ALTER TABLE o_media_to_group ADD CONSTRAINT med_to_group_group_idx FOREIGN KEY (fk_group) REFERENCES o_bs_group (id);
+ALTER TABLE o_media_to_group ADD CONSTRAINT med_to_group_re_idx FOREIGN KEY (fk_repositoryentry) REFERENCES o_repositoryentry (repositoryentry_id);
+
+ALTER TABLE o_media_version ADD CONSTRAINT media_version_media_idx FOREIGN KEY (fk_media) REFERENCES o_media (id);
+ALTER TABLE o_media_version ADD CONSTRAINT media_version_meta_idx FOREIGN KEY (fk_metadata) REFERENCES o_vfs_metadata (id);
+ALTER TABLE o_media_version ADD CONSTRAINT media_version_version_metadata_idx FOREIGN KEY (fk_version_metadata) REFERENCES o_media_version_metadata(id);
+CREATE INDEX idx_media_version_uuid_idx ON o_media_version (p_version_uuid);
+CREATE INDEX idx_media_version_checksum_idx ON o_media_version (p_version_checksum);
+
+ALTER TABLE o_media_log ADD CONSTRAINT media_log_media_idx FOREIGN KEY (fk_media) REFERENCES o_media (id);
+ALTER TABLE o_media_log ADD CONSTRAINT media_log_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+
+ALTER TABLE o_ce_page_reference ADD CONSTRAINT page_ref_to_page_idx FOREIGN KEY (fk_page) REFERENCES o_ce_page (id);
+ALTER TABLE o_ce_page_reference ADD CONSTRAINT page_ref_to_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+
+ALTER TABLE o_ce_page_part ADD CONSTRAINT media_part_version_idx FOREIGN KEY (fk_media_version_id) REFERENCES o_media_version (id);
+ALTER TABLE o_ce_page_part ADD CONSTRAINT pf_page_page_body_idx FOREIGN KEY (fk_page_body_id) REFERENCES o_ce_page_body (id);
+ALTER TABLE o_ce_page_part ADD CONSTRAINT pf_page_media_idx FOREIGN KEY (fk_media_id) REFERENCES o_media (id);
+ALTER TABLE o_ce_page_part ADD CONSTRAINT pf_part_form_idx FOREIGN KEY (fk_form_entry_id) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_ce_page_part ADD CONSTRAINT media_part_ident_idx FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
+
+CREATE INDEX idx_category_name_idx ON o_pf_category (p_name);
+
+ALTER TABLE o_pf_category_relation ADD CONSTRAINT pf_category_rel_cat_idx FOREIGN KEY (fk_category_id) REFERENCES o_pf_category (id);
+CREATE INDEX idx_category_rel_resid_idx ON o_pf_category_relation (p_resid);
+
+ALTER TABLE o_pf_assessment_section ADD CONSTRAINT pf_asection_section_idx FOREIGN KEY (fk_section_id) REFERENCES o_pf_section (id);
+ALTER TABLE o_pf_assessment_section ADD CONSTRAINT pf_asection_ident_idx FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
+
+ALTER TABLE o_ce_assignment ADD CONSTRAINT pf_assign_section_idx FOREIGN KEY (fk_section_id) REFERENCES o_pf_section (id);
+ALTER TABLE o_ce_assignment ADD CONSTRAINT pf_assign_binder_idx FOREIGN KEY (fk_binder_id) REFERENCES o_pf_binder (id);
+ALTER TABLE o_ce_assignment ADD CONSTRAINT pf_assign_ref_assign_idx FOREIGN KEY (fk_template_reference_id) REFERENCES o_ce_assignment (id);
+ALTER TABLE o_ce_assignment ADD CONSTRAINT pf_assign_page_idx FOREIGN KEY (fk_page_id) REFERENCES o_ce_page (id);
+ALTER TABLE o_ce_assignment ADD CONSTRAINT pf_assign_assignee_idx FOREIGN KEY (fk_assignee_id) REFERENCES o_bs_identity (id);
+ALTER TABLE o_ce_assignment ADD CONSTRAINT pf_assign_form_idx FOREIGN KEY (fk_form_entry_id) REFERENCES o_repositoryentry (repositoryentry_id);
+
+ALTER TABLE o_pf_binder_user_infos ADD CONSTRAINT binder_user_to_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+ALTER TABLE o_pf_binder_user_infos ADD CONSTRAINT binder_user_binder_idx FOREIGN KEY (fk_binder) REFERENCES o_pf_binder (id);
+
+ALTER TABLE o_ce_page_user_infos ADD CONSTRAINT user_pfpage_idx FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
+ALTER TABLE o_ce_page_user_infos ADD CONSTRAINT page_pfpage_idx FOREIGN KEY (fk_page_id) REFERENCES o_ce_page (id);
+
+ALTER TABLE o_ce_audit_log ADD CONSTRAINT ce_log_to_doer_idx FOREIGN KEY (fk_doer) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_ce_log_to_page_idx ON o_ce_audit_log (fk_page);
+
+
+-- Evaluation form
+ALTER TABLE o_eva_form_survey ADD CONSTRAINT eva_surv_to_surv_idx FOREIGN KEY (fk_series_previous) REFERENCES o_eva_form_survey (id);
+CREATE INDEX idx_eva_surv_ores_idx ON o_eva_form_survey (e_resid, e_resname);
+
+ALTER TABLE o_eva_form_participation ADD CONSTRAINT eva_part_to_surv_idx FOREIGN KEY (fk_survey) REFERENCES o_eva_form_survey (id);
+CREATE UNIQUE INDEX idx_eva_part_ident_idx ON o_eva_form_participation (e_identifier_key, e_identifier_type, fk_survey);
+CREATE UNIQUE INDEX idx_eva_part_executor_idx ON o_eva_form_participation (fk_executor, fk_survey);
+
+ALTER TABLE o_eva_form_session ADD CONSTRAINT eva_sess_to_surv_idx FOREIGN KEY (fk_survey) REFERENCES o_eva_form_survey (id);
+ALTER TABLE o_eva_form_session ADD CONSTRAINT eva_sess_to_part_idx FOREIGN KEY (fk_participation) REFERENCES o_eva_form_participation (id);
+ALTER TABLE o_eva_form_session ADD CONSTRAINT eva_sess_to_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+ALTER TABLE o_eva_form_session ADD CONSTRAINT eva_sess_to_body_idx FOREIGN KEY (fk_page_body) REFERENCES o_ce_page_body (id);
+ALTER TABLE o_eva_form_session ADD CONSTRAINT eva_sess_to_form_idx FOREIGN KEY (fk_form_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+
+ALTER TABLE o_eva_form_response ADD CONSTRAINT eva_resp_to_sess_idx FOREIGN KEY (fk_session) REFERENCES o_eva_form_session (id);
+CREATE INDEX idx_eva_resp_report_idx ON o_eva_form_response (fk_session, e_responseidentifier, e_no_response);
+
+ALTER TABLE o_ce_page_to_tax_competence ADD CONSTRAINT fk_tax_competence_idx FOREIGN KEY (fk_tax_competence) REFERENCES o_tax_taxonomy_competence (id);
+ALTER TABLE o_ce_page_to_tax_competence ADD CONSTRAINT fk_pf_page_idx FOREIGN KEY (fk_pf_page) REFERENCES o_ce_page (id);
+
+-- VFS metadata
+ALTER TABLE o_vfs_metadata ADD CONSTRAINT fmeta_to_author_idx FOREIGN KEY (fk_locked_identity) REFERENCES o_bs_identity (id);
+ALTER TABLE o_vfs_metadata ADD CONSTRAINT fmeta_modified_by_idx FOREIGN KEY (fk_lastmodified_by) REFERENCES o_bs_identity (id);
+ALTER TABLE o_vfs_metadata ADD CONSTRAINT fmeta_to_lockid_idx FOREIGN KEY (fk_initialized_by) REFERENCES o_bs_identity (id);
+ALTER TABLE o_vfs_metadata ADD CONSTRAINT fmeta_to_lic_type_idx FOREIGN KEY (fk_license_type) REFERENCES o_lic_license_type (id);
+ALTER TABLE o_vfs_metadata ADD CONSTRAINT fmeta_to_parent_idx FOREIGN KEY (fk_parent) REFERENCES o_vfs_metadata (id);
+
+-- Creating computed columns for indexing
+ALTER TABLE o_vfs_metadata ADD f_relative_path_computed AS LEFT(f_relative_path, 255) PERSISTED;
+ALTER TABLE o_vfs_metadata ADD f_filename_computed AS LEFT(f_filename, 255) PERSISTED;
+CREATE INDEX f_m_rel_path_idx ON o_vfs_metadata (f_relative_path_computed);
+CREATE INDEX f_m_file_idx ON o_vfs_metadata (f_relative_path_computed, f_filename_computed);
+CREATE INDEX f_m_uuid_idx ON o_vfs_metadata (f_uuid);
+CREATE INDEX f_exp_date_idx ON o_vfs_metadata (f_expiration_date);
+
+ALTER TABLE o_vfs_thumbnail ADD CONSTRAINT fthumb_to_meta_idx FOREIGN KEY (fk_metadata) REFERENCES o_vfs_metadata (id);
+
+ALTER TABLE o_vfs_revision ADD CONSTRAINT fvers_to_author_idx FOREIGN KEY (fk_initialized_by) REFERENCES o_bs_identity (id);
+ALTER TABLE o_vfs_revision ADD CONSTRAINT fvers_modified_by_idx FOREIGN KEY (fk_lastmodified_by) REFERENCES o_bs_identity (id);
+ALTER TABLE o_vfs_revision ADD CONSTRAINT fvers_to_meta_idx FOREIGN KEY (fk_metadata) REFERENCES o_vfs_metadata (id);
+ALTER TABLE o_vfs_revision ADD CONSTRAINT fvers_to_lic_type_idx FOREIGN KEY (fk_license_type) REFERENCES o_lic_license_type (id);
+
+CREATE INDEX idx_vfs_meta_transstat_idx ON o_vfs_metadata (f_transcoding_status);
+
+-- Document editor
+CREATE UNIQUE INDEX idx_de_userinfo_ident_idx ON o_de_user_info (fk_identity);
+
+-- Quality management
+ALTER TABLE o_qual_data_collection ADD CONSTRAINT qual_dc_to_gen_idx FOREIGN KEY (fk_generator) REFERENCES o_qual_generator (id);
+CREATE INDEX idx_dc_status_idx ON o_qual_data_collection (q_status);
+
+ALTER TABLE o_qual_data_collection_to_org ADD CONSTRAINT qual_dc_to_org_idx FOREIGN KEY (fk_data_collection) REFERENCES o_qual_data_collection (id);
+CREATE UNIQUE INDEX idx_qual_dc_to_org_idx ON o_qual_data_collection_to_org (fk_data_collection, fk_organisation);
+
+ALTER TABLE o_qual_context ADD CONSTRAINT qual_con_to_data_collection_idx FOREIGN KEY (fk_data_collection) REFERENCES o_qual_data_collection (id);
+ALTER TABLE o_qual_context ADD CONSTRAINT qual_con_to_participation_idx FOREIGN KEY (fk_eva_participation) REFERENCES o_eva_form_participation (id);
+ALTER TABLE o_qual_context ADD CONSTRAINT qual_con_to_session_idx FOREIGN KEY (fk_eva_session) REFERENCES o_eva_form_session (id);
+
+ALTER TABLE o_qual_context_to_organisation ADD CONSTRAINT qual_con_to_org_con_idx FOREIGN KEY (fk_context) REFERENCES o_qual_context (id);
+CREATE UNIQUE INDEX idx_con_to_org_org_idx ON o_qual_context_to_organisation (fk_organisation, fk_context);
+
+ALTER TABLE o_qual_context_to_curriculum ADD CONSTRAINT qual_con_to_cur_con_idx FOREIGN KEY (fk_context) REFERENCES o_qual_context (id);
+CREATE UNIQUE INDEX idx_con_to_cur_cur_idx ON o_qual_context_to_curriculum (fk_curriculum, fk_context);
+
+ALTER TABLE o_qual_context_to_cur_element ADD CONSTRAINT qual_con_to_cur_ele_con_idx FOREIGN KEY (fk_context) REFERENCES o_qual_context (id);
+CREATE UNIQUE INDEX idx_con_to_cur_ele_ele_idx ON o_qual_context_to_cur_element (fk_cur_element, fk_context);
+
+ALTER TABLE o_qual_context_to_tax_level ADD CONSTRAINT qual_con_to_tax_level_con_idx FOREIGN KEY (fk_context) REFERENCES o_qual_context (id);
+CREATE UNIQUE INDEX idx_con_to_tax_level_tax_idx ON o_qual_context_to_tax_level (fk_tax_leveL, fk_context);
+
+ALTER TABLE o_qual_reminder ADD CONSTRAINT qual_rem_to_data_collection_idx FOREIGN KEY (fk_data_collection) REFERENCES o_qual_data_collection (id);
+
+ALTER TABLE o_qual_report_access ADD CONSTRAINT qual_repacc_to_dc_idx FOREIGN KEY (fk_data_collection) REFERENCES o_qual_data_collection (id);
+ALTER TABLE o_qual_report_access ADD CONSTRAINT qual_repacc_to_generator_idx FOREIGN KEY (fk_generator) REFERENCES o_qual_generator (id);
+
+ALTER TABLE o_qual_generator_to_org ADD CONSTRAINT qual_gen_to_org_idx FOREIGN KEY (fk_generator) REFERENCES o_qual_generator (id);
+CREATE UNIQUE INDEX idx_qual_gen_to_org_idx ON o_qual_generator_to_org (fk_generator, fk_organisation);
+
+ALTER TABLE o_qual_generator_override ADD CONSTRAINT qual_override_to_gen_idx FOREIGN KEY (fk_generator) REFERENCES o_qual_generator (id);
+ALTER TABLE o_qual_generator_override ADD CONSTRAINT qual_override_to_dc_idx FOREIGN KEY (fk_data_collection) REFERENCES o_qual_data_collection (id);
+CREATE INDEX idx_override_ident_idx ON o_qual_generator_override (q_identifier);
+
+CREATE INDEX idx_qm_audit_doer_idx ON o_qual_audit_log (fk_doer);
+CREATE INDEX idx_qm_audit_dc_idx ON o_qual_audit_log (fk_data_collection);
+CREATE INDEX idx_qm_audit_todo_idx ON o_qual_audit_log (fk_todo_task);
+CREATE INDEX idx_qm_audit_ident_idx ON o_qual_audit_log (fk_identity);
+
+-- Question pool
+ALTER TABLE o_qp_pool ADD CONSTRAINT idx_qp_pool_owner_grp_id FOREIGN KEY (fk_ownergroup) REFERENCES o_bs_secgroup (id);
+
+ALTER TABLE o_qp_pool_2_item ADD CONSTRAINT idx_qp_pool_2_item_pool_id FOREIGN KEY (fk_pool_id) REFERENCES o_qp_pool (id);
+ALTER TABLE o_qp_pool_2_item ADD CONSTRAINT idx_qp_pool_2_item_item_id FOREIGN KEY (fk_item_id) REFERENCES o_qp_item (id);
+ALTER TABLE o_qp_pool_2_item ADD UNIQUE (fk_pool_id, fk_item_id);
+
+ALTER TABLE o_qp_share_item ADD CONSTRAINT idx_qp_share_rsrc_id FOREIGN KEY (fk_resource_id) REFERENCES o_olatresource (resource_id);
+ALTER TABLE o_qp_share_item ADD CONSTRAINT idx_qp_share_item_id FOREIGN KEY (fk_item_id) REFERENCES o_qp_item (id);
+ALTER TABLE o_qp_share_item ADD UNIQUE (fk_resource_id, fk_item_id);
+
+ALTER TABLE o_qp_item_collection ADD CONSTRAINT idx_qp_coll_owner_id FOREIGN KEY (fk_owner_id) REFERENCES o_bs_identity (id);
+
+ALTER TABLE o_qp_collection_2_item ADD CONSTRAINT idx_qp_coll_coll_id FOREIGN KEY (fk_collection_id) REFERENCES o_qp_item_collection (id);
+ALTER TABLE o_qp_collection_2_item ADD CONSTRAINT idx_qp_coll_item_id FOREIGN KEY (fk_item_id) REFERENCES o_qp_item (id);
+ALTER TABLE o_qp_collection_2_item ADD UNIQUE (fk_collection_id, fk_item_id);
+
+ALTER TABLE o_qp_item ADD CONSTRAINT idx_qp_pool_2_tax_id FOREIGN KEY (fk_taxonomy_level_v2) REFERENCES o_tax_taxonomy_level (id);
+ALTER TABLE o_qp_item ADD CONSTRAINT idx_qp_item_owner_id FOREIGN KEY (fk_ownergroup) REFERENCES o_bs_secgroup (id);
+ALTER TABLE o_qp_item ADD CONSTRAINT idx_qp_item_edu_ctxt_id FOREIGN KEY (fk_edu_context) REFERENCES o_qp_edu_context (id);
+ALTER TABLE o_qp_item ADD CONSTRAINT idx_qp_item_type_id FOREIGN KEY (fk_type) REFERENCES o_qp_item_type (id);
+ALTER TABLE o_qp_item ADD CONSTRAINT idx_qp_item_license_id FOREIGN KEY (fk_license) REFERENCES o_qp_license (id);
+
+ALTER TABLE o_qp_taxonomy_level ADD CONSTRAINT idx_qp_field_2_parent_id FOREIGN KEY (fk_parent_field) REFERENCES o_qp_taxonomy_level (id);
+
+-- Creating computed column for indexing
+ALTER TABLE o_qp_taxonomy_level ADD q_mat_path_ids_computed AS LEFT(q_mat_path_ids, 255) PERSISTED;
+CREATE INDEX idx_taxon_mat_pathon ON o_qp_taxonomy_level (q_mat_path_ids_computed);
+
+ALTER TABLE o_qp_item_type ADD UNIQUE (q_type);
+CREATE INDEX idx_item_audit_item_idx ON o_qp_item_audit_log (fk_item_id);
+
+-- LTI
+ALTER TABLE o_lti_outcome ADD CONSTRAINT idx_lti_outcome_ident_id FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
+ALTER TABLE o_lti_outcome ADD CONSTRAINT idx_lti_outcome_rsrc_id FOREIGN KEY (fk_resource_id) REFERENCES o_olatresource (resource_id);
+
+-- LTI 1.3
+ALTER TABLE o_lti_tool_deployment ADD CONSTRAINT lti_sdep_to_tool_idx FOREIGN KEY (fk_tool_id) REFERENCES o_lti_tool (id);
+ALTER TABLE o_lti_tool_deployment ADD CONSTRAINT lti_sdep_to_re_idx FOREIGN KEY (fk_entry_id) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_lti_tool_deployment ADD CONSTRAINT dep_to_group_idx FOREIGN KEY (fk_group_id) REFERENCES o_gp_business (group_id);
+
+ALTER TABLE o_lti_context ADD CONSTRAINT ltictx_to_deploy_idx FOREIGN KEY (fk_deployment_id) REFERENCES o_lti_tool_deployment (id);
+ALTER TABLE o_lti_context ADD CONSTRAINT lti_ctxt_to_re_idx FOREIGN KEY (fk_entry_id) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_lti_context ADD CONSTRAINT ctxt_to_group_idx FOREIGN KEY (fk_group_id) REFERENCES o_gp_business (group_id);
+
+ALTER TABLE o_lti_shared_tool_deployment ADD CONSTRAINT unique_deploy_platform UNIQUE (l_deployment_id, fk_platform_id);
+ALTER TABLE o_lti_shared_tool_deployment ADD CONSTRAINT lti_sha_dep_to_tool_idx FOREIGN KEY (fk_platform_id) REFERENCES o_lti_platform (id);
+ALTER TABLE o_lti_shared_tool_deployment ADD CONSTRAINT lti_shared_to_re_idx FOREIGN KEY (fk_entry_id) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_lti_shared_tool_deployment ADD CONSTRAINT lti_shared_to_bg_idx FOREIGN KEY (fk_group_id) REFERENCES o_gp_business (group_id);
+
+ALTER TABLE o_lti_shared_tool_service ADD CONSTRAINT lti_sha_ser_to_dep_idx FOREIGN KEY (fk_deployment_id) REFERENCES o_lti_shared_tool_deployment (id);
+
+ALTER TABLE o_lti_content_item ADD CONSTRAINT ltiitem_to_tool_idx FOREIGN KEY (fk_tool_id) REFERENCES o_lti_tool (id);
+ALTER TABLE o_lti_content_item ADD CONSTRAINT ltiitem_to_deploy_idx FOREIGN KEY (fk_tool_deployment_id) REFERENCES o_lti_tool_deployment (id);
+ALTER TABLE o_lti_content_item ADD CONSTRAINT ltiitem_to_context_idx FOREIGN KEY (fk_context_id) REFERENCES o_lti_context (id);
+
+CREATE INDEX idx_lti_kid_idx ON o_lti_key (l_key_id);
+
+-- Assessment mode
+ALTER TABLE o_as_mode_course ADD CONSTRAINT as_mode_to_repo_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_as_mode_course ADD CONSTRAINT as_mode_to_lblock_idx FOREIGN KEY (fk_lecture_block) REFERENCES o_lecture_block (id);
+
+ALTER TABLE o_as_mode_course_to_group ADD CONSTRAINT as_modetogroup_group_idx FOREIGN KEY (fk_group_id) REFERENCES o_gp_business (group_id);
+ALTER TABLE o_as_mode_course_to_group ADD CONSTRAINT as_modetogroup_mode_idx FOREIGN KEY (fk_assessment_mode_id) REFERENCES o_as_mode_course (id);
+
+ALTER TABLE o_as_mode_course_to_area ADD CONSTRAINT as_modetoarea_area_idx FOREIGN KEY (fk_area_id) REFERENCES o_gp_bgarea (area_id);
+ALTER TABLE o_as_mode_course_to_area ADD CONSTRAINT as_modetoarea_mode_idx FOREIGN KEY (fk_assessment_mode_id) REFERENCES o_as_mode_course (id);
+
+ALTER TABLE o_as_mode_course_to_cur_el ADD CONSTRAINT as_modetocur_el_idx FOREIGN KEY (fk_cur_element_id) REFERENCES o_cur_curriculum_element (id);
+ALTER TABLE o_as_mode_course_to_cur_el ADD CONSTRAINT as_modetocur_mode_idx FOREIGN KEY (fk_assessment_mode_id) REFERENCES o_as_mode_course (id);
+
+-- Assessment inspection
+ALTER TABLE o_as_inspection_configuration ADD CONSTRAINT as_insp_to_repo_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+
+ALTER TABLE o_as_inspection ADD CONSTRAINT as_insp_to_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+ALTER TABLE o_as_inspection ADD CONSTRAINT as_insp_to_config_idx FOREIGN KEY (fk_configuration) REFERENCES o_as_inspection_configuration (id);
+CREATE INDEX idx_as_insp_subident_idx ON o_as_inspection (a_subident);
+CREATE INDEX idx_as_insp_endtime_idx ON o_as_inspection (a_end_time);
+CREATE INDEX idx_as_insp_fromto_idx ON o_as_inspection (a_from, a_to);
+
+ALTER TABLE o_as_inspection_log ADD CONSTRAINT as_insp_log_to_ident_idx FOREIGN KEY (fk_doer) REFERENCES o_bs_identity (id);
+ALTER TABLE o_as_inspection_log ADD CONSTRAINT as_log_to_insp_idx FOREIGN KEY (fk_inspection) REFERENCES o_as_inspection (id);
+
+-- Certificate
+ALTER TABLE o_cer_certificate ADD CONSTRAINT cer_to_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+ALTER TABLE o_cer_certificate ADD CONSTRAINT cer_to_resource_idx FOREIGN KEY (fk_olatresource) REFERENCES o_olatresource (resource_id);
+ALTER TABLE o_cer_certificate ADD CONSTRAINT certificate_metadata_idx FOREIGN KEY (fk_metadata) REFERENCES o_vfs_metadata (id);
+
+CREATE INDEX cer_archived_resource_idx ON o_cer_certificate (c_archived_resource_id);
+CREATE INDEX cer_uuid_idx ON o_cer_certificate (c_uuid);
+
+ALTER TABLE o_cer_entry_config ADD CONSTRAINT cer_entry_config_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_cer_entry_config ADD CONSTRAINT template_config_entry_idx FOREIGN KEY (fk_template) REFERENCES o_cer_template (id);
+
+-- SMS
+ALTER TABLE o_sms_message_log ADD CONSTRAINT sms_log_to_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+
+-- Webfeed
+CREATE INDEX idx_feed_resourceable_idx ON o_feed (f_resourceable_id, f_resourceable_type);
+ALTER TABLE o_feed_item ADD CONSTRAINT item_to_feed_fk FOREIGN KEY (fk_feed_id) REFERENCES o_feed (id);
+CREATE INDEX idx_item_feed_idx ON o_feed_item (fk_feed_id);
+ALTER TABLE o_feed_item ADD CONSTRAINT feed_item_to_ident_author_fk FOREIGN KEY (fk_identity_author_id) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_item_ident_author_idx ON o_feed_item (fk_identity_author_id);
+ALTER TABLE o_feed_item ADD CONSTRAINT feed_item_to_ident_modified_fk FOREIGN KEY (fk_identity_modified_id) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_item_ident_modified_idx ON o_feed_item (fk_identity_modified_id);
+
+-- Lecture
+ALTER TABLE o_lecture_block ADD CONSTRAINT lec_block_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_lecture_block ADD CONSTRAINT lec_block_gcoach_idx FOREIGN KEY (fk_teacher_group) REFERENCES o_bs_group (id);
+ALTER TABLE o_lecture_block ADD CONSTRAINT lec_block_reason_idx FOREIGN KEY (fk_reason) REFERENCES o_lecture_reason (id);
+
+ALTER TABLE o_lecture_block_roll_call ADD CONSTRAINT absence_category_idx FOREIGN KEY (fk_absence_category) REFERENCES o_lecture_absence_category (id);
+
+ALTER TABLE o_lecture_absence_notice ADD CONSTRAINT notice_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+ALTER TABLE o_lecture_absence_notice ADD CONSTRAINT notice_notif_identity_idx FOREIGN KEY (fk_notifier) REFERENCES o_bs_identity (id);
+ALTER TABLE o_lecture_absence_notice ADD CONSTRAINT notice_auth_identity_idx FOREIGN KEY (fk_authorizer) REFERENCES o_bs_identity (id);
+ALTER TABLE o_lecture_absence_notice ADD CONSTRAINT notice_category_idx FOREIGN KEY (fk_absence_category) REFERENCES o_lecture_absence_category (id);
+
+ALTER TABLE o_lecture_notice_to_block ADD CONSTRAINT notice_to_block_idx FOREIGN KEY (fk_lecture_block) REFERENCES o_lecture_block (id);
+ALTER TABLE o_lecture_notice_to_block ADD CONSTRAINT notice_to_notice_idx FOREIGN KEY (fk_absence_notice) REFERENCES o_lecture_absence_notice (id);
+
+ALTER TABLE o_lecture_notice_to_entry ADD CONSTRAINT notice_to_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_lecture_notice_to_entry ADD CONSTRAINT rel_notice_e_to_notice_idx FOREIGN KEY (fk_absence_notice) REFERENCES o_lecture_absence_notice (id);
+
+ALTER TABLE o_lecture_block_to_group ADD CONSTRAINT lec_block_to_block_idx FOREIGN KEY (fk_group) REFERENCES o_bs_group (id);
+ALTER TABLE o_lecture_block_to_group ADD CONSTRAINT lec_block_to_group_idx FOREIGN KEY (fk_lecture_block) REFERENCES o_lecture_block (id);
+
+ALTER TABLE o_lecture_block_roll_call ADD CONSTRAINT lec_call_block_idx FOREIGN KEY (fk_lecture_block) REFERENCES o_lecture_block (id);
+ALTER TABLE o_lecture_block_roll_call ADD CONSTRAINT lec_call_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+ALTER TABLE o_lecture_block_roll_call ADD CONSTRAINT rollcall_to_notice_idx FOREIGN KEY (fk_absence_notice) REFERENCES o_lecture_absence_notice (id);
+
+ALTER TABLE o_lecture_reminder ADD CONSTRAINT lec_reminder_block_idx FOREIGN KEY (fk_lecture_block) REFERENCES o_lecture_block (id);
+ALTER TABLE o_lecture_reminder ADD CONSTRAINT lec_reminder_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+
+ALTER TABLE o_lecture_participant_summary ADD CONSTRAINT lec_part_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_lecture_participant_summary ADD CONSTRAINT lec_part_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+
+ALTER TABLE o_lecture_entry_config ADD CONSTRAINT lec_entry_config_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+
+CREATE INDEX idx_lec_audit_entry_idx ON o_lecture_block_audit_log (fk_entry);
+CREATE INDEX idx_lec_audit_ident_idx ON o_lecture_block_audit_log (fk_identity);
+
+ALTER TABLE o_lecture_block_to_tax_level ADD CONSTRAINT lblock_rel_to_lblock_idx FOREIGN KEY (fk_lecture_block) REFERENCES o_lecture_block (id);
+ALTER TABLE o_lecture_block_to_tax_level ADD CONSTRAINT lblock_rel_to_tax_lev_idx FOREIGN KEY (fk_taxonomy_level) REFERENCES o_tax_taxonomy_level (id);
+
+-- Taxonomy
+ALTER TABLE o_tax_taxonomy ADD CONSTRAINT tax_to_group_idx FOREIGN KEY (fk_group) REFERENCES o_bs_group (id);
+
+ALTER TABLE o_tax_taxonomy_level_type ADD CONSTRAINT tax_type_to_taxonomy_idx FOREIGN KEY (fk_taxonomy) REFERENCES o_tax_taxonomy (id);
+
+ALTER TABLE o_tax_taxonomy_type_to_type ADD CONSTRAINT tax_type_to_type_idx FOREIGN KEY (fk_type) REFERENCES o_tax_taxonomy_level_type (id);
+CREATE INDEX idx_tax_type_to_type_idx ON o_tax_taxonomy_type_to_type (fk_type);
+ALTER TABLE o_tax_taxonomy_type_to_type ADD CONSTRAINT tax_type_to_sub_type_idx FOREIGN KEY (fk_allowed_sub_type) REFERENCES o_tax_taxonomy_level_type (id);
+CREATE INDEX idx_tax_type_to_sub_type_idx ON o_tax_taxonomy_type_to_type (fk_allowed_sub_type);
+
+ALTER TABLE o_tax_taxonomy_level ADD CONSTRAINT tax_level_to_taxonomy_idx FOREIGN KEY (fk_taxonomy) REFERENCES o_tax_taxonomy (id);
+ALTER TABLE o_tax_taxonomy_level ADD CONSTRAINT tax_level_to_tax_level_idx FOREIGN KEY (fk_parent) REFERENCES o_tax_taxonomy_level (id);
+ALTER TABLE o_tax_taxonomy_level ADD CONSTRAINT tax_level_to_type_idx FOREIGN KEY (fk_type) REFERENCES o_tax_taxonomy_level_type (id);
+CREATE INDEX idx_tax_level_path_key_idx ON o_tax_taxonomy_level (t_m_path_keys);
+
+ALTER TABLE o_tax_taxonomy_competence ADD CONSTRAINT tax_comp_to_tax_level_idx FOREIGN KEY (fk_level) REFERENCES o_tax_taxonomy_level (id);
+ALTER TABLE o_tax_taxonomy_competence ADD CONSTRAINT tax_level_to_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+
+-- Dialog elements
+ALTER TABLE o_dialog_element ADD CONSTRAINT dial_el_author_idx FOREIGN KEY (fk_author) REFERENCES o_bs_identity (id);
+ALTER TABLE o_dialog_element ADD CONSTRAINT dial_el_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_dialog_element ADD CONSTRAINT dial_el_forum_idx FOREIGN KEY (fk_forum) REFERENCES o_forum (forum_id);
+CREATE INDEX idx_dial_el_subident_idx ON o_dialog_element (d_subident);
+
+-- Licenses
+ALTER TABLE o_lic_license_type_activation ADD CONSTRAINT lic_activation_type_fk FOREIGN KEY (fk_license_type_id) REFERENCES o_lic_license_type (id);
+CREATE INDEX lic_activation_type_idx ON o_lic_license_type_activation (fk_license_type_id);
+ALTER TABLE o_lic_license ADD CONSTRAINT lic_license_type_fk FOREIGN KEY (fk_license_type_id) REFERENCES o_lic_license_type (id);
+CREATE INDEX lic_license_type_idx ON o_lic_license (fk_license_type_id);
+CREATE UNIQUE INDEX lic_license_ores_idx ON o_lic_license (l_resid, l_resname);
+
+-- Organisation
+ALTER TABLE o_org_organisation ADD CONSTRAINT org_to_group_idx FOREIGN KEY (fk_group) REFERENCES o_bs_group (id);
+ALTER TABLE o_org_organisation ADD CONSTRAINT org_to_root_org_idx FOREIGN KEY (fk_root) REFERENCES o_org_organisation (id);
+ALTER TABLE o_org_organisation ADD CONSTRAINT org_to_parent_org_idx FOREIGN KEY (fk_parent) REFERENCES o_org_organisation (id);
+ALTER TABLE o_org_organisation ADD CONSTRAINT org_to_org_type_idx FOREIGN KEY (fk_type) REFERENCES o_org_organisation_type (id);
+
+ALTER TABLE o_org_type_to_type ADD CONSTRAINT org_type_to_type_idx FOREIGN KEY (fk_type) REFERENCES o_org_organisation_type (id);
+ALTER TABLE o_org_type_to_type ADD CONSTRAINT org_type_to_sub_type_idx FOREIGN KEY (fk_allowed_sub_type) REFERENCES o_org_organisation_type (id);
+
+ALTER TABLE o_re_to_organisation ADD CONSTRAINT rel_org_to_re_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_re_to_organisation ADD CONSTRAINT rel_org_to_org_idx FOREIGN KEY (fk_organisation) REFERENCES o_org_organisation (id);
+
+-- Curriculum
+ALTER TABLE o_cur_curriculum ADD CONSTRAINT cur_to_group_idx FOREIGN KEY (fk_group) REFERENCES o_bs_group (id);
+ALTER TABLE o_cur_curriculum ADD CONSTRAINT cur_to_org_idx FOREIGN KEY (fk_organisation) REFERENCES o_org_organisation (id);
+
+ALTER TABLE o_cur_curriculum_element ADD CONSTRAINT cur_el_to_group_idx FOREIGN KEY (fk_group) REFERENCES o_bs_group (id);
+ALTER TABLE o_cur_curriculum_element ADD CONSTRAINT cur_el_to_cur_el_idx FOREIGN KEY (fk_parent) REFERENCES o_cur_curriculum_element (id);
+ALTER TABLE o_cur_curriculum_element ADD CONSTRAINT cur_el_to_cur_idx FOREIGN KEY (fk_curriculum) REFERENCES o_cur_curriculum (id);
+ALTER TABLE o_cur_curriculum_element ADD CONSTRAINT cur_el_type_to_el_type_idx FOREIGN KEY (fk_type) REFERENCES o_cur_element_type (id);
+
+ALTER TABLE o_cur_element_type_to_type ADD CONSTRAINT cur_type_to_type_idx FOREIGN KEY (fk_type) REFERENCES o_cur_element_type (id);
+ALTER TABLE o_cur_element_type_to_type ADD CONSTRAINT cur_type_to_sub_type_idx FOREIGN KEY (fk_allowed_sub_type) REFERENCES o_cur_element_type (id);
+
+ALTER TABLE o_cur_element_to_tax_level ADD CONSTRAINT cur_el_rel_to_cur_el_idx FOREIGN KEY (fk_cur_element) REFERENCES o_cur_curriculum_element (id);
+ALTER TABLE o_cur_element_to_tax_level ADD CONSTRAINT cur_el_to_tax_level_idx FOREIGN KEY (fk_taxonomy_level) REFERENCES o_tax_taxonomy_level (id);
+
+-- Edu-sharing
+CREATE INDEX idx_es_usage_ident_idx ON o_es_usage (e_identifier);
+CREATE INDEX idx_es_usage_ores_idx ON o_es_usage (e_resid, e_resname);
+
+-- Logging table
+CREATE INDEX log_target_resid_idx ON o_loggingtable (targetresid);
+CREATE INDEX log_ptarget_resid_idx ON o_loggingtable (parentresid);
+CREATE INDEX log_gptarget_resid_idx ON o_loggingtable (grandparentresid);
+CREATE INDEX log_ggptarget_resid_idx ON o_loggingtable (greatgrandparentresid);
+CREATE INDEX log_creationdate_idx ON o_loggingtable (creationdate);
+
+-- Livestream
+CREATE INDEX idx_livestream_viewers_idx ON o_livestream_launch (l_subident, l_launch_date, fk_entry, fk_identity);
+
+-- Grading
+ALTER TABLE o_grad_to_identity ADD CONSTRAINT grad_to_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+ALTER TABLE o_grad_to_identity ADD CONSTRAINT grad_id_to_repo_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+
+ALTER TABLE o_grad_assignment ADD CONSTRAINT grad_assign_to_entry_idx FOREIGN KEY (fk_reference_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_grad_assignment ADD CONSTRAINT grad_assign_to_assess_idx FOREIGN KEY (fk_assessment_entry) REFERENCES o_as_entry (id);
+ALTER TABLE o_grad_assignment ADD CONSTRAINT grad_assign_to_grader_idx FOREIGN KEY (fk_grader) REFERENCES o_grad_to_identity (id);
+
+ALTER TABLE o_grad_time_record ADD CONSTRAINT grad_time_to_assign_idx FOREIGN KEY (fk_assignment) REFERENCES o_grad_assignment (id);
+ALTER TABLE o_grad_time_record ADD CONSTRAINT grad_time_to_grader_idx FOREIGN KEY (fk_grader) REFERENCES o_grad_to_identity (id);
+
+ALTER TABLE o_grad_configuration ADD CONSTRAINT grad_config_to_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+
+-- Course
+ALTER TABLE o_course_element ADD CONSTRAINT courseele_to_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+CREATE UNIQUE INDEX idx_courseele_subident_idx ON o_course_element (c_subident, fk_entry);
+
+-- Course styles
+CREATE UNIQUE INDEX idx_course_colcat_ident ON o_course_color_category (c_identifier);
+
+-- Appointments
+ALTER TABLE o_ap_topic ADD CONSTRAINT ap_topic_entry_idx FOREIGN KEY (fk_entry_id) REFERENCES o_repositoryentry (repositoryentry_id);
+ALTER TABLE o_ap_organizer ADD CONSTRAINT ap_organizer_topic_idx FOREIGN KEY (fk_topic_id) REFERENCES o_ap_topic (id);
+ALTER TABLE o_ap_organizer ADD CONSTRAINT ap_organizer_identity_idx FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
+ALTER TABLE o_ap_topic_to_group ADD CONSTRAINT ap_tg_topic_idx FOREIGN KEY (fk_topic_id) REFERENCES o_ap_topic (id);
+CREATE INDEX idx_ap_tg_group_idx ON o_ap_topic_to_group(fk_group_id);
+ALTER TABLE o_ap_appointment ADD CONSTRAINT ap_appointment_topic_idx FOREIGN KEY (fk_topic_id) REFERENCES o_ap_topic (id);
+ALTER TABLE o_ap_appointment ADD CONSTRAINT ap_appointment_meeting_idx FOREIGN KEY (fk_meeting_id) REFERENCES o_bbb_meeting (id);
+ALTER TABLE o_ap_appointment ADD CONSTRAINT ap_appointment_teams_idx FOREIGN KEY (fk_teams_id) REFERENCES o_teams_meeting (id);
+ALTER TABLE o_ap_participation ADD CONSTRAINT ap_part_appointment_idx FOREIGN KEY (fk_appointment_id) REFERENCES o_ap_appointment (id);
+ALTER TABLE o_ap_participation ADD CONSTRAINT ap_part_identity_idx FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
+
+-- Organization role rights
+ALTER TABLE o_org_role_to_right ADD CONSTRAINT org_role_to_right_to_organisation_idx FOREIGN KEY (fk_organisation) REFERENCES o_org_organisation (id);
+CREATE INDEX idx_org_role_to_right_to_organisation_idx ON o_org_role_to_right (fk_organisation);
+
+-- Contact tracing
+ALTER TABLE o_ct_registration ADD CONSTRAINT reg_to_loc_idx FOREIGN KEY (fk_location) REFERENCES o_ct_location (id);
+CREATE INDEX idx_reg_to_loc_idx ON o_ct_registration (fk_location);
+CREATE INDEX idx_qr_id_idx ON o_ct_location (l_qr_id);
+
+-- Immunity proof
+ALTER TABLE o_immunity_proof ADD CONSTRAINT proof_to_user_idx FOREIGN KEY (fk_user) REFERENCES o_bs_identity(id);
+CREATE INDEX idx_immunity_proof ON o_immunity_proof (fk_user);
+
+-- Zoom
+ALTER TABLE o_zoom_profile ADD CONSTRAINT zoom_profile_tool_idx FOREIGN KEY (fk_lti_tool_id) REFERENCES o_lti_tool (id);
+CREATE INDEX idx_zoom_profile_tool_idx ON o_zoom_profile (fk_lti_tool_id);
+
+ALTER TABLE o_zoom_config ADD CONSTRAINT zoom_config_profile_idx FOREIGN KEY (fk_profile) REFERENCES o_zoom_profile (id);
+CREATE INDEX idx_zoom_config_profile_idx ON o_zoom_config (fk_profile);
+
+ALTER TABLE o_zoom_config ADD CONSTRAINT zoom_config_tool_deployment_idx FOREIGN KEY (fk_lti_tool_deployment_id) REFERENCES o_lti_tool_deployment (id);
+CREATE INDEX idx_zoom_config_tool_deployment_idx ON o_zoom_config (fk_lti_tool_deployment_id);
+
+ALTER TABLE o_zoom_config ADD CONSTRAINT zoom_config_context_idx FOREIGN KEY (fk_lti_context_id) REFERENCES o_lti_context (id);
+
+-- Projects
+ALTER TABLE o_proj_project ADD CONSTRAINT project_creator_idx FOREIGN KEY (fk_creator) REFERENCES o_bs_identity(id);
+ALTER TABLE o_proj_project ADD CONSTRAINT project_group_idx FOREIGN KEY (fk_group) REFERENCES o_bs_group (id);
+ALTER TABLE o_proj_project_to_org ADD CONSTRAINT rel_pto_project_idx FOREIGN KEY (fk_project) REFERENCES o_proj_project (id);
+ALTER TABLE o_proj_project_to_org ADD CONSTRAINT rel_pto_org_idx FOREIGN KEY (fk_organisation) REFERENCES o_org_organisation (id);
+ALTER TABLE o_proj_template_to_org ADD CONSTRAINT rel_tto_project_idx FOREIGN KEY (fk_project) REFERENCES o_proj_project (id);
+ALTER TABLE o_proj_template_to_org ADD CONSTRAINT rel_tto_org_idx FOREIGN KEY (fk_organisation) REFERENCES o_org_organisation (id);
+ALTER TABLE o_proj_project_user_info ADD CONSTRAINT rel_pui_project_idx FOREIGN KEY (fk_project) REFERENCES o_proj_project (id);
+ALTER TABLE o_proj_project_user_info ADD CONSTRAINT rel_pui_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity(id);
+
+ALTER TABLE o_proj_artefact ADD CONSTRAINT artefact_modby_idx FOREIGN KEY (fk_content_modified_by) REFERENCES o_bs_identity(id);
+ALTER TABLE o_proj_artefact ADD CONSTRAINT artefact_project_idx FOREIGN KEY (fk_project) REFERENCES o_proj_project (id);
+ALTER TABLE o_proj_artefact ADD CONSTRAINT artefact_creator_idx FOREIGN KEY (fk_creator) REFERENCES o_bs_identity(id);
+ALTER TABLE o_proj_artefact ADD CONSTRAINT artefact_group_idx FOREIGN KEY (fk_group) REFERENCES o_bs_group (id);
+ALTER TABLE o_proj_artefact_to_artefact ADD CONSTRAINT projata_artefact1_idx FOREIGN KEY (fk_artefact1) REFERENCES o_proj_artefact (id);
+ALTER TABLE o_proj_artefact_to_artefact ADD CONSTRAINT projata_artefact2_idx FOREIGN KEY (fk_artefact2) REFERENCES o_proj_artefact (id);
+ALTER TABLE o_proj_artefact_to_artefact ADD CONSTRAINT projata_project_idx FOREIGN KEY (fk_project) REFERENCES o_proj_project (id);
+ALTER TABLE o_proj_artefact_to_artefact ADD CONSTRAINT projata_creator_idx FOREIGN KEY (fk_creator) REFERENCES o_bs_identity(id);
+
+ALTER TABLE o_proj_tag ADD CONSTRAINT tag_project_idx FOREIGN KEY (fk_project) REFERENCES o_proj_project (id);
+ALTER TABLE o_proj_tag ADD CONSTRAINT tag_artefact_idx FOREIGN KEY (fk_artefact) REFERENCES o_proj_artefact (id);
+ALTER TABLE o_proj_tag ADD CONSTRAINT tag_tag_idx FOREIGN KEY (fk_tag) REFERENCES o_tag_tag (id);
+
+ALTER TABLE o_proj_file ADD CONSTRAINT file_artefact_idx FOREIGN KEY (fk_artefact) REFERENCES o_proj_artefact (id);
+ALTER TABLE o_proj_file ADD CONSTRAINT file_metadata_idx FOREIGN KEY (fk_metadata) REFERENCES o_vfs_metadata(id);
+ALTER TABLE o_proj_todo ADD CONSTRAINT todo_artefact_idx FOREIGN KEY (fk_artefact) REFERENCES o_proj_artefact (id);
+ALTER TABLE o_proj_todo ADD CONSTRAINT todo_todo_idx FOREIGN KEY (fk_todo_task) REFERENCES o_todo_task(id);
+CREATE UNIQUE INDEX idx_todo_ident_idx ON o_proj_todo (p_identifier);
+ALTER TABLE o_proj_note ADD CONSTRAINT note_artefact_idx FOREIGN KEY (fk_artefact) REFERENCES o_proj_artefact (id);
+ALTER TABLE o_proj_appointment ADD CONSTRAINT appointment_artefact_idx FOREIGN KEY (fk_artefact) REFERENCES o_proj_artefact (id);
+CREATE UNIQUE INDEX idx_appointment_ident_idx ON o_proj_appointment (p_identifier);
+ALTER TABLE o_proj_milestone ADD CONSTRAINT milestone_artefact_idx FOREIGN KEY (fk_artefact) REFERENCES o_proj_artefact (id);
+CREATE UNIQUE INDEX idx_milestone_ident_idx ON o_proj_milestone (p_identifier);
+ALTER TABLE o_proj_decision ADD CONSTRAINT decision_artefact_idx FOREIGN KEY (fk_artefact) REFERENCES o_proj_artefact (id);
+
+ALTER TABLE o_proj_activity ADD CONSTRAINT activity_doer_idx FOREIGN KEY (fk_doer) REFERENCES o_bs_identity (id);
+ALTER TABLE o_proj_activity ADD CONSTRAINT activity_project_idx FOREIGN KEY (fk_project) REFERENCES o_proj_project (id);
+CREATE INDEX idx_activity_artefact_idx ON o_proj_activity (fk_artefact);
+CREATE INDEX idx_activity_artefact_reference_idx ON o_proj_activity (fk_artefact_reference);
+ALTER TABLE o_proj_activity ADD CONSTRAINT activity_member_idx FOREIGN KEY (fk_member) REFERENCES o_bs_identity (id);
+ALTER TABLE o_proj_activity ADD CONSTRAINT activity_organisation_idx FOREIGN KEY (fk_organisation) REFERENCES o_org_organisation (id);
+CREATE INDEX idx_activity_temp_ident_idx ON o_proj_activity (p_temp_identifier);
+
+-- JupyterHub
+ALTER TABLE o_jup_hub ADD CONSTRAINT jup_hub_tool_idx FOREIGN KEY (fk_lti_tool_id) REFERENCES o_lti_tool (id);
+CREATE INDEX idx_jup_hub_tool_idx ON o_jup_hub (fk_lti_tool_id);
+
+ALTER TABLE o_jup_deployment ADD CONSTRAINT jup_deployment_hub_idx FOREIGN KEY (fk_hub) REFERENCES o_jup_hub (id);
+CREATE INDEX idx_jup_deployment_hub_idx ON o_jup_deployment (fk_hub);
+
+ALTER TABLE o_jup_deployment ADD CONSTRAINT jup_deployment_tool_deployment_idx FOREIGN KEY (fk_lti_tool_deployment_id) REFERENCES o_lti_tool_deployment (id);
+CREATE INDEX idx_jup_deployment_tool_deployment_idx ON o_jup_deployment (fk_lti_tool_deployment_id);
+
+ALTER TABLE o_jup_deployment ADD CONSTRAINT jup_deployment_context_idx FOREIGN KEY (fk_lti_context_id) REFERENCES o_lti_context (id);
+
+-- Open Badges
+CREATE INDEX o_badge_class_uuid_idx ON o_badge_class (b_uuid);
+CREATE INDEX o_badge_assertion_uuid_idx ON o_badge_assertion (b_uuid);
+
+ALTER TABLE o_badge_class ADD CONSTRAINT badge_class_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+
+ALTER TABLE o_badge_assertion ADD CONSTRAINT badge_assertion_class_idx FOREIGN KEY (fk_badge_class) REFERENCES o_badge_class (id);
+
+ALTER TABLE o_badge_assertion ADD CONSTRAINT badge_assertion_recipient_idx FOREIGN KEY (fk_recipient) REFERENCES o_bs_identity (id);
+
+ALTER TABLE o_badge_assertion ADD CONSTRAINT badge_assertion_awarded_by_idx FOREIGN KEY (fk_awarded_by) REFERENCES o_bs_identity (id);
+
+ALTER TABLE o_badge_category ADD CONSTRAINT badge_category_tag_idx FOREIGN KEY (fk_tag) REFERENCES o_tag_tag (id);
+
+ALTER TABLE o_badge_category ADD CONSTRAINT badge_category_template_idx FOREIGN KEY (fk_template) REFERENCES o_badge_template (id);
+
+ALTER TABLE o_badge_category ADD CONSTRAINT badge_category_class_idx FOREIGN KEY (fk_class) REFERENCES o_badge_class (id);
+
+ALTER TABLE o_badge_entry_config ADD CONSTRAINT badge_entry_config_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
+
+-- Gui Preferences
+ALTER TABLE o_gui_prefs ADD CONSTRAINT o_gui_prefs_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_o_gui_prefs_attrclass_idx ON o_gui_prefs (g_pref_attributed_class);
+CREATE INDEX idx_o_gui_prefs_key_idx ON o_gui_prefs (g_pref_key);
+
+-- Hibernate Unique Key
+INSERT INTO hibernate_unique_key (next_hi) VALUES (0);

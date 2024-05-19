@@ -4853,608 +4853,618 @@
 -- create index projectbroker_project_id_idx on o_projectbroker_project (project_id);
 -- create index o_projectbroker_customfields_idx on o_projectbroker_customfields (fk_project_id);
 
+
+-- check until here
+
 -- info messages
-alter table o_info_message add constraint FKF85553465A4FA5DC foreign key (fk_author_id) references o_bs_identity (id);
-alter table o_info_message add constraint FKF85553465A4FA5EF foreign key (fk_modifier_id) references o_bs_identity (id);
+-- alter table o_info_message add constraint FKF85553465A4FA5DC foreign key (fk_author_id) references o_bs_identity (id);
+-- alter table o_info_message add constraint FKF85553465A4FA5EF foreign key (fk_modifier_id) references o_bs_identity (id);
 
-create index imsg_resid_idx on o_info_message (resid);
+-- create index imsg_resid_idx on o_info_message (resid);
 
-alter table o_info_message_to_group add constraint o_info_message_to_group_msg_idx foreign key (fk_info_message_id) references o_info_message (info_id);
-alter table o_info_message_to_group add constraint o_info_message_to_group_group_idx foreign key (fk_group_id) references o_gp_business (group_id);
+-- alter table o_info_message_to_group add constraint o_info_message_to_group_msg_idx foreign key (fk_info_message_id) references o_info_message (info_id);
+-- alter table o_info_message_to_group add constraint o_info_message_to_group_group_idx foreign key (fk_group_id) references o_gp_business (group_id);
 
-alter table o_info_message_to_cur_el add constraint o_info_message_to_cur_el_msg_idx foreign key (fk_info_message_id) references o_info_message (info_id);
-alter table o_info_message_to_cur_el add constraint o_info_message_to_cur_el_curel_idx foreign key (fk_cur_element_id) references o_cur_curriculum_element (id);
+-- alter table o_info_message_to_cur_el add constraint o_info_message_to_cur_el_msg_idx foreign key (fk_info_message_id) references o_info_message (info_id);
+-- alter table o_info_message_to_cur_el add constraint o_info_message_to_cur_el_curel_idx foreign key (fk_cur_element_id) references o_cur_curriculum_element (id);
 
--- db course
-alter table o_co_db_entry add constraint FK_DB_ENTRY_TO_IDENT foreign key (identity) references o_bs_identity (id);
+-- -- db course
+-- alter table o_co_db_entry add constraint FK_DB_ENTRY_TO_IDENT foreign key (identity) references o_bs_identity (id);
 
-create index o_co_db_course_idx on o_co_db_entry (courseid);
-create index o_co_db_cat_idx on o_co_db_entry (category);
-create index o_co_db_name_idx on o_co_db_entry (name);
+-- create index o_co_db_course_idx on o_co_db_entry (courseid);
+-- create index o_co_db_cat_idx on o_co_db_entry (category);
+-- create index o_co_db_name_idx on o_co_db_entry (name);
 
--- open meeting
-alter table o_om_room_reference add constraint idx_omroom_to_bgroup foreign key (businessgroup) references o_gp_business (group_id);
-create index idx_omroom_residname on o_om_room_reference (resourcetypename,resourcetypeid);
+-- -- open meeting
+-- alter table o_om_room_reference add constraint idx_omroom_to_bgroup foreign key (businessgroup) references o_gp_business (group_id);
+-- create index idx_omroom_residname on o_om_room_reference (resourcetypename,resourcetypeid);
 
--- Adobe Connect
-alter table o_aconnect_meeting add constraint aconnect_meet_entry_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
-alter table o_aconnect_meeting add constraint aconnect_meet_grp_idx foreign key (fk_group_id) references o_gp_business (group_id);
+-- -- Adobe Connect
+-- alter table o_aconnect_meeting add constraint aconnect_meet_entry_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
+-- alter table o_aconnect_meeting add constraint aconnect_meet_grp_idx foreign key (fk_group_id) references o_gp_business (group_id);
 
-alter table o_aconnect_user add constraint aconn_ident_idx foreign key (fk_identity_id) references o_bs_identity (id);
+-- alter table o_aconnect_user add constraint aconn_ident_idx foreign key (fk_identity_id) references o_bs_identity (id);
 
--- Bigbluebutton
-alter table o_bbb_meeting add constraint bbb_meet_entry_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
-alter table o_bbb_meeting add constraint bbb_meet_grp_idx foreign key (fk_group_id) references o_gp_business (group_id);
-alter table o_bbb_meeting add constraint bbb_meet_template_idx foreign key (fk_template_id) references o_bbb_template (id);
-alter table o_bbb_meeting add constraint bbb_meet_creator_idx foreign key (fk_creator_id) references o_bs_identity (id);
-alter table o_bbb_meeting add constraint bbb_meet_serv_idx foreign key (fk_server_id) references o_bbb_server (id);
-alter table o_bbb_meeting add constraint bbb_dir_idx unique (b_directory);
+-- -- Bigbluebutton
+-- alter table o_bbb_meeting add constraint bbb_meet_entry_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
+-- alter table o_bbb_meeting add constraint bbb_meet_grp_idx foreign key (fk_group_id) references o_gp_business (group_id);
+-- alter table o_bbb_meeting add constraint bbb_meet_template_idx foreign key (fk_template_id) references o_bbb_template (id);
+-- alter table o_bbb_meeting add constraint bbb_meet_creator_idx foreign key (fk_creator_id) references o_bs_identity (id);
+-- alter table o_bbb_meeting add constraint bbb_meet_serv_idx foreign key (fk_server_id) references o_bbb_server (id);
+-- alter table o_bbb_meeting add constraint bbb_dir_idx unique (b_directory);
 
-alter table o_bbb_attendee add constraint bbb_attend_ident_idx foreign key (fk_identity_id) references o_bs_identity (id);
-alter table o_bbb_attendee add constraint bbb_attend_meet_idx foreign key (fk_meeting_id) references o_bbb_meeting (id);
+-- alter table o_bbb_attendee add constraint bbb_attend_ident_idx foreign key (fk_identity_id) references o_bs_identity (id);
+-- alter table o_bbb_attendee add constraint bbb_attend_meet_idx foreign key (fk_meeting_id) references o_bbb_meeting (id);
 
-alter table o_bbb_recording add constraint bbb_record_meet_idx foreign key (fk_meeting_id) references o_bbb_meeting (id);
+-- alter table o_bbb_recording add constraint bbb_record_meet_idx foreign key (fk_meeting_id) references o_bbb_meeting (id);
 
--- Teams
-alter table o_teams_meeting add constraint teams_meet_entry_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
-alter table o_teams_meeting add constraint teams_meet_grp_idx foreign key (fk_group_id) references o_gp_business (group_id);
-alter table o_teams_meeting add constraint teams_meet_creator_idx foreign key (fk_creator_id) references o_bs_identity (id);
-
-alter table o_teams_user add constraint teams_user_ident_idx foreign key (fk_identity_id) references o_bs_identity (id);
+-- -- Teams
+-- alter table o_teams_meeting add constraint teams_meet_entry_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
+-- alter table o_teams_meeting add constraint teams_meet_grp_idx foreign key (fk_group_id) references o_gp_business (group_id);
+-- alter table o_teams_meeting add constraint teams_meet_creator_idx foreign key (fk_creator_id) references o_bs_identity (id);
 
-alter table o_teams_attendee add constraint teams_att_ident_idx foreign key (fk_identity_id) references o_bs_identity (id);
-alter table o_teams_attendee add constraint teams_att_user_idx foreign key (fk_teams_user_id) references o_teams_user (id);
-alter table o_teams_attendee add constraint teams_att_meet_idx foreign key (fk_meeting_id) references o_teams_meeting (id);
+-- alter table o_teams_user add constraint teams_user_ident_idx foreign key (fk_identity_id) references o_bs_identity (id);
 
--- tag
-create unique index idx_tag_name_idx on o_tag_tag (t_display_name);
+-- alter table o_teams_attendee add constraint teams_att_ident_idx foreign key (fk_identity_id) references o_bs_identity (id);
+-- alter table o_teams_attendee add constraint teams_att_user_idx foreign key (fk_teams_user_id) references o_teams_user (id);
+-- alter table o_teams_attendee add constraint teams_att_meet_idx foreign key (fk_meeting_id) references o_teams_meeting (id);
 
--- ToDo
-alter table o_todo_task add constraint todo_task_coll_idx foreign key (fk_collection) references o_todo_task (id);
-create index idx_todo_origin_id_idx on o_todo_task (t_origin_id);
-create index idx_todo_tag_todo_idx on o_todo_task_tag (fk_todo_task);
-create index idx_todo_tag_tag_idx on o_todo_task_tag (fk_tag);
+-- -- tag
+-- create unique index idx_tag_name_idx on o_tag_tag (t_display_name);
 
--- mail
-alter table o_mail add constraint FKF86663165A4FA5DC foreign key (fk_from_id) references o_mail_recipient (recipient_id);
-create index idx_mail_meta_id_idx on o_mail (meta_mail_id);
+-- -- ToDo
+-- alter table o_todo_task add constraint todo_task_coll_idx foreign key (fk_collection) references o_todo_task (id);
+-- create index idx_todo_origin_id_idx on o_todo_task (t_origin_id);
+-- create index idx_todo_tag_todo_idx on o_todo_task_tag (fk_todo_task);
+-- create index idx_todo_tag_tag_idx on o_todo_task_tag (fk_tag);
 
-alter table o_mail_recipient add constraint FKF86663165A4FA5DG foreign key (fk_recipient_id) references o_bs_identity (id);
-
-alter table o_mail_to_recipient add constraint FKF86663165A4FA5DE foreign key (fk_mail_id) references o_mail (mail_id);
-alter table o_mail_to_recipient add constraint FKF86663165A4FA5DD foreign key (fk_recipient_id) references o_mail_recipient (recipient_id);
-
-alter table o_mail_attachment add constraint FKF86663165A4FA5DF foreign key (fk_att_mail_id) references o_mail (mail_id);
-create index idx_mail_att_checksum_idx on o_mail_attachment (datas_checksum);
-create index idx_mail_path_idx on o_mail_attachment (datas_path(255));
-create index idx_mail_att_siblings_idx on o_mail_attachment (datas_checksum, mimetype, datas_size, datas_name);
-
--- instant messaging
-alter table o_im_message add constraint idx_im_msg_to_fromid foreign key (fk_from_identity_id) references o_bs_identity (id);
-create index idx_im_msg_res_idx on o_im_message (msg_resid,msg_resname);
-create index idx_im_msg_channel_idx on o_im_message (msg_resid,msg_resname,msg_ressubpath,msg_channel);
+-- -- mail
+-- alter table o_mail add constraint FKF86663165A4FA5DC foreign key (fk_from_id) references o_mail_recipient (recipient_id);
+-- create index idx_mail_meta_id_idx on o_mail (meta_mail_id);
 
-alter table o_im_message add constraint im_msg_bbb_idx foreign key (fk_meeting_id) references o_bbb_meeting (id);
-alter table o_im_message add constraint im_msg_teams_idx foreign key (fk_teams_id) references o_teams_meeting (id);
+-- alter table o_mail_recipient add constraint FKF86663165A4FA5DG foreign key (fk_recipient_id) references o_bs_identity (id);
 
-alter table o_im_notification add constraint idx_im_not_to_toid foreign key (fk_to_identity_id) references o_bs_identity (id);
-alter table o_im_notification add constraint idx_im_not_to_fromid foreign key (fk_from_identity_id) references o_bs_identity (id);
-create index idx_im_chat_res_idx on o_im_notification (chat_resid,chat_resname);
-create index idx_im_chat_typed_idx on o_im_notification (fk_to_identity_id,chat_type);
+-- alter table o_mail_to_recipient add constraint FKF86663165A4FA5DE foreign key (fk_mail_id) references o_mail (mail_id);
+-- alter table o_mail_to_recipient add constraint FKF86663165A4FA5DD foreign key (fk_recipient_id) references o_mail_recipient (recipient_id);
 
-alter table o_im_roster_entry add constraint idx_im_rost_to_id foreign key (fk_identity_id) references o_bs_identity (id);
-create index idx_im_rost_res_idx on o_im_roster_entry (r_resid,r_resname);
-create index idx_im_rost_sub_idx on o_im_roster_entry (r_resid,r_resname,r_ressubpath);
+-- alter table o_mail_attachment add constraint FKF86663165A4FA5DF foreign key (fk_att_mail_id) references o_mail (mail_id);
+-- create index idx_mail_att_checksum_idx on o_mail_attachment (datas_checksum);
+-- create index idx_mail_path_idx on o_mail_attachment (datas_path(255));
+-- create index idx_mail_att_siblings_idx on o_mail_attachment (datas_checksum, mimetype, datas_size, datas_name);
 
-alter table o_im_preferences add constraint idx_im_prfs_to_id foreign key (fk_from_identity_id) references o_bs_identity (id);
-
--- efficiency statements
-alter table o_as_eff_statement add constraint eff_statement_id_cstr foreign key (fk_identity) references o_bs_identity (id);
-create index eff_statement_repo_key_idx on o_as_eff_statement (course_repo_key);
-create index idx_eff_stat_course_ident_idx on o_as_eff_statement (fk_identity,course_repo_key);
-
--- course infos
-alter table o_as_user_course_infos add index user_course_infos_id_cstr (fk_identity), add constraint user_course_infos_id_cstr foreign key (fk_identity) references o_bs_identity (id);
-alter table o_as_user_course_infos add index user_course_infos_res_cstr (fk_resource_id), add constraint user_course_infos_res_cstr foreign key (fk_resource_id) references o_olatresource (resource_id);
-alter table o_as_user_course_infos add unique (fk_identity, fk_resource_id);
-
-alter table o_as_entry add constraint as_entry_to_identity_idx foreign key (fk_identity) references o_bs_identity (id);
-alter table o_as_entry add constraint as_entry_to_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_as_entry add constraint as_entry_to_refentry_idx foreign key (fk_reference_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_as_entry add constraint as_entry_to_coach_idx foreign key (fk_coach) references o_bs_identity (id);
-
-create index idx_as_entry_to_id_idx on o_as_entry (a_assessment_id);
-create index idx_as_entry_start_idx on o_as_entry (a_date_start);
-create index idx_as_entry_subident_idx on o_as_entry(a_subident, fk_entry, fk_identity);
-create index idx_as_entry_re_status_idx on o_as_entry(fk_entry, a_status);
-
-alter table o_as_score_accounting_trigger add constraint satrigger_to_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-create index idx_satrigger_bs_group_idx on o_as_score_accounting_trigger (e_business_group_key);
-create index idx_satrigger_org_idx on o_as_score_accounting_trigger (e_organisation_key);
-create index idx_satrigger_curele_idx on o_as_score_accounting_trigger (e_curriculum_element_key);
-create index idx_satrigger_userprop_idx on o_as_score_accounting_trigger (e_user_property_value, e_user_property_name);
-
--- Assessment message
-alter table o_as_message add constraint as_msg_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-
-alter table o_as_message_log add constraint as_msg_log_identity_idx foreign key (fk_identity) references o_bs_identity (id);
-alter table o_as_message_log add constraint as_msg_log_msg_idx foreign key (fk_message) references o_as_message (id);
-
--- disadvantage compensation
-alter table o_as_compensation add constraint compensation_ident_idx foreign key (fk_identity) references o_bs_identity (id);
-alter table o_as_compensation add constraint compensation_crea_idx foreign key (fk_creator) references o_bs_identity (id);
-alter table o_as_compensation add constraint compensation_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-
-create index comp_log_entry_idx on o_as_compensation_log (fk_entry_id);
-create index comp_log_ident_idx on o_as_compensation_log (fk_identity_id);
-
--- Grade
-create unique index idx_grsys_ident on o_gr_grade_system (g_identifier);
-alter table o_gr_grade_scale add constraint grscale_to_entry_idx foreign key (fk_grade_system) references o_gr_grade_system (id);
-alter table o_gr_performance_class add constraint perf_to_grsys_idx foreign key (fk_grade_system) references o_gr_grade_system (id);
-alter table o_gr_grade_scale add constraint grscale_to_grsys_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_gr_breakpoint add constraint grbp_to_grsys_idx foreign key (fk_grade_scale) references o_gr_grade_scale (id);
-
--- gotomeeting
-alter table o_goto_organizer add constraint goto_organ_owner_idx foreign key (fk_identity) references o_bs_identity (id);
-create index idx_goto_organ_okey_idx on o_goto_organizer(g_organizer_key);
-create index idx_goto_organ_uname_idx on o_goto_organizer(g_username);
-
-alter table o_goto_meeting add constraint goto_meet_repoentry_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
-alter table o_goto_meeting add constraint goto_meet_busgrp_idx foreign key (fk_group_id) references o_gp_business (group_id);
-alter table o_goto_meeting add constraint goto_meet_organizer_idx foreign key (fk_organizer_id) references o_goto_organizer (id);
-
-alter table o_goto_registrant add constraint goto_regis_meeting_idx foreign key (fk_meeting_id) references o_goto_meeting (id);
-alter table o_goto_registrant add constraint goto_regis_ident_idx foreign key (fk_identity_id) references o_bs_identity (id);
-
--- video
-alter table o_vid_transcoding add constraint fk_resource_id_idx foreign key (fk_resource_id) references o_olatresource (resource_id);
-create index vid_status_trans_idx on o_vid_transcoding(vid_status);
-create index vid_transcoder_trans_idx on o_vid_transcoding(vid_transcoder);
-alter table o_vid_metadata add constraint vid_meta_rsrc_idx foreign key (fk_resource_id) references o_olatresource (resource_id);
-
-alter table o_vid_to_organisation add constraint vid_entry_to_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_vid_to_organisation add constraint vid_entry_to_org_idx foreign key (fk_organisation) references o_org_organisation (id);
-
--- video task
-alter table o_vid_task_session add constraint vid_sess_to_repo_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_vid_task_session add constraint vid_sess_to_vid_entry_idx foreign key (fk_reference_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_vid_task_session add constraint vid_sess_to_identity_idx foreign key (fk_identity) references o_bs_identity (id);
-alter table o_vid_task_session add constraint vid_sess_to_as_entry_idx foreign key (fk_assessment_entry) references o_as_entry (id);
-
-alter table o_vid_task_selection add constraint vid_sel_to_session_idx foreign key (fk_task_session) references o_vid_task_session (id);
-
--- calendar
-alter table o_cal_use_config add constraint cal_u_conf_to_ident_idx foreign key (fk_identity) references o_bs_identity (id);
-create index idx_cal_u_conf_cal_id_idx on o_cal_use_config (c_calendar_id);
-create index idx_cal_u_conf_cal_type_idx on o_cal_use_config (c_calendar_type);
-
-alter table o_cal_import add constraint cal_imp_to_ident_idx foreign key (fk_identity) references o_bs_identity (id);
-create index idx_cal_imp_cal_id_idx on o_cal_import (c_calendar_id);
-create index idx_cal_imp_cal_type_idx on o_cal_import (c_calendar_type);
-
-create index idx_cal_imp_to_cal_id_idx on o_cal_import_to (c_to_calendar_id);
-create index idx_cal_imp_to_cal_type_idx on o_cal_import_to (c_to_calendar_type);
-
--- mapper
-create index o_mapper_uuid_idx on o_mapper (mapper_uuid);
-
--- qti 2.1
-alter table o_qti_assessmenttest_session add constraint qti_sess_to_repo_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_qti_assessmenttest_session add constraint qti_sess_to_course_entry_idx foreign key (fk_reference_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_qti_assessmenttest_session add constraint qti_sess_to_identity_idx foreign key (fk_identity) references o_bs_identity (id);
-alter table o_qti_assessmenttest_session add constraint qti_sess_to_as_entry_idx foreign key (fk_assessment_entry) references o_as_entry (id);
-
-alter table o_qti_assessmentitem_session add constraint qti_itemsess_to_testsess_idx foreign key (fk_assessmenttest_session) references o_qti_assessmenttest_session (id);
-create index idx_item_identifier_idx on o_qti_assessmentitem_session (q_itemidentifier);
-
-alter table o_qti_assessment_response add constraint qti_resp_to_testsession_idx foreign key (fk_assessmenttest_session) references o_qti_assessmenttest_session (id);
-alter table o_qti_assessment_response add constraint qti_resp_to_itemsession_idx foreign key (fk_assessmentitem_session) references o_qti_assessmentitem_session (id);
-create index idx_response_identifier_idx on o_qti_assessment_response (q_responseidentifier);
-create index idx_item_ext_ref_idx on o_qti_assessmentitem_session (q_externalrefidentifier);
-
-alter table o_qti_assessment_marks add constraint qti_marks_to_repo_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_qti_assessment_marks add constraint qti_marks_to_course_entry_idx foreign key (fk_reference_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_qti_assessment_marks add constraint qti_marks_to_identity_idx foreign key (fk_identity) references o_bs_identity (id);
-
--- Practice
-alter table o_practice_resource add constraint pract_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_practice_resource add constraint pract_test_entry_idx foreign key (fk_test_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_practice_resource add constraint pract_item_coll_idx foreign key (fk_item_collection) references o_qp_item_collection (id);
-alter table o_practice_resource add constraint pract_poll_idx foreign key (fk_pool) references o_qp_pool (id);
-alter table o_practice_resource add constraint pract_rsrc_share_idx foreign key (fk_resource_share) references o_olatresource(resource_id);
-
-alter table o_practice_global_item_ref add constraint pract_global_ident_idx foreign key (fk_identity) references o_bs_identity(id);
-
-create index idx_pract_global_id_uu_idx on o_practice_global_item_ref (fk_identity,p_identifier);
-
--- portfolio
-alter table o_pf_binder add constraint pf_binder_resource_idx foreign key (fk_olatresource_id) references o_olatresource (resource_id);
-alter table o_pf_binder add constraint pf_binder_group_idx foreign key (fk_group_id) references o_bs_group (id);
-alter table o_pf_binder add constraint pf_binder_course_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
-alter table o_pf_binder add constraint pf_binder_template_idx foreign key (fk_template_id) references o_pf_binder (id);
-
-alter table o_pf_section add constraint pf_section_group_idx foreign key (fk_group_id) references o_bs_group (id);
-alter table o_pf_section add constraint pf_section_binder_idx foreign key (fk_binder_id) references o_pf_binder (id);
-alter table o_pf_section add constraint pf_section_template_idx foreign key (fk_template_reference_id) references o_pf_section (id);
-
-alter table o_ce_page add constraint pf_page_group_idx foreign key (fk_group_id) references o_bs_group (id);
-alter table o_ce_page add constraint pf_page_section_idx foreign key (fk_section_id) references o_pf_section (id);
-alter table o_ce_page add constraint pf_page_body_idx foreign key (fk_body_id) references o_ce_page_body (id);
-alter table o_ce_page add constraint page_preview_metadata_idx foreign key (fk_preview_metadata) references o_vfs_metadata(id);
-
-alter table o_media add constraint pf_media_author_idx foreign key (fk_author_id) references o_bs_identity (id);
-create index idx_category_rel_resid_idx on o_media (p_business_path);
-
-alter table o_media_tag add constraint media_tag_media_idx foreign key (fk_media) references o_media (id);
-alter table o_media_tag add constraint media_tag_tag_idx foreign key (fk_tag) references o_tag_tag (id);
-
-alter table o_media_to_tax_level add constraint media_tax_media_idx foreign key (fk_media) references o_media (id);
-alter table o_media_to_tax_level add constraint media_tax_tax_idx foreign key (fk_taxonomy_level) references o_tax_taxonomy_level (id);
-
-alter table o_media_to_group add constraint med_to_group_media_idx foreign key (fk_media) references o_media (id);
-alter table o_media_to_group add constraint med_to_group_group_idx foreign key (fk_group) references o_bs_group (id);
-alter table o_media_to_group add constraint med_to_group_re_idx foreign key (fk_repositoryentry) references o_repositoryentry (repositoryentry_id);
-
-alter table o_media_version add constraint media_version_media_idx foreign key (fk_media) references o_media (id);
-alter table o_media_version add constraint media_version_meta_idx foreign key (fk_metadata) references o_vfs_metadata (id);
-alter table o_media_version add constraint media_version_version_metadata_idx foreign key (fk_version_metadata) references o_media_version_metadata(id);
-create index idx_media_version_uuid_idx on o_media_version (p_version_uuid);
-create index idx_media_version_checksum_idx on o_media_version (p_version_checksum);
-
-alter table o_media_log add constraint media_log_media_idx foreign key (fk_media) references o_media (id);
-alter table o_media_log add constraint media_log_ident_idx foreign key (fk_identity) references o_bs_identity (id);
-
-alter table o_ce_page_reference add constraint page_ref_to_page_idx foreign key (fk_page) references o_ce_page (id);
-alter table o_ce_page_reference add constraint page_ref_to_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-
-alter table o_ce_page_part add constraint media_part_version_idx foreign key (fk_media_version_id) references o_media_version (id);
-alter table o_ce_page_part add constraint pf_page_page_body_idx foreign key (fk_page_body_id) references o_ce_page_body (id);
-alter table o_ce_page_part add constraint pf_page_media_idx foreign key (fk_media_id) references o_media (id);
-alter table o_ce_page_part add constraint pf_part_form_idx foreign key (fk_form_entry_id) references o_repositoryentry (repositoryentry_id);
-alter table o_ce_page_part add constraint media_part_ident_idx foreign key (fk_identity_id) references o_bs_identity (id);
+-- -- instant messaging
+-- alter table o_im_message add constraint idx_im_msg_to_fromid foreign key (fk_from_identity_id) references o_bs_identity (id);
+-- create index idx_im_msg_res_idx on o_im_message (msg_resid,msg_resname);
+-- create index idx_im_msg_channel_idx on o_im_message (msg_resid,msg_resname,msg_ressubpath,msg_channel);
 
-create index idx_category_name_idx on o_pf_category (p_name);
-
-alter table o_pf_category_relation add constraint pf_category_rel_cat_idx foreign key (fk_category_id) references o_pf_category (id);
-create index idx_category_rel_resid_idx on o_pf_category_relation (p_resid);
+-- alter table o_im_message add constraint im_msg_bbb_idx foreign key (fk_meeting_id) references o_bbb_meeting (id);
+-- alter table o_im_message add constraint im_msg_teams_idx foreign key (fk_teams_id) references o_teams_meeting (id);
 
-alter table o_pf_assessment_section add constraint pf_asection_section_idx foreign key (fk_section_id) references o_pf_section (id);
-alter table o_pf_assessment_section add constraint pf_asection_ident_idx foreign key (fk_identity_id) references o_bs_identity (id);
+-- alter table o_im_notification add constraint idx_im_not_to_toid foreign key (fk_to_identity_id) references o_bs_identity (id);
+-- alter table o_im_notification add constraint idx_im_not_to_fromid foreign key (fk_from_identity_id) references o_bs_identity (id);
+-- create index idx_im_chat_res_idx on o_im_notification (chat_resid,chat_resname);
+-- create index idx_im_chat_typed_idx on o_im_notification (fk_to_identity_id,chat_type);
 
-alter table o_ce_assignment add constraint pf_assign_section_idx foreign key (fk_section_id) references o_pf_section (id);
-alter table o_ce_assignment add constraint pf_assign_binder_idx foreign key (fk_binder_id) references o_pf_binder (id);
-alter table o_ce_assignment add constraint pf_assign_ref_assign_idx foreign key (fk_template_reference_id) references o_ce_assignment (id);
-alter table o_ce_assignment add constraint pf_assign_page_idx foreign key (fk_page_id) references o_ce_page (id);
-alter table o_ce_assignment add constraint pf_assign_assignee_idx foreign key (fk_assignee_id) references o_bs_identity (id);
-alter table o_ce_assignment add constraint pf_assign_form_idx foreign key (fk_form_entry_id) references o_repositoryentry (repositoryentry_id);
+-- alter table o_im_roster_entry add constraint idx_im_rost_to_id foreign key (fk_identity_id) references o_bs_identity (id);
+-- create index idx_im_rost_res_idx on o_im_roster_entry (r_resid,r_resname);
+-- create index idx_im_rost_sub_idx on o_im_roster_entry (r_resid,r_resname,r_ressubpath);
 
-alter table o_pf_binder_user_infos add constraint binder_user_to_identity_idx foreign key (fk_identity) references o_bs_identity (id);
-alter table o_pf_binder_user_infos add constraint binder_user_binder_idx foreign key (fk_binder) references o_pf_binder (id);
-
-alter table o_ce_page_user_infos add constraint user_pfpage_idx foreign key (fk_identity_id) references o_bs_identity (id);
-alter table o_ce_page_user_infos add constraint page_pfpage_idx foreign key (fk_page_id) references o_ce_page (id);
+-- alter table o_im_preferences add constraint idx_im_prfs_to_id foreign key (fk_from_identity_id) references o_bs_identity (id);
 
-alter table o_ce_audit_log add constraint ce_log_to_doer_idx foreign key (fk_doer) references o_bs_identity (id);
-create index idx_ce_log_to_page_idx on o_ce_audit_log (fk_page);
+-- -- efficiency statements
+-- alter table o_as_eff_statement add constraint eff_statement_id_cstr foreign key (fk_identity) references o_bs_identity (id);
+-- create index eff_statement_repo_key_idx on o_as_eff_statement (course_repo_key);
+-- create index idx_eff_stat_course_ident_idx on o_as_eff_statement (fk_identity,course_repo_key);
 
--- evaluation form
-alter table o_eva_form_survey add constraint eva_surv_to_surv_idx foreign key (fk_series_previous) references o_eva_form_survey (id);
-create index idx_eva_surv_ores_idx on o_eva_form_survey (e_resid, e_resname, e_sub_ident(255), e_sub_ident2(255));
 
-alter table o_eva_form_participation add constraint eva_part_to_surv_idx foreign key (fk_survey) references o_eva_form_survey (id);
-create unique index idx_eva_part_ident_idx on o_eva_form_participation (e_identifier_key, e_identifier_type, fk_survey);
-create unique index idx_eva_part_executor_idx on o_eva_form_participation (fk_executor, fk_survey);
+-- -- here
+
+-- -- course infos
+-- alter table o_as_user_course_infos add index user_course_infos_id_cstr (fk_identity), add constraint user_course_infos_id_cstr foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_as_user_course_infos add index user_course_infos_res_cstr (fk_resource_id), add constraint user_course_infos_res_cstr foreign key (fk_resource_id) references o_olatresource (resource_id);
+-- alter table o_as_user_course_infos add unique (fk_identity, fk_resource_id);
+
+-- alter table o_as_entry add constraint as_entry_to_identity_idx foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_as_entry add constraint as_entry_to_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_as_entry add constraint as_entry_to_refentry_idx foreign key (fk_reference_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_as_entry add constraint as_entry_to_coach_idx foreign key (fk_coach) references o_bs_identity (id);
+
+-- create index idx_as_entry_to_id_idx on o_as_entry (a_assessment_id);
+-- create index idx_as_entry_start_idx on o_as_entry (a_date_start);
+-- create index idx_as_entry_subident_idx on o_as_entry(a_subident, fk_entry, fk_identity);
+-- create index idx_as_entry_re_status_idx on o_as_entry(fk_entry, a_status);
+
+-- alter table o_as_score_accounting_trigger add constraint satrigger_to_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- create index idx_satrigger_bs_group_idx on o_as_score_accounting_trigger (e_business_group_key);
+-- create index idx_satrigger_org_idx on o_as_score_accounting_trigger (e_organisation_key);
+-- create index idx_satrigger_curele_idx on o_as_score_accounting_trigger (e_curriculum_element_key);
+-- create index idx_satrigger_userprop_idx on o_as_score_accounting_trigger (e_user_property_value, e_user_property_name);
+
+-- -- Assessment message
+-- alter table o_as_message add constraint as_msg_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+
+-- alter table o_as_message_log add constraint as_msg_log_identity_idx foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_as_message_log add constraint as_msg_log_msg_idx foreign key (fk_message) references o_as_message (id);
+
+-- -- disadvantage compensation
+-- alter table o_as_compensation add constraint compensation_ident_idx foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_as_compensation add constraint compensation_crea_idx foreign key (fk_creator) references o_bs_identity (id);
+-- alter table o_as_compensation add constraint compensation_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+
+-- create index comp_log_entry_idx on o_as_compensation_log (fk_entry_id);
+-- create index comp_log_ident_idx on o_as_compensation_log (fk_identity_id);
+
+-- -- Grade
+-- create unique index idx_grsys_ident on o_gr_grade_system (g_identifier);
+-- alter table o_gr_grade_scale add constraint grscale_to_entry_idx foreign key (fk_grade_system) references o_gr_grade_system (id);
+-- alter table o_gr_performance_class add constraint perf_to_grsys_idx foreign key (fk_grade_system) references o_gr_grade_system (id);
+-- alter table o_gr_grade_scale add constraint grscale_to_grsys_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_gr_breakpoint add constraint grbp_to_grsys_idx foreign key (fk_grade_scale) references o_gr_grade_scale (id);
+
+-- -- gotomeeting
+-- alter table o_goto_organizer add constraint goto_organ_owner_idx foreign key (fk_identity) references o_bs_identity (id);
+-- create index idx_goto_organ_okey_idx on o_goto_organizer(g_organizer_key);
+-- create index idx_goto_organ_uname_idx on o_goto_organizer(g_username);
+
+-- alter table o_goto_meeting add constraint goto_meet_repoentry_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
+-- alter table o_goto_meeting add constraint goto_meet_busgrp_idx foreign key (fk_group_id) references o_gp_business (group_id);
+-- alter table o_goto_meeting add constraint goto_meet_organizer_idx foreign key (fk_organizer_id) references o_goto_organizer (id);
+
+-- alter table o_goto_registrant add constraint goto_regis_meeting_idx foreign key (fk_meeting_id) references o_goto_meeting (id);
+-- alter table o_goto_registrant add constraint goto_regis_ident_idx foreign key (fk_identity_id) references o_bs_identity (id);
+
+-- -- video
+-- alter table o_vid_transcoding add constraint fk_resource_id_idx foreign key (fk_resource_id) references o_olatresource (resource_id);
+-- create index vid_status_trans_idx on o_vid_transcoding(vid_status);
+-- create index vid_transcoder_trans_idx on o_vid_transcoding(vid_transcoder);
+-- alter table o_vid_metadata add constraint vid_meta_rsrc_idx foreign key (fk_resource_id) references o_olatresource (resource_id);
+
+-- alter table o_vid_to_organisation add constraint vid_entry_to_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_vid_to_organisation add constraint vid_entry_to_org_idx foreign key (fk_organisation) references o_org_organisation (id);
+
+-- -- video task
+-- alter table o_vid_task_session add constraint vid_sess_to_repo_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_vid_task_session add constraint vid_sess_to_vid_entry_idx foreign key (fk_reference_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_vid_task_session add constraint vid_sess_to_identity_idx foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_vid_task_session add constraint vid_sess_to_as_entry_idx foreign key (fk_assessment_entry) references o_as_entry (id);
+
+-- alter table o_vid_task_selection add constraint vid_sel_to_session_idx foreign key (fk_task_session) references o_vid_task_session (id);
+
+-- -- calendar
+-- alter table o_cal_use_config add constraint cal_u_conf_to_ident_idx foreign key (fk_identity) references o_bs_identity (id);
+-- create index idx_cal_u_conf_cal_id_idx on o_cal_use_config (c_calendar_id);
+-- create index idx_cal_u_conf_cal_type_idx on o_cal_use_config (c_calendar_type);
+
+-- alter table o_cal_import add constraint cal_imp_to_ident_idx foreign key (fk_identity) references o_bs_identity (id);
+-- create index idx_cal_imp_cal_id_idx on o_cal_import (c_calendar_id);
+-- create index idx_cal_imp_cal_type_idx on o_cal_import (c_calendar_type);
+
+-- create index idx_cal_imp_to_cal_id_idx on o_cal_import_to (c_to_calendar_id);
+-- create index idx_cal_imp_to_cal_type_idx on o_cal_import_to (c_to_calendar_type);
+
+-- -- mapper
+-- create index o_mapper_uuid_idx on o_mapper (mapper_uuid);
+
+---- qti 2.1
+-- alter table o_qti_assessmenttest_session add constraint qti_sess_to_repo_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_qti_assessmenttest_session add constraint qti_sess_to_course_entry_idx foreign key (fk_reference_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_qti_assessmenttest_session add constraint qti_sess_to_identity_idx foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_qti_assessmenttest_session add constraint qti_sess_to_as_entry_idx foreign key (fk_assessment_entry) references o_as_entry (id);
+
+-- alter table o_qti_assessmentitem_session add constraint qti_itemsess_to_testsess_idx foreign key (fk_assessmenttest_session) references o_qti_assessmenttest_session (id);
+-- create index idx_item_identifier_idx on o_qti_assessmentitem_session (q_itemidentifier);
 
-alter table o_eva_form_session add constraint eva_sess_to_surv_idx foreign key (fk_survey) references o_eva_form_survey (id);
-alter table o_eva_form_session add constraint eva_sess_to_part_idx foreign key (fk_participation) references o_eva_form_participation (id);
-alter table o_eva_form_session add constraint eva_sess_to_ident_idx foreign key (fk_identity) references o_bs_identity (id);
-alter table o_eva_form_session add constraint eva_sess_to_body_idx foreign key (fk_page_body) references o_ce_page_body (id);
-alter table o_eva_form_session add constraint eva_sess_to_form_idx foreign key (fk_form_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_qti_assessment_response add constraint qti_resp_to_testsession_idx foreign key (fk_assessmenttest_session) references o_qti_assessmenttest_session (id);
+-- alter table o_qti_assessment_response add constraint qti_resp_to_itemsession_idx foreign key (fk_assessmentitem_session) references o_qti_assessmentitem_session (id);
+-- create index idx_response_identifier_idx on o_qti_assessment_response (q_responseidentifier);
+-- create index idx_item_ext_ref_idx on o_qti_assessmentitem_session (q_externalrefidentifier);
+
+-- alter table o_qti_assessment_marks add constraint qti_marks_to_repo_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_qti_assessment_marks add constraint qti_marks_to_course_entry_idx foreign key (fk_reference_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_qti_assessment_marks add constraint qti_marks_to_identity_idx foreign key (fk_identity) references o_bs_identity (id);
+
+-- -- Practice
+-- alter table o_practice_resource add constraint pract_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_practice_resource add constraint pract_test_entry_idx foreign key (fk_test_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_practice_resource add constraint pract_item_coll_idx foreign key (fk_item_collection) references o_qp_item_collection (id);
+-- alter table o_practice_resource add constraint pract_poll_idx foreign key (fk_pool) references o_qp_pool (id);
+-- alter table o_practice_resource add constraint pract_rsrc_share_idx foreign key (fk_resource_share) references o_olatresource(resource_id);
 
-alter table o_eva_form_response add constraint eva_resp_to_sess_idx foreign key (fk_session) references o_eva_form_session (id);
-create index idx_eva_resp_report_idx on o_eva_form_response (fk_session, e_responseidentifier, e_no_response);
+-- alter table o_practice_global_item_ref add constraint pract_global_ident_idx foreign key (fk_identity) references o_bs_identity(id);
+
+-- create index idx_pract_global_id_uu_idx on o_practice_global_item_ref (fk_identity,p_identifier);
+
+-- -- portfolio
+-- alter table o_pf_binder add constraint pf_binder_resource_idx foreign key (fk_olatresource_id) references o_olatresource (resource_id);
+-- alter table o_pf_binder add constraint pf_binder_group_idx foreign key (fk_group_id) references o_bs_group (id);
+-- alter table o_pf_binder add constraint pf_binder_course_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
+-- alter table o_pf_binder add constraint pf_binder_template_idx foreign key (fk_template_id) references o_pf_binder (id);
+
+-- alter table o_pf_section add constraint pf_section_group_idx foreign key (fk_group_id) references o_bs_group (id);
+-- alter table o_pf_section add constraint pf_section_binder_idx foreign key (fk_binder_id) references o_pf_binder (id);
+-- alter table o_pf_section add constraint pf_section_template_idx foreign key (fk_template_reference_id) references o_pf_section (id);
+
+-- alter table o_ce_page add constraint pf_page_group_idx foreign key (fk_group_id) references o_bs_group (id);
+-- alter table o_ce_page add constraint pf_page_section_idx foreign key (fk_section_id) references o_pf_section (id);
+-- alter table o_ce_page add constraint pf_page_body_idx foreign key (fk_body_id) references o_ce_page_body (id);
+-- alter table o_ce_page add constraint page_preview_metadata_idx foreign key (fk_preview_metadata) references o_vfs_metadata(id);
+
+-- alter table o_media add constraint pf_media_author_idx foreign key (fk_author_id) references o_bs_identity (id);
+-- create index idx_category_rel_resid_idx on o_media (p_business_path);
+
+-- alter table o_media_tag add constraint media_tag_media_idx foreign key (fk_media) references o_media (id);
+-- alter table o_media_tag add constraint media_tag_tag_idx foreign key (fk_tag) references o_tag_tag (id);
+
+-- alter table o_media_to_tax_level add constraint media_tax_media_idx foreign key (fk_media) references o_media (id);
+-- alter table o_media_to_tax_level add constraint media_tax_tax_idx foreign key (fk_taxonomy_level) references o_tax_taxonomy_level (id);
 
-alter table o_ce_page_to_tax_competence add constraint fk_tax_competence_idx foreign key (fk_tax_competence) references o_tax_taxonomy_competence (id);
-alter table o_ce_page_to_tax_competence add constraint fk_pf_page_idx foreign key (fk_pf_page) references o_ce_page (id);
+-- alter table o_media_to_group add constraint med_to_group_media_idx foreign key (fk_media) references o_media (id);
+-- alter table o_media_to_group add constraint med_to_group_group_idx foreign key (fk_group) references o_bs_group (id);
+-- alter table o_media_to_group add constraint med_to_group_re_idx foreign key (fk_repositoryentry) references o_repositoryentry (repositoryentry_id);
 
--- vfs metadata
-alter table o_vfs_metadata add constraint fmeta_to_author_idx foreign key (fk_locked_identity) references o_bs_identity (id);
-alter table o_vfs_metadata add constraint fmeta_modified_by_idx foreign key (fk_lastmodified_by) references o_bs_identity (id);
-alter table o_vfs_metadata add constraint fmeta_to_lockid_idx foreign key (fk_initialized_by) references o_bs_identity (id);
-alter table o_vfs_metadata add constraint fmeta_to_lic_type_idx foreign key (fk_license_type) references o_lic_license_type (id);
-alter table o_vfs_metadata add constraint fmeta_to_parent_idx foreign key (fk_parent) references o_vfs_metadata (id);
-create index f_m_rel_path_idx on o_vfs_metadata (f_relative_path(255));
-create index f_m_file_idx on o_vfs_metadata (f_relative_path(255),f_filename(255));
-create index f_m_uuid_idx on o_vfs_metadata (f_uuid);
-create index f_exp_date_idx on o_vfs_metadata (f_expiration_date);
+-- alter table o_media_version add constraint media_version_media_idx foreign key (fk_media) references o_media (id);
+-- alter table o_media_version add constraint media_version_meta_idx foreign key (fk_metadata) references o_vfs_metadata (id);
+-- alter table o_media_version add constraint media_version_version_metadata_idx foreign key (fk_version_metadata) references o_media_version_metadata(id);
+-- create index idx_media_version_uuid_idx on o_media_version (p_version_uuid);
+-- create index idx_media_version_checksum_idx on o_media_version (p_version_checksum);
 
-alter table o_vfs_thumbnail add constraint fthumb_to_meta_idx foreign key (fk_metadata) references o_vfs_metadata (id);
+-- alter table o_media_log add constraint media_log_media_idx foreign key (fk_media) references o_media (id);
+-- alter table o_media_log add constraint media_log_ident_idx foreign key (fk_identity) references o_bs_identity (id);
 
-alter table o_vfs_revision add constraint fvers_to_author_idx foreign key (fk_initialized_by) references o_bs_identity (id);
-alter table o_vfs_revision add constraint fvers_modified_by_idx foreign key (fk_lastmodified_by) references o_bs_identity (id);
-alter table o_vfs_revision add constraint fvers_to_meta_idx foreign key (fk_metadata) references o_vfs_metadata (id);
-alter table o_vfs_revision add constraint fvers_to_lic_type_idx foreign key (fk_license_type) references o_lic_license_type (id);
+-- alter table o_ce_page_reference add constraint page_ref_to_page_idx foreign key (fk_page) references o_ce_page (id);
+-- alter table o_ce_page_reference add constraint page_ref_to_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
 
-create index idx_vfs_meta_transstat_idx on o_vfs_metadata(f_transcoding_status);
+-- alter table o_ce_page_part add constraint media_part_version_idx foreign key (fk_media_version_id) references o_media_version (id);
+-- alter table o_ce_page_part add constraint pf_page_page_body_idx foreign key (fk_page_body_id) references o_ce_page_body (id);
+-- alter table o_ce_page_part add constraint pf_page_media_idx foreign key (fk_media_id) references o_media (id);
+-- alter table o_ce_page_part add constraint pf_part_form_idx foreign key (fk_form_entry_id) references o_repositoryentry (repositoryentry_id);
+-- alter table o_ce_page_part add constraint media_part_ident_idx foreign key (fk_identity_id) references o_bs_identity (id);
 
--- Document editor
-create unique index idx_de_userinfo_ident_idx on o_de_user_info(fk_identity);
+-- create index idx_category_name_idx on o_pf_category (p_name);
 
--- quality management
-alter table o_qual_data_collection add constraint qual_dc_to_gen_idx foreign key (fk_generator) references o_qual_generator (id);
-create index idx_dc_status_idx on o_qual_data_collection (q_status);
+-- alter table o_pf_category_relation add constraint pf_category_rel_cat_idx foreign key (fk_category_id) references o_pf_category (id);
+-- create index idx_category_rel_resid_idx on o_pf_category_relation (p_resid);
 
-alter table o_qual_data_collection_to_org add constraint qual_dc_to_org_idx foreign key (fk_data_collection) references o_qual_data_collection (id);
-create unique index idx_qual_dc_to_org_idx on o_qual_data_collection_to_org (fk_data_collection, fk_organisation);
+-- alter table o_pf_assessment_section add constraint pf_asection_section_idx foreign key (fk_section_id) references o_pf_section (id);
+-- alter table o_pf_assessment_section add constraint pf_asection_ident_idx foreign key (fk_identity_id) references o_bs_identity (id);
 
-alter table o_qual_context add constraint qual_con_to_data_collection_idx foreign key (fk_data_collection) references o_qual_data_collection (id);
-alter table o_qual_context add constraint qual_con_to_participation_idx foreign key (fk_eva_participation) references o_eva_form_participation (id);
-alter table o_qual_context add constraint qual_con_to_session_idx foreign key (fk_eva_session) references o_eva_form_session (id);
+-- alter table o_ce_assignment add constraint pf_assign_section_idx foreign key (fk_section_id) references o_pf_section (id);
+-- alter table o_ce_assignment add constraint pf_assign_binder_idx foreign key (fk_binder_id) references o_pf_binder (id);
+-- alter table o_ce_assignment add constraint pf_assign_ref_assign_idx foreign key (fk_template_reference_id) references o_ce_assignment (id);
+-- alter table o_ce_assignment add constraint pf_assign_page_idx foreign key (fk_page_id) references o_ce_page (id);
+-- alter table o_ce_assignment add constraint pf_assign_assignee_idx foreign key (fk_assignee_id) references o_bs_identity (id);
+-- alter table o_ce_assignment add constraint pf_assign_form_idx foreign key (fk_form_entry_id) references o_repositoryentry (repositoryentry_id);
 
-alter table o_qual_context_to_organisation add constraint qual_con_to_org_con_idx foreign key (fk_context) references o_qual_context (id);
-create unique index idx_con_to_org_org_idx on o_qual_context_to_organisation (fk_organisation, fk_context);
+-- alter table o_pf_binder_user_infos add constraint binder_user_to_identity_idx foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_pf_binder_user_infos add constraint binder_user_binder_idx foreign key (fk_binder) references o_pf_binder (id);
 
-alter table o_qual_context_to_curriculum add constraint qual_con_to_cur_con_idx foreign key (fk_context) references o_qual_context (id);
-create unique index idx_con_to_cur_cur_idx on o_qual_context_to_curriculum (fk_curriculum, fk_context);
+-- alter table o_ce_page_user_infos add constraint user_pfpage_idx foreign key (fk_identity_id) references o_bs_identity (id);
+-- alter table o_ce_page_user_infos add constraint page_pfpage_idx foreign key (fk_page_id) references o_ce_page (id);
 
-alter table o_qual_context_to_cur_element add constraint qual_con_to_cur_ele_con_idx foreign key (fk_context) references o_qual_context (id);
-create unique index idx_con_to_cur_ele_ele_idx on o_qual_context_to_cur_element (fk_cur_element, fk_context);
+-- alter table o_ce_audit_log add constraint ce_log_to_doer_idx foreign key (fk_doer) references o_bs_identity (id);
+-- create index idx_ce_log_to_page_idx on o_ce_audit_log (fk_page);
 
-alter table o_qual_context_to_tax_level add constraint qual_con_to_tax_level_con_idx foreign key (fk_context) references o_qual_context (id);
-create unique index idx_con_to_tax_level_tax_idx on o_qual_context_to_tax_level (fk_tax_leveL, fk_context);
+-- another round
 
-alter table o_qual_reminder add constraint qual_rem_to_data_collection_idx foreign key (fk_data_collection) references o_qual_data_collection (id);
 
-alter table o_qual_report_access add constraint qual_repacc_to_dc_idx foreign key (fk_data_collection) references o_qual_data_collection (id);
-alter table o_qual_report_access add constraint qual_repacc_to_generator_idx foreign key (fk_generator) references o_qual_generator (id);
+-- -- evaluation form
+-- alter table o_eva_form_survey add constraint eva_surv_to_surv_idx foreign key (fk_series_previous) references o_eva_form_survey (id);
+-- create index idx_eva_surv_ores_idx on o_eva_form_survey (e_resid, e_resname, e_sub_ident(255), e_sub_ident2(255));
 
-alter table o_qual_generator_to_org add constraint qual_gen_to_org_idx foreign key (fk_generator) references o_qual_generator (id);
-create unique index idx_qual_gen_to_org_idx on o_qual_generator_to_org (fk_generator, fk_organisation);
+-- alter table o_eva_form_participation add constraint eva_part_to_surv_idx foreign key (fk_survey) references o_eva_form_survey (id);
+-- create unique index idx_eva_part_ident_idx on o_eva_form_participation (e_identifier_key, e_identifier_type, fk_survey);
+-- create unique index idx_eva_part_executor_idx on o_eva_form_participation (fk_executor, fk_survey);
 
-alter table o_qual_generator_override add constraint qual_override_to_gen_idx foreign key (fk_generator) references o_qual_generator (id);
-alter table o_qual_generator_override add constraint qual_override_to_dc_idx foreign key (fk_data_collection) references o_qual_data_collection (id);
-create index idx_override_ident_idx on o_qual_generator_override(q_identifier);
+-- alter table o_eva_form_session add constraint eva_sess_to_surv_idx foreign key (fk_survey) references o_eva_form_survey (id);
+-- alter table o_eva_form_session add constraint eva_sess_to_part_idx foreign key (fk_participation) references o_eva_form_participation (id);
+-- alter table o_eva_form_session add constraint eva_sess_to_ident_idx foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_eva_form_session add constraint eva_sess_to_body_idx foreign key (fk_page_body) references o_ce_page_body (id);
+-- alter table o_eva_form_session add constraint eva_sess_to_form_idx foreign key (fk_form_entry) references o_repositoryentry (repositoryentry_id);
 
-create index idx_qm_audit_doer_idx on o_qual_audit_log (fk_doer);
-create index idx_qm_audit_dc_idx on o_qual_audit_log (fk_data_collection);
-create index idx_qm_audit_todo_idx on o_qual_audit_log (fk_todo_task);
-create index idx_qm_audit_ident_idx on o_qual_audit_log (fk_identity);
+-- alter table o_eva_form_response add constraint eva_resp_to_sess_idx foreign key (fk_session) references o_eva_form_session (id);
+-- create index idx_eva_resp_report_idx on o_eva_form_response (fk_session, e_responseidentifier, e_no_response);
 
--- question pool
-alter table o_qp_pool add constraint idx_qp_pool_owner_grp_id foreign key (fk_ownergroup) references o_bs_secgroup(id);
+-- alter table o_ce_page_to_tax_competence add constraint fk_tax_competence_idx foreign key (fk_tax_competence) references o_tax_taxonomy_competence (id);
+-- alter table o_ce_page_to_tax_competence add constraint fk_pf_page_idx foreign key (fk_pf_page) references o_ce_page (id);
 
-alter table o_qp_pool_2_item add constraint idx_qp_pool_2_item_pool_id foreign key (fk_pool_id) references o_qp_pool(id);
-alter table o_qp_pool_2_item add constraint idx_qp_pool_2_item_item_id foreign key (fk_item_id) references o_qp_item(id);
-alter table o_qp_pool_2_item add unique (fk_pool_id, fk_item_id);
+-- -- vfs metadata
+-- alter table o_vfs_metadata add constraint fmeta_to_author_idx foreign key (fk_locked_identity) references o_bs_identity (id);
+-- alter table o_vfs_metadata add constraint fmeta_modified_by_idx foreign key (fk_lastmodified_by) references o_bs_identity (id);
+-- alter table o_vfs_metadata add constraint fmeta_to_lockid_idx foreign key (fk_initialized_by) references o_bs_identity (id);
+-- alter table o_vfs_metadata add constraint fmeta_to_lic_type_idx foreign key (fk_license_type) references o_lic_license_type (id);
+-- alter table o_vfs_metadata add constraint fmeta_to_parent_idx foreign key (fk_parent) references o_vfs_metadata (id);
+-- create index f_m_rel_path_idx on o_vfs_metadata (f_relative_path(255));
+-- create index f_m_file_idx on o_vfs_metadata (f_relative_path(255),f_filename(255));
+-- create index f_m_uuid_idx on o_vfs_metadata (f_uuid);
+-- create index f_exp_date_idx on o_vfs_metadata (f_expiration_date);
 
-alter table o_qp_share_item add constraint idx_qp_share_rsrc_id foreign key (fk_resource_id) references o_olatresource(resource_id);
-alter table o_qp_share_item add constraint idx_qp_share_item_id foreign key (fk_item_id) references o_qp_item(id);
-alter table o_qp_share_item add unique (fk_resource_id, fk_item_id);
+-- alter table o_vfs_thumbnail add constraint fthumb_to_meta_idx foreign key (fk_metadata) references o_vfs_metadata (id);
 
-alter table o_qp_item_collection add constraint idx_qp_coll_owner_id foreign key (fk_owner_id) references o_bs_identity(id);
+-- alter table o_vfs_revision add constraint fvers_to_author_idx foreign key (fk_initialized_by) references o_bs_identity (id);
+-- alter table o_vfs_revision add constraint fvers_modified_by_idx foreign key (fk_lastmodified_by) references o_bs_identity (id);
+-- alter table o_vfs_revision add constraint fvers_to_meta_idx foreign key (fk_metadata) references o_vfs_metadata (id);
+-- alter table o_vfs_revision add constraint fvers_to_lic_type_idx foreign key (fk_license_type) references o_lic_license_type (id);
 
-alter table o_qp_collection_2_item add constraint idx_qp_coll_coll_id foreign key (fk_collection_id) references o_qp_item_collection(id);
-alter table o_qp_collection_2_item add constraint idx_qp_coll_item_id foreign key (fk_item_id) references o_qp_item(id);
-alter table o_qp_collection_2_item add unique (fk_collection_id, fk_item_id);
+-- create index idx_vfs_meta_transstat_idx on o_vfs_metadata(f_transcoding_status);
 
-alter table o_qp_item add constraint idx_qp_pool_2_tax_id foreign key (fk_taxonomy_level_v2) references o_tax_taxonomy_level(id);
-alter table o_qp_item add constraint idx_qp_item_owner_id foreign key (fk_ownergroup) references o_bs_secgroup(id);
-alter table o_qp_item add constraint idx_qp_item_edu_ctxt_id foreign key (fk_edu_context) references o_qp_edu_context(id);
-alter table o_qp_item add constraint idx_qp_item_type_id foreign key (fk_type) references o_qp_item_type(id);
-alter table o_qp_item add constraint idx_qp_item_license_id foreign key (fk_license) references o_qp_license(id);
+-- -- Document editor
+-- create unique index idx_de_userinfo_ident_idx on o_de_user_info(fk_identity);
 
-alter table o_qp_taxonomy_level add constraint idx_qp_field_2_parent_id foreign key (fk_parent_field) references o_qp_taxonomy_level(id);
-create index idx_taxon_mat_pathon on o_qp_taxonomy_level (q_mat_path_ids(255));
+-- -- quality management
+-- alter table o_qual_data_collection add constraint qual_dc_to_gen_idx foreign key (fk_generator) references o_qual_generator (id);
+-- create index idx_dc_status_idx on o_qual_data_collection (q_status);
 
-alter table o_qp_item_type add unique (q_type(200));
-create index idx_item_audit_item_idx on o_qp_item_audit_log (fk_item_id);
+-- alter table o_qual_data_collection_to_org add constraint qual_dc_to_org_idx foreign key (fk_data_collection) references o_qual_data_collection (id);
+-- create unique index idx_qual_dc_to_org_idx on o_qual_data_collection_to_org (fk_data_collection, fk_organisation);
 
--- LTI
-alter table o_lti_outcome add constraint idx_lti_outcome_ident_id foreign key (fk_identity_id) references o_bs_identity(id);
-alter table o_lti_outcome add constraint idx_lti_outcome_rsrc_id foreign key (fk_resource_id) references o_olatresource(resource_id);
+-- alter table o_qual_context add constraint qual_con_to_data_collection_idx foreign key (fk_data_collection) references o_qual_data_collection (id);
+-- alter table o_qual_context add constraint qual_con_to_participation_idx foreign key (fk_eva_participation) references o_eva_form_participation (id);
+-- alter table o_qual_context add constraint qual_con_to_session_idx foreign key (fk_eva_session) references o_eva_form_session (id);
 
+-- alter table o_qual_context_to_organisation add constraint qual_con_to_org_con_idx foreign key (fk_context) references o_qual_context (id);
+-- create unique index idx_con_to_org_org_idx on o_qual_context_to_organisation (fk_organisation, fk_context);
 
--- LTI 1.3
-alter table o_lti_tool_deployment add constraint lti_sdep_to_tool_idx foreign key (fk_tool_id) references o_lti_tool (id);
-alter table o_lti_tool_deployment add constraint lti_sdep_to_re_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
-alter table o_lti_tool_deployment add constraint dep_to_group_idx foreign key (fk_group_id) references o_gp_business(group_id);
+-- alter table o_qual_context_to_curriculum add constraint qual_con_to_cur_con_idx foreign key (fk_context) references o_qual_context (id);
+-- create unique index idx_con_to_cur_cur_idx on o_qual_context_to_curriculum (fk_curriculum, fk_context);
 
-alter table o_lti_context add constraint ltictx_to_deploy_idx foreign key (fk_deployment_id) references o_lti_tool_deployment(id);
-alter table o_lti_context add constraint lti_ctxt_to_re_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
-alter table o_lti_context add constraint ctxt_to_group_idx foreign key (fk_group_id) references o_gp_business(group_id);
+-- alter table o_qual_context_to_cur_element add constraint qual_con_to_cur_ele_con_idx foreign key (fk_context) references o_qual_context (id);
+-- create unique index idx_con_to_cur_ele_ele_idx on o_qual_context_to_cur_element (fk_cur_element, fk_context);
 
-alter table o_lti_shared_tool_deployment add constraint unique_deploy_platform unique (l_deployment_id, fk_platform_id);
-alter table o_lti_shared_tool_deployment add constraint lti_sha_dep_to_tool_idx foreign key (fk_platform_id) references o_lti_platform (id);
-alter table o_lti_shared_tool_deployment add constraint lti_shared_to_re_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
-alter table o_lti_shared_tool_deployment add constraint lti_shared_to_bg_idx foreign key (fk_group_id) references o_gp_business (group_id);
+-- alter table o_qual_context_to_tax_level add constraint qual_con_to_tax_level_con_idx foreign key (fk_context) references o_qual_context (id);
+-- create unique index idx_con_to_tax_level_tax_idx on o_qual_context_to_tax_level (fk_tax_leveL, fk_context);
 
-alter table o_lti_shared_tool_service add constraint lti_sha_ser_to_dep_idx foreign key (fk_deployment_id) references o_lti_shared_tool_deployment (id);
+-- alter table o_qual_reminder add constraint qual_rem_to_data_collection_idx foreign key (fk_data_collection) references o_qual_data_collection (id);
 
-alter table o_lti_content_item add constraint ltiitem_to_tool_idx foreign key (fk_tool_id) references o_lti_tool(id);
-alter table o_lti_content_item add constraint ltiitem_to_deploy_idx foreign key (fk_tool_deployment_id) references o_lti_tool_deployment(id);
-alter table o_lti_content_item add constraint ltiitem_to_context_idx foreign key (fk_context_id) references o_lti_context(id);
+-- alter table o_qual_report_access add constraint qual_repacc_to_dc_idx foreign key (fk_data_collection) references o_qual_data_collection (id);
+-- alter table o_qual_report_access add constraint qual_repacc_to_generator_idx foreign key (fk_generator) references o_qual_generator (id);
 
-create index idx_lti_kid_idx on o_lti_key (l_key_id);
+-- alter table o_qual_generator_to_org add constraint qual_gen_to_org_idx foreign key (fk_generator) references o_qual_generator (id);
+-- create unique index idx_qual_gen_to_org_idx on o_qual_generator_to_org (fk_generator, fk_organisation);
 
--- assessment mode
-alter table o_as_mode_course add constraint as_mode_to_repo_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_as_mode_course add constraint as_mode_to_lblock_idx foreign key (fk_lecture_block) references o_lecture_block (id);
+-- alter table o_qual_generator_override add constraint qual_override_to_gen_idx foreign key (fk_generator) references o_qual_generator (id);
+-- alter table o_qual_generator_override add constraint qual_override_to_dc_idx foreign key (fk_data_collection) references o_qual_data_collection (id);
+-- create index idx_override_ident_idx on o_qual_generator_override(q_identifier);
 
-alter table o_as_mode_course_to_group add constraint as_modetogroup_group_idx foreign key (fk_group_id) references o_gp_business (group_id);
-alter table o_as_mode_course_to_group add constraint as_modetogroup_mode_idx foreign key (fk_assessment_mode_id) references o_as_mode_course (id);
+-- create index idx_qm_audit_doer_idx on o_qual_audit_log (fk_doer);
+-- create index idx_qm_audit_dc_idx on o_qual_audit_log (fk_data_collection);
+-- create index idx_qm_audit_todo_idx on o_qual_audit_log (fk_todo_task);
+-- create index idx_qm_audit_ident_idx on o_qual_audit_log (fk_identity);
 
-alter table o_as_mode_course_to_area add constraint as_modetoarea_area_idx foreign key (fk_area_id) references o_gp_bgarea (area_id);
-alter table o_as_mode_course_to_area add constraint as_modetoarea_mode_idx foreign key (fk_assessment_mode_id) references o_as_mode_course (id);
+-- -- question pool
+-- alter table o_qp_pool add constraint idx_qp_pool_owner_grp_id foreign key (fk_ownergroup) references o_bs_secgroup(id);
 
-alter table o_as_mode_course_to_cur_el add constraint as_modetocur_el_idx foreign key (fk_cur_element_id) references o_cur_curriculum_element (id);
-alter table o_as_mode_course_to_cur_el add constraint as_modetocur_mode_idx foreign key (fk_assessment_mode_id) references o_as_mode_course (id);
+-- alter table o_qp_pool_2_item add constraint idx_qp_pool_2_item_pool_id foreign key (fk_pool_id) references o_qp_pool(id);
+-- alter table o_qp_pool_2_item add constraint idx_qp_pool_2_item_item_id foreign key (fk_item_id) references o_qp_item(id);
+-- alter table o_qp_pool_2_item add unique (fk_pool_id, fk_item_id);
 
--- assessment inspection
-alter table o_as_inspection_configuration add constraint as_insp_to_repo_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_qp_share_item add constraint idx_qp_share_rsrc_id foreign key (fk_resource_id) references o_olatresource(resource_id);
+-- alter table o_qp_share_item add constraint idx_qp_share_item_id foreign key (fk_item_id) references o_qp_item(id);
+-- alter table o_qp_share_item add unique (fk_resource_id, fk_item_id);
 
-alter table o_as_inspection add constraint as_insp_to_ident_idx foreign key (fk_identity) references o_bs_identity (id);
-alter table o_as_inspection add constraint as_insp_to_config_idx foreign key (fk_configuration) references o_as_inspection_configuration (id);
-create index idx_as_insp_subident_idx on o_as_inspection (a_subident);
-create index idx_as_insp_endtime_idx on o_as_inspection (a_end_time);
-create index idx_as_insp_fromto_idx on o_as_inspection (a_from,a_to);
+-- alter table o_qp_item_collection add constraint idx_qp_coll_owner_id foreign key (fk_owner_id) references o_bs_identity(id);
 
-alter table o_as_inspection_log add constraint as_insp_log_to_ident_idx foreign key (fk_doer) references o_bs_identity (id);
-alter table o_as_inspection_log add constraint as_log_to_insp_idx foreign key (fk_inspection) references o_as_inspection (id);
+-- alter table o_qp_collection_2_item add constraint idx_qp_coll_coll_id foreign key (fk_collection_id) references o_qp_item_collection(id);
+-- alter table o_qp_collection_2_item add constraint idx_qp_coll_item_id foreign key (fk_item_id) references o_qp_item(id);
+-- alter table o_qp_collection_2_item add unique (fk_collection_id, fk_item_id);
 
--- certificate
-alter table o_cer_certificate add constraint cer_to_identity_idx foreign key (fk_identity) references o_bs_identity (id);
-alter table o_cer_certificate add constraint cer_to_resource_idx foreign key (fk_olatresource) references o_olatresource (resource_id);
-alter table o_cer_certificate add constraint certificate_metadata_idx foreign key (fk_metadata) references o_vfs_metadata(id);
+-- alter table o_qp_item add constraint idx_qp_pool_2_tax_id foreign key (fk_taxonomy_level_v2) references o_tax_taxonomy_level(id);
+-- alter table o_qp_item add constraint idx_qp_item_owner_id foreign key (fk_ownergroup) references o_bs_secgroup(id);
+-- alter table o_qp_item add constraint idx_qp_item_edu_ctxt_id foreign key (fk_edu_context) references o_qp_edu_context(id);
+-- alter table o_qp_item add constraint idx_qp_item_type_id foreign key (fk_type) references o_qp_item_type(id);
+-- alter table o_qp_item add constraint idx_qp_item_license_id foreign key (fk_license) references o_qp_license(id);
 
-create index cer_archived_resource_idx on o_cer_certificate (c_archived_resource_id);
-create index cer_uuid_idx on o_cer_certificate (c_uuid);
+-- alter table o_qp_taxonomy_level add constraint idx_qp_field_2_parent_id foreign key (fk_parent_field) references o_qp_taxonomy_level(id);
+-- create index idx_taxon_mat_pathon on o_qp_taxonomy_level (q_mat_path_ids(255));
 
-alter table o_cer_entry_config add constraint cer_entry_config_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_cer_entry_config add constraint template_config_entry_idx foreign key (fk_template) references o_cer_template (id);
+-- alter table o_qp_item_type add unique (q_type(200));
+-- create index idx_item_audit_item_idx on o_qp_item_audit_log (fk_item_id);
 
--- sms
-alter table o_sms_message_log add constraint sms_log_to_identity_idx foreign key (fk_identity) references o_bs_identity (id);
+-- -- LTI
+-- alter table o_lti_outcome add constraint idx_lti_outcome_ident_id foreign key (fk_identity_id) references o_bs_identity(id);
+-- alter table o_lti_outcome add constraint idx_lti_outcome_rsrc_id foreign key (fk_resource_id) references o_olatresource(resource_id);
 
--- webfeed
-create index idx_feed_resourceable_idx on o_feed (f_resourceable_id, f_resourceable_type);
-alter table o_feed_item add constraint item_to_feed_fk foreign key(fk_feed_id) references o_feed(id);
-create index idx_item_feed_idx on o_feed_item(fk_feed_id);
-alter table o_feed_item add constraint feed_item_to_ident_author_fk foreign key (fk_identity_author_id) references o_bs_identity (id);
-create index idx_item_ident_author_idx on o_feed_item(fk_identity_author_id);
-alter table o_feed_item add constraint feed_item_to_ident_modified_fk foreign key (fk_identity_modified_id) references o_bs_identity (id);
-create index idx_item_ident_modified_idx on o_feed_item(fk_identity_modified_id);
 
--- lecture
-alter table o_lecture_block add constraint lec_block_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_lecture_block add constraint lec_block_gcoach_idx foreign key (fk_teacher_group) references o_bs_group (id);
-alter table o_lecture_block add constraint lec_block_reason_idx foreign key (fk_reason) references o_lecture_reason (id);
+-- -- LTI 1.3
+-- alter table o_lti_tool_deployment add constraint lti_sdep_to_tool_idx foreign key (fk_tool_id) references o_lti_tool (id);
+-- alter table o_lti_tool_deployment add constraint lti_sdep_to_re_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
+-- alter table o_lti_tool_deployment add constraint dep_to_group_idx foreign key (fk_group_id) references o_gp_business(group_id);
 
-alter table o_lecture_block_roll_call add constraint absence_category_idx foreign key (fk_absence_category) references o_lecture_absence_category (id);
+-- alter table o_lti_context add constraint ltictx_to_deploy_idx foreign key (fk_deployment_id) references o_lti_tool_deployment(id);
+-- alter table o_lti_context add constraint lti_ctxt_to_re_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
+-- alter table o_lti_context add constraint ctxt_to_group_idx foreign key (fk_group_id) references o_gp_business(group_id);
 
-alter table o_lecture_absence_notice add constraint notice_identity_idx foreign key (fk_identity) references o_bs_identity (id);
-alter table o_lecture_absence_notice add constraint notice_notif_identity_idx foreign key (fk_notifier) references o_bs_identity (id);
-alter table o_lecture_absence_notice add constraint notice_auth_identity_idx foreign key (fk_authorizer) references o_bs_identity (id);
-alter table o_lecture_absence_notice add constraint notice_category_idx foreign key (fk_absence_category) references o_lecture_absence_category (id);
+-- alter table o_lti_shared_tool_deployment add constraint unique_deploy_platform unique (l_deployment_id, fk_platform_id);
+-- alter table o_lti_shared_tool_deployment add constraint lti_sha_dep_to_tool_idx foreign key (fk_platform_id) references o_lti_platform (id);
+-- alter table o_lti_shared_tool_deployment add constraint lti_shared_to_re_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
+-- alter table o_lti_shared_tool_deployment add constraint lti_shared_to_bg_idx foreign key (fk_group_id) references o_gp_business (group_id);
 
-alter table o_lecture_notice_to_block add constraint notice_to_block_idx foreign key (fk_lecture_block) references o_lecture_block (id);
-alter table o_lecture_notice_to_block add constraint notice_to_notice_idx foreign key (fk_absence_notice) references o_lecture_absence_notice (id);
+-- alter table o_lti_shared_tool_service add constraint lti_sha_ser_to_dep_idx foreign key (fk_deployment_id) references o_lti_shared_tool_deployment (id);
 
-alter table o_lecture_notice_to_entry add constraint notice_to_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_lecture_notice_to_entry add constraint rel_notice_e_to_notice_idx foreign key (fk_absence_notice) references o_lecture_absence_notice (id);
+-- alter table o_lti_content_item add constraint ltiitem_to_tool_idx foreign key (fk_tool_id) references o_lti_tool(id);
+-- alter table o_lti_content_item add constraint ltiitem_to_deploy_idx foreign key (fk_tool_deployment_id) references o_lti_tool_deployment(id);
+-- alter table o_lti_content_item add constraint ltiitem_to_context_idx foreign key (fk_context_id) references o_lti_context(id);
 
-alter table o_lecture_block_to_group add constraint lec_block_to_block_idx foreign key (fk_group) references o_bs_group (id);
-alter table o_lecture_block_to_group add constraint lec_block_to_group_idx foreign key (fk_lecture_block) references o_lecture_block (id);
+-- create index idx_lti_kid_idx on o_lti_key (l_key_id);
 
-alter table o_lecture_block_roll_call add constraint lec_call_block_idx foreign key (fk_lecture_block) references o_lecture_block (id);
-alter table o_lecture_block_roll_call add constraint lec_call_identity_idx foreign key (fk_identity) references o_bs_identity (id);
-alter table o_lecture_block_roll_call add constraint rollcall_to_notice_idx foreign key (fk_absence_notice) references o_lecture_absence_notice (id);
+-- -- assessment mode
+-- alter table o_as_mode_course add constraint as_mode_to_repo_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_as_mode_course add constraint as_mode_to_lblock_idx foreign key (fk_lecture_block) references o_lecture_block (id);
 
-alter table o_lecture_reminder add constraint lec_reminder_block_idx foreign key (fk_lecture_block) references o_lecture_block (id);
-alter table o_lecture_reminder add constraint lec_reminder_identity_idx foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_as_mode_course_to_group add constraint as_modetogroup_group_idx foreign key (fk_group_id) references o_gp_business (group_id);
+-- alter table o_as_mode_course_to_group add constraint as_modetogroup_mode_idx foreign key (fk_assessment_mode_id) references o_as_mode_course (id);
 
-alter table o_lecture_participant_summary add constraint lec_part_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_lecture_participant_summary add constraint lec_part_ident_idx foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_as_mode_course_to_area add constraint as_modetoarea_area_idx foreign key (fk_area_id) references o_gp_bgarea (area_id);
+-- alter table o_as_mode_course_to_area add constraint as_modetoarea_mode_idx foreign key (fk_assessment_mode_id) references o_as_mode_course (id);
 
-alter table o_lecture_entry_config add constraint lec_entry_config_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_as_mode_course_to_cur_el add constraint as_modetocur_el_idx foreign key (fk_cur_element_id) references o_cur_curriculum_element (id);
+-- alter table o_as_mode_course_to_cur_el add constraint as_modetocur_mode_idx foreign key (fk_assessment_mode_id) references o_as_mode_course (id);
 
-create index idx_lec_audit_entry_idx on o_lecture_block_audit_log(fk_entry);
-create index idx_lec_audit_ident_idx on o_lecture_block_audit_log(fk_identity);
+-- -- assessment inspection
+-- alter table o_as_inspection_configuration add constraint as_insp_to_repo_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
 
-alter table o_lecture_block_to_tax_level add constraint lblock_rel_to_lblock_idx foreign key (fk_lecture_block) references o_lecture_block (id);
-alter table o_lecture_block_to_tax_level add constraint lblock_rel_to_tax_lev_idx foreign key (fk_taxonomy_level) references o_tax_taxonomy_level (id);
+-- alter table o_as_inspection add constraint as_insp_to_ident_idx foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_as_inspection add constraint as_insp_to_config_idx foreign key (fk_configuration) references o_as_inspection_configuration (id);
+-- create index idx_as_insp_subident_idx on o_as_inspection (a_subident);
+-- create index idx_as_insp_endtime_idx on o_as_inspection (a_end_time);
+-- create index idx_as_insp_fromto_idx on o_as_inspection (a_from,a_to);
 
--- taxonomy
-alter table o_tax_taxonomy add constraint tax_to_group_idx foreign key (fk_group) references o_bs_group (id);
+-- alter table o_as_inspection_log add constraint as_insp_log_to_ident_idx foreign key (fk_doer) references o_bs_identity (id);
+-- alter table o_as_inspection_log add constraint as_log_to_insp_idx foreign key (fk_inspection) references o_as_inspection (id);
 
-alter table o_tax_taxonomy_level_type add constraint tax_type_to_taxonomy_idx foreign key (fk_taxonomy) references o_tax_taxonomy (id);
+-- -- certificate
+-- alter table o_cer_certificate add constraint cer_to_identity_idx foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_cer_certificate add constraint cer_to_resource_idx foreign key (fk_olatresource) references o_olatresource (resource_id);
+-- alter table o_cer_certificate add constraint certificate_metadata_idx foreign key (fk_metadata) references o_vfs_metadata(id);
 
-alter table o_tax_taxonomy_type_to_type add constraint tax_type_to_type_idx foreign key (fk_type) references o_tax_taxonomy_level_type (id);
-create index idx_tax_type_to_type_idx on o_tax_taxonomy_type_to_type (fk_type);
-alter table o_tax_taxonomy_type_to_type add constraint tax_type_to_sub_type_idx foreign key (fk_allowed_sub_type) references o_tax_taxonomy_level_type (id);
-create index idx_tax_type_to_sub_type_idx on o_tax_taxonomy_type_to_type (fk_allowed_sub_type);
+-- create index cer_archived_resource_idx on o_cer_certificate (c_archived_resource_id);
+-- create index cer_uuid_idx on o_cer_certificate (c_uuid);
 
-alter table o_tax_taxonomy_level add constraint tax_level_to_taxonomy_idx foreign key (fk_taxonomy) references o_tax_taxonomy (id);
-alter table o_tax_taxonomy_level add constraint tax_level_to_tax_level_idx foreign key (fk_parent) references o_tax_taxonomy_level (id);
-alter table o_tax_taxonomy_level add constraint tax_level_to_type_idx foreign key (fk_type) references o_tax_taxonomy_level_type (id);
-create index idx_tax_level_path_key_idx on o_tax_taxonomy_level (t_m_path_keys);
+-- alter table o_cer_entry_config add constraint cer_entry_config_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_cer_entry_config add constraint template_config_entry_idx foreign key (fk_template) references o_cer_template (id);
 
-alter table o_tax_taxonomy_competence add constraint tax_comp_to_tax_level_idx foreign key (fk_level) references o_tax_taxonomy_level (id);
-alter table o_tax_taxonomy_competence add constraint tax_level_to_ident_idx foreign key (fk_identity) references o_bs_identity (id);
+-- -- sms
+-- alter table o_sms_message_log add constraint sms_log_to_identity_idx foreign key (fk_identity) references o_bs_identity (id);
 
--- dialog elements
-alter table o_dialog_element add constraint dial_el_author_idx foreign key (fk_author) references o_bs_identity (id);
-alter table o_dialog_element add constraint dial_el_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_dialog_element add constraint dial_el_forum_idx foreign key (fk_forum) references o_forum (forum_id);
-create index idx_dial_el_subident_idx on o_dialog_element (d_subident);
+-- -- webfeed
+-- create index idx_feed_resourceable_idx on o_feed (f_resourceable_id, f_resourceable_type);
+-- alter table o_feed_item add constraint item_to_feed_fk foreign key(fk_feed_id) references o_feed(id);
+-- create index idx_item_feed_idx on o_feed_item(fk_feed_id);
+-- alter table o_feed_item add constraint feed_item_to_ident_author_fk foreign key (fk_identity_author_id) references o_bs_identity (id);
+-- create index idx_item_ident_author_idx on o_feed_item(fk_identity_author_id);
+-- alter table o_feed_item add constraint feed_item_to_ident_modified_fk foreign key (fk_identity_modified_id) references o_bs_identity (id);
+-- create index idx_item_ident_modified_idx on o_feed_item(fk_identity_modified_id);
 
--- licenses
-alter table o_lic_license_type_activation add constraint lic_activation_type_fk foreign key (fk_license_type_id) references o_lic_license_type (id);
-create index lic_activation_type_idx on o_lic_license_type_activation (fk_license_type_id);
-alter table o_lic_license add constraint lic_license_type_fk foreign key (fk_license_type_id) references o_lic_license_type (id);
-create index lic_license_type_idx on o_lic_license (fk_license_type_id);
-create unique index lic_license_ores_idx on o_lic_license (l_resid, l_resname);
+-- -- lecture
+-- alter table o_lecture_block add constraint lec_block_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_lecture_block add constraint lec_block_gcoach_idx foreign key (fk_teacher_group) references o_bs_group (id);
+-- alter table o_lecture_block add constraint lec_block_reason_idx foreign key (fk_reason) references o_lecture_reason (id);
 
--- organisation
-alter table o_org_organisation add constraint org_to_group_idx foreign key (fk_group) references o_bs_group (id);
-alter table o_org_organisation add constraint org_to_root_org_idx foreign key (fk_root) references o_org_organisation (id);
-alter table o_org_organisation add constraint org_to_parent_org_idx foreign key (fk_parent) references o_org_organisation (id);
-alter table o_org_organisation add constraint org_to_org_type_idx foreign key (fk_type) references o_org_organisation_type (id);
+-- alter table o_lecture_block_roll_call add constraint absence_category_idx foreign key (fk_absence_category) references o_lecture_absence_category (id);
 
-alter table o_org_type_to_type add constraint org_type_to_type_idx foreign key (fk_type) references o_org_organisation_type (id);
-alter table o_org_type_to_type add constraint org_type_to_sub_type_idx foreign key (fk_allowed_sub_type) references o_org_organisation_type (id);
+-- alter table o_lecture_absence_notice add constraint notice_identity_idx foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_lecture_absence_notice add constraint notice_notif_identity_idx foreign key (fk_notifier) references o_bs_identity (id);
+-- alter table o_lecture_absence_notice add constraint notice_auth_identity_idx foreign key (fk_authorizer) references o_bs_identity (id);
+-- alter table o_lecture_absence_notice add constraint notice_category_idx foreign key (fk_absence_category) references o_lecture_absence_category (id);
 
-alter table o_re_to_organisation add constraint rel_org_to_re_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_re_to_organisation add constraint rel_org_to_org_idx foreign key (fk_organisation) references o_org_organisation (id);
+-- alter table o_lecture_notice_to_block add constraint notice_to_block_idx foreign key (fk_lecture_block) references o_lecture_block (id);
+-- alter table o_lecture_notice_to_block add constraint notice_to_notice_idx foreign key (fk_absence_notice) references o_lecture_absence_notice (id);
 
--- curriculum
-alter table o_cur_curriculum add constraint cur_to_group_idx foreign key (fk_group) references o_bs_group (id);
-alter table o_cur_curriculum add constraint cur_to_org_idx foreign key (fk_organisation) references o_org_organisation (id);
+-- alter table o_lecture_notice_to_entry add constraint notice_to_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_lecture_notice_to_entry add constraint rel_notice_e_to_notice_idx foreign key (fk_absence_notice) references o_lecture_absence_notice (id);
 
-alter table o_cur_curriculum_element add constraint cur_el_to_group_idx foreign key (fk_group) references o_bs_group (id);
-alter table o_cur_curriculum_element add constraint cur_el_to_cur_el_idx foreign key (fk_parent) references o_cur_curriculum_element (id);
-alter table o_cur_curriculum_element add constraint cur_el_to_cur_idx foreign key (fk_curriculum) references o_cur_curriculum (id);
-alter table o_cur_curriculum_element add constraint cur_el_type_to_el_type_idx foreign key (fk_type) references o_cur_element_type (id);
+-- alter table o_lecture_block_to_group add constraint lec_block_to_block_idx foreign key (fk_group) references o_bs_group (id);
+-- alter table o_lecture_block_to_group add constraint lec_block_to_group_idx foreign key (fk_lecture_block) references o_lecture_block (id);
 
-alter table o_cur_element_type_to_type add constraint cur_type_to_type_idx foreign key (fk_type) references o_cur_element_type (id);
-alter table o_cur_element_type_to_type add constraint cur_type_to_sub_type_idx foreign key (fk_allowed_sub_type) references o_cur_element_type (id);
+-- alter table o_lecture_block_roll_call add constraint lec_call_block_idx foreign key (fk_lecture_block) references o_lecture_block (id);
+-- alter table o_lecture_block_roll_call add constraint lec_call_identity_idx foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_lecture_block_roll_call add constraint rollcall_to_notice_idx foreign key (fk_absence_notice) references o_lecture_absence_notice (id);
 
-alter table o_cur_element_to_tax_level add constraint cur_el_rel_to_cur_el_idx foreign key (fk_cur_element) references o_cur_curriculum_element (id);
-alter table o_cur_element_to_tax_level add constraint cur_el_to_tax_level_idx foreign key (fk_taxonomy_level) references o_tax_taxonomy_level (id);
+-- alter table o_lecture_reminder add constraint lec_reminder_block_idx foreign key (fk_lecture_block) references o_lecture_block (id);
+-- alter table o_lecture_reminder add constraint lec_reminder_identity_idx foreign key (fk_identity) references o_bs_identity (id);
 
--- edu-sharing
-create index idx_es_usage_ident_idx on o_es_usage (e_identifier);
-create index idx_es_usage_ores_idx on o_es_usage (e_resid, e_resname);
+-- alter table o_lecture_participant_summary add constraint lec_part_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_lecture_participant_summary add constraint lec_part_ident_idx foreign key (fk_identity) references o_bs_identity (id);
 
--- o_logging_table
-create index log_target_resid_idx on o_loggingtable(targetresid);
-create index log_ptarget_resid_idx on o_loggingtable(parentresid);
-create index log_gptarget_resid_idx on o_loggingtable(grandparentresid);
-create index log_ggptarget_resid_idx on o_loggingtable(greatgrandparentresid);
-create index log_creationdate_idx on o_loggingtable(creationdate);
+-- alter table o_lecture_entry_config add constraint lec_entry_config_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
 
--- livestream
-create index idx_livestream_viewers_idx on o_livestream_launch(l_subident, l_launch_date, fk_entry, fk_identity);
+-- create index idx_lec_audit_entry_idx on o_lecture_block_audit_log(fk_entry);
+-- create index idx_lec_audit_ident_idx on o_lecture_block_audit_log(fk_identity);
 
--- grading
-alter table o_grad_to_identity add constraint grad_to_ident_idx foreign key (fk_identity) references o_bs_identity (id);
-alter table o_grad_to_identity add constraint grad_id_to_repo_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_lecture_block_to_tax_level add constraint lblock_rel_to_lblock_idx foreign key (fk_lecture_block) references o_lecture_block (id);
+-- alter table o_lecture_block_to_tax_level add constraint lblock_rel_to_tax_lev_idx foreign key (fk_taxonomy_level) references o_tax_taxonomy_level (id);
 
-alter table o_grad_assignment add constraint grad_assign_to_entry_idx foreign key (fk_reference_entry) references o_repositoryentry (repositoryentry_id);
-alter table o_grad_assignment add constraint grad_assign_to_assess_idx foreign key (fk_assessment_entry) references o_as_entry (id);
-alter table o_grad_assignment add constraint grad_assign_to_grader_idx foreign key (fk_grader) references o_grad_to_identity (id);
+-- -- taxonomy
+-- alter table o_tax_taxonomy add constraint tax_to_group_idx foreign key (fk_group) references o_bs_group (id);
 
-alter table o_grad_time_record add constraint grad_time_to_assign_idx foreign key (fk_assignment) references o_grad_assignment (id);
-alter table o_grad_time_record add constraint grad_time_to_grader_idx foreign key (fk_grader) references o_grad_to_identity (id);
+-- alter table o_tax_taxonomy_level_type add constraint tax_type_to_taxonomy_idx foreign key (fk_taxonomy) references o_tax_taxonomy (id);
 
-alter table o_grad_configuration add constraint grad_config_to_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_tax_taxonomy_type_to_type add constraint tax_type_to_type_idx foreign key (fk_type) references o_tax_taxonomy_level_type (id);
+-- create index idx_tax_type_to_type_idx on o_tax_taxonomy_type_to_type (fk_type);
+-- alter table o_tax_taxonomy_type_to_type add constraint tax_type_to_sub_type_idx foreign key (fk_allowed_sub_type) references o_tax_taxonomy_level_type (id);
+-- create index idx_tax_type_to_sub_type_idx on o_tax_taxonomy_type_to_type (fk_allowed_sub_type);
 
--- Course
-alter table o_course_element add constraint courseele_to_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
-create unique index idx_courseele_subident_idx on o_course_element (c_subident, fk_entry);
+-- alter table o_tax_taxonomy_level add constraint tax_level_to_taxonomy_idx foreign key (fk_taxonomy) references o_tax_taxonomy (id);
+-- alter table o_tax_taxonomy_level add constraint tax_level_to_tax_level_idx foreign key (fk_parent) references o_tax_taxonomy_level (id);
+-- alter table o_tax_taxonomy_level add constraint tax_level_to_type_idx foreign key (fk_type) references o_tax_taxonomy_level_type (id);
+-- create index idx_tax_level_path_key_idx on o_tax_taxonomy_level (t_m_path_keys);
 
--- Course styles
-create unique index idx_course_colcat_ident on o_course_color_category (c_identifier);
+-- alter table o_tax_taxonomy_competence add constraint tax_comp_to_tax_level_idx foreign key (fk_level) references o_tax_taxonomy_level (id);
+-- alter table o_tax_taxonomy_competence add constraint tax_level_to_ident_idx foreign key (fk_identity) references o_bs_identity (id);
+
+-- -- dialog elements
+-- alter table o_dialog_element add constraint dial_el_author_idx foreign key (fk_author) references o_bs_identity (id);
+-- alter table o_dialog_element add constraint dial_el_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_dialog_element add constraint dial_el_forum_idx foreign key (fk_forum) references o_forum (forum_id);
+-- create index idx_dial_el_subident_idx on o_dialog_element (d_subident);
+
+-- -- licenses
+-- alter table o_lic_license_type_activation add constraint lic_activation_type_fk foreign key (fk_license_type_id) references o_lic_license_type (id);
+-- create index lic_activation_type_idx on o_lic_license_type_activation (fk_license_type_id);
+-- alter table o_lic_license add constraint lic_license_type_fk foreign key (fk_license_type_id) references o_lic_license_type (id);
+-- create index lic_license_type_idx on o_lic_license (fk_license_type_id);
+-- create unique index lic_license_ores_idx on o_lic_license (l_resid, l_resname);
+
+-- -- organisation
+-- alter table o_org_organisation add constraint org_to_group_idx foreign key (fk_group) references o_bs_group (id);
+-- alter table o_org_organisation add constraint org_to_root_org_idx foreign key (fk_root) references o_org_organisation (id);
+-- alter table o_org_organisation add constraint org_to_parent_org_idx foreign key (fk_parent) references o_org_organisation (id);
+-- alter table o_org_organisation add constraint org_to_org_type_idx foreign key (fk_type) references o_org_organisation_type (id);
+
+-- alter table o_org_type_to_type add constraint org_type_to_type_idx foreign key (fk_type) references o_org_organisation_type (id);
+-- alter table o_org_type_to_type add constraint org_type_to_sub_type_idx foreign key (fk_allowed_sub_type) references o_org_organisation_type (id);
+
+-- alter table o_re_to_organisation add constraint rel_org_to_re_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_re_to_organisation add constraint rel_org_to_org_idx foreign key (fk_organisation) references o_org_organisation (id);
+
+-- -- curriculum
+-- alter table o_cur_curriculum add constraint cur_to_group_idx foreign key (fk_group) references o_bs_group (id);
+-- alter table o_cur_curriculum add constraint cur_to_org_idx foreign key (fk_organisation) references o_org_organisation (id);
+
+-- alter table o_cur_curriculum_element add constraint cur_el_to_group_idx foreign key (fk_group) references o_bs_group (id);
+-- alter table o_cur_curriculum_element add constraint cur_el_to_cur_el_idx foreign key (fk_parent) references o_cur_curriculum_element (id);
+-- alter table o_cur_curriculum_element add constraint cur_el_to_cur_idx foreign key (fk_curriculum) references o_cur_curriculum (id);
+-- alter table o_cur_curriculum_element add constraint cur_el_type_to_el_type_idx foreign key (fk_type) references o_cur_element_type (id);
+
+-- alter table o_cur_element_type_to_type add constraint cur_type_to_type_idx foreign key (fk_type) references o_cur_element_type (id);
+-- alter table o_cur_element_type_to_type add constraint cur_type_to_sub_type_idx foreign key (fk_allowed_sub_type) references o_cur_element_type (id);
+
+-- alter table o_cur_element_to_tax_level add constraint cur_el_rel_to_cur_el_idx foreign key (fk_cur_element) references o_cur_curriculum_element (id);
+-- alter table o_cur_element_to_tax_level add constraint cur_el_to_tax_level_idx foreign key (fk_taxonomy_level) references o_tax_taxonomy_level (id);
+
+-- -- edu-sharing
+-- create index idx_es_usage_ident_idx on o_es_usage (e_identifier);
+-- create index idx_es_usage_ores_idx on o_es_usage (e_resid, e_resname);
+
+-- -- o_logging_table
+-- create index log_target_resid_idx on o_loggingtable(targetresid);
+-- create index log_ptarget_resid_idx on o_loggingtable(parentresid);
+-- create index log_gptarget_resid_idx on o_loggingtable(grandparentresid);
+-- create index log_ggptarget_resid_idx on o_loggingtable(greatgrandparentresid);
+-- create index log_creationdate_idx on o_loggingtable(creationdate);
+
+-- -- livestream
+-- create index idx_livestream_viewers_idx on o_livestream_launch(l_subident, l_launch_date, fk_entry, fk_identity);
+
+-- -- grading
+-- alter table o_grad_to_identity add constraint grad_to_ident_idx foreign key (fk_identity) references o_bs_identity (id);
+-- alter table o_grad_to_identity add constraint grad_id_to_repo_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+
+-- alter table o_grad_assignment add constraint grad_assign_to_entry_idx foreign key (fk_reference_entry) references o_repositoryentry (repositoryentry_id);
+-- alter table o_grad_assignment add constraint grad_assign_to_assess_idx foreign key (fk_assessment_entry) references o_as_entry (id);
+-- alter table o_grad_assignment add constraint grad_assign_to_grader_idx foreign key (fk_grader) references o_grad_to_identity (id);
+
+-- alter table o_grad_time_record add constraint grad_time_to_assign_idx foreign key (fk_assignment) references o_grad_assignment (id);
+-- alter table o_grad_time_record add constraint grad_time_to_grader_idx foreign key (fk_grader) references o_grad_to_identity (id);
+
+-- alter table o_grad_configuration add constraint grad_config_to_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+
+-- -- Course
+-- alter table o_course_element add constraint courseele_to_entry_idx foreign key (fk_entry) references o_repositoryentry (repositoryentry_id);
+-- create unique index idx_courseele_subident_idx on o_course_element (c_subident, fk_entry);
+
+-- -- Course styles
+-- create unique index idx_course_colcat_ident on o_course_color_category (c_identifier);
+
 
 -- Appointments
 alter table o_ap_topic add constraint ap_topic_entry_idx foreign key (fk_entry_id) references o_repositoryentry (repositoryentry_id);
