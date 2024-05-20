@@ -5,7 +5,7 @@
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_forum' AND xtype='U')
 CREATE TABLE o_forum (
    forum_id BIGINT NOT NULL,
-   version INT NOT NULL,  -- Changed from MEDIUMINT UNSIGNED to INT
+   version INT NOT NULL,  -- Changed from MEDIUMINT UNSIGNEDz to INT
    creationdate DATETIME2,  -- Changed from DATETIME to DATETIME2 for more precision
    f_refresname NVARCHAR(50),  -- Changed VARCHAR to NVARCHAR for better Unicode support
    f_refresid BIGINT,
