@@ -1734,7 +1734,7 @@ CREATE TABLE o_as_entry (
    lastmodified DATETIME2 NOT NULL,
    lastcoachmodified DATETIME2,
    lastusermodified DATETIME2,
-   a_attempts BIGINT DEFAULT NULL,  -- Fixed typo
+   a_attemtps BIGINT DEFAULT NULL,
    a_last_attempt DATETIME2 DEFAULT NULL,
    a_score NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
    a_weighted_score NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
@@ -5270,7 +5270,7 @@ CREATE INDEX idx_prop_restype_idx ON o_property (resourcetypename);
 
 -- Group Table
 ALTER TABLE o_bs_group_member 
-ADD CONSTRAINT member_idprofile_ctx 
+ADD CONSTRAINT member_identity_ctx 
 FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
 
 ALTER TABLE o_bs_group_member 
