@@ -655,6 +655,8 @@ CREATE TABLE o_repositoryentry (
    deletiondate DATETIME2 DEFAULT NULL,
    fk_deleted_by BIGINT DEFAULT NULL,
    fk_educational_type BIGINT DEFAULT NULL,
+   coursecode NVARCHAR(255),  -- Added coursecode column
+   cpdhours DECIMAL(10, 1),  -- Added cpdhours column
    PRIMARY KEY (repositoryentry_id)
 );
 
