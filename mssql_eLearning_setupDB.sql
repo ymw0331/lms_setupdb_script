@@ -1,6 +1,3 @@
--- MSSQL does not have a direct equivalent for FOREIGN_KEY_CHECKS
--- This is typically handled through ALTER TABLE statements for specific constraints
-
 -- Check and create o_forum table
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_forum' AND xtype='U')
 CREATE TABLE o_forum (
@@ -61,8 +58,6 @@ CREATE TABLE o_bs_group (
    g_name NVARCHAR(36),  -- Changed VARCHAR to NVARCHAR
    PRIMARY KEY (id)
 );
-
--- second round
 
 -- Check and create o_bs_group_member table
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_bs_group_member' AND xtype='U')
@@ -343,7 +338,6 @@ CREATE TABLE o_bs_namedgroup (
    UNIQUE (groupname)
 );
 
--- thrid round
 -- Check and create o_catentry table
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_catentry' AND xtype='U')
 CREATE TABLE o_catentry (
@@ -479,6 +473,8 @@ CREATE TABLE o_user (
    u_genericcheckboxproperty BIT,
    u_genericcheckboxproperty2 BIT,
    u_genericcheckboxproperty3 BIT,
+   u_unitno NVARCHAR(255),
+   u_fullname NVARCHAR(255),
    fk_identity BIGINT,
    PRIMARY KEY (user_id)
 );
@@ -653,10 +649,10 @@ CREATE TABLE o_repositoryentry (
    invitations_owner_enabled BIT DEFAULT 0 NOT NULL,  -- Changed BOOL to BIT
    lti_deployment_owner_enabled BIT DEFAULT 0 NOT NULL,  -- Changed BOOL to BIT
    deletiondate DATETIME2 DEFAULT NULL,
-   fk_deleted_by BIGINT DEFAULT NULL,
-   fk_educational_type BIGINT DEFAULT NULL,
    coursecode NVARCHAR(255),  -- Added coursecode column
    cpdhours DECIMAL(10, 1),  -- Added cpdhours column
+   fk_deleted_by BIGINT DEFAULT NULL,
+   fk_educational_type BIGINT DEFAULT NULL,
    PRIMARY KEY (repositoryentry_id)
 );
 
@@ -1231,7 +1227,6 @@ CREATE TABLE o_ac_method (
 );
 
 
---fourth round
 -- Check and create o_ac_offer_access table
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_ac_offer_access' AND xtype='U')
 CREATE TABLE o_ac_offer_access (
@@ -1710,7 +1705,6 @@ CREATE TABLE o_as_eff_statement (
 
 
 
--- fifth round
 -- Check and create o_as_user_course_infos table
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_as_user_course_infos' AND xtype='U')
 CREATE TABLE o_as_user_course_infos (
@@ -2300,8 +2294,6 @@ CREATE TABLE o_cal_import_to (
 );
 
 
--- sixth round
-
 -- Check and create o_im_message table
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_im_message' AND xtype='U')
 CREATE TABLE o_im_message (
@@ -2815,7 +2807,6 @@ CREATE TABLE o_pf_binder (
 );
 
 
--- seventh round
 -- Check and create o_pf_section table
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_pf_section' AND xtype='U')
 CREATE TABLE o_pf_section (
@@ -3429,7 +3420,7 @@ CREATE TABLE o_lti_tool (
    PRIMARY KEY (id)
 );
 
--- eight round
+
 -- Check and create o_lti_tool_deployment table
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_lti_tool_deployment' AND xtype='U')
 CREATE TABLE o_lti_tool_deployment (
@@ -3889,6 +3880,8 @@ CREATE TABLE o_lecture_block (
   l_auto_close_date DATETIME2 DEFAULT NULL,
   l_status NVARCHAR(16) NOT NULL,
   l_roll_call_status NVARCHAR(16) NOT NULL,
+  l_qr_scan_enable BIT DEFAULT 0 NULL,  -- Added new column, Changed BOOLEAN to BIT
+  l_attendance_review_status NVARCHAR(16) NULL,  -- Added new column
   fk_reason BIGINT,
   fk_entry BIGINT NOT NULL,
   fk_teacher_group BIGINT NOT NULL,
@@ -3943,6 +3936,10 @@ CREATE TABLE o_lecture_block_roll_call (
   l_appeal_reason NVARCHAR(MAX),  -- Changed MEDIUMTEXT to NVARCHAR(MAX)
   l_appeal_status NVARCHAR(MAX),  -- Changed MEDIUMTEXT to NVARCHAR(MAX)
   l_appeal_status_reason NVARCHAR(MAX),  -- Changed MEDIUMTEXT to NVARCHAR(MAX)
+  l_check_in_time BIGINT NULL,  -- Added new column
+  l_check_out_time BIGINT NULL,  -- Added new column
+  l_attendance_status BIT NULL,  -- Added new column, Changed BOOLEAN to BIT
+  l_is_review BIT NULL,  -- Added new column, Changed BOOLEAN to BIT
   fk_lecture_block BIGINT NOT NULL,
   fk_identity BIGINT NOT NULL,
   fk_absence_category BIGINT,
@@ -3962,7 +3959,6 @@ CREATE TABLE o_lecture_reminder (
 );
 
 
---nineth round
 -- Check and create o_lecture_participant_summary table
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_lecture_participant_summary' AND xtype='U')
 CREATE TABLE o_lecture_participant_summary (
@@ -3978,6 +3974,7 @@ CREATE TABLE o_lecture_participant_summary (
   l_attendance_rate DECIMAL(38,30) DEFAULT NULL,  -- Changed FLOAT(65,30) to DECIMAL(38,30)
   l_cal_sync BIT DEFAULT 0,
   l_cal_last_sync_date DATETIME2 DEFAULT NULL,
+  l_awarded_cpd_hour BIGINT NULL,  -- Added new column
   fk_entry BIGINT NOT NULL,
   fk_identity BIGINT NOT NULL,
   PRIMARY KEY (id),
@@ -4534,8 +4531,6 @@ CREATE TABLE o_ap_organizer (
 );
 
 
---  tenth round
-
 -- Check and create o_ap_topic_to_group table
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_ap_topic_to_group' AND xtype='U')
 CREATE TABLE o_ap_topic_to_group (
@@ -5023,9 +5018,42 @@ CREATE TABLE o_gui_prefs (
    PRIMARY KEY (id)
 );
 
--- eleventh round
--- create views
--- user view
+-- Check and create o_booking table
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_booking' AND xtype='U')
+CREATE TABLE o_booking (
+   booking_id BIGINT NOT NULL,
+   version INT NOT NULL,
+   creationdate DATETIME2,
+   lastmodified DATETIME2,
+   fk_created_by BIGINT DEFAULT NULL,
+   purpose NVARCHAR(255),
+   starttime DATETIME2 NOT NULL,
+   endtime DATETIME2 NOT NULL,
+   status NVARCHAR(16),
+   deletiondate DATETIME2 DEFAULT NULL,
+   fk_deleted_by BIGINT DEFAULT NULL,
+   fk_room BIGINT,
+   PRIMARY KEY (booking_id)
+);
+
+-- Check and create o_room table
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_room' AND xtype='U')
+CREATE TABLE o_room (
+   room_id BIGINT NOT NULL,
+   version INT NOT NULL,
+   creationdate DATETIME2,
+   lastmodified DATETIME2,
+   fk_created_by BIGINT DEFAULT NULL,
+   name NVARCHAR(255),
+   capacity INT NOT NULL,
+   status NVARCHAR(16),
+   deletiondate DATETIME2 DEFAULT NULL,
+   fk_deleted_by BIGINT DEFAULT NULL,
+   PRIMARY KEY (room_id)
+);
+
+-- Create Views
+-- User View
 IF EXISTS (SELECT * FROM sysobjects WHERE name='o_bs_identity_short_v' AND xtype='V')
     DROP VIEW o_bs_identity_short_v;
 GO
@@ -5047,7 +5075,7 @@ CREATE VIEW o_bs_identity_short_v AS (
 );
 GO
 
--- business to repository view
+-- Business To Repository View
 IF EXISTS (SELECT * FROM sysobjects WHERE name='o_gp_business_to_repository_v' AND xtype='V')
     DROP VIEW o_gp_business_to_repository_v;
 GO
@@ -5063,7 +5091,7 @@ CREATE VIEW o_gp_business_to_repository_v AS (
 );
 GO
 
--- group membership view
+-- Group Membership View
 IF EXISTS (SELECT * FROM sysobjects WHERE name='o_bs_gp_membership_v' AND xtype='V')
     DROP VIEW o_bs_gp_membership_v;
 GO
@@ -5081,7 +5109,7 @@ CREATE VIEW o_bs_gp_membership_v AS (
 );
 GO
 
--- repository membership view
+-- Repository Membership View
 IF EXISTS (SELECT * FROM sysobjects WHERE name='o_re_membership_v' AND xtype='V')
     DROP VIEW o_re_membership_v;
 GO
@@ -5100,7 +5128,7 @@ CREATE VIEW o_re_membership_v AS (
 );
 GO
 
--- contact key view
+-- Contact Key View
 IF EXISTS (SELECT * FROM sysobjects WHERE name='o_gp_contactkey_v' AND xtype='V')
     DROP VIEW o_gp_contactkey_v;
 GO
@@ -5122,7 +5150,7 @@ CREATE VIEW o_gp_contactkey_v AS (
 );
 GO
 
--- contact external view
+-- Contact External View
 IF EXISTS (SELECT * FROM sysobjects WHERE name='o_gp_contactext_v' AND xtype='V')
     DROP VIEW o_gp_contactext_v;
 GO
@@ -5150,7 +5178,7 @@ CREATE VIEW o_gp_contactext_v AS (
 );
 GO
 
--- pool to item short view
+-- Pool To Item Short View
 IF EXISTS (SELECT * FROM sysobjects WHERE name='o_qp_pool_2_item_short_v' AND xtype='V')
     DROP VIEW o_qp_pool_2_item_short_v;
 GO
@@ -5169,7 +5197,7 @@ CREATE VIEW o_qp_pool_2_item_short_v AS (
 );
 GO
 
--- share to item short view
+-- Share to Item Short View
 IF EXISTS (SELECT * FROM sysobjects WHERE name='o_qp_share_2_item_short_v' AND xtype='V')
     DROP VIEW o_qp_share_2_item_short_v;
 GO
@@ -5189,22 +5217,18 @@ CREATE VIEW o_qp_share_2_item_short_v AS (
 GO
 
 
--- Create index on oc_lock table
 CREATE INDEX ocl_asset_idx ON oc_lock (asset);
 GO
 
--- Add foreign key constraint to oc_lock table
 ALTER TABLE oc_lock 
 ADD CONSTRAINT FK9E30F4B66115906D 
 FOREIGN KEY (identity_fk) REFERENCES o_bs_identity (id);
 GO
 
--- Add index on identity_fk column
 CREATE INDEX FK9E30F4B66115906D ON oc_lock (identity_fk);
 GO
 
 -- Rating Table
--- Adding foreign key constraint
 ALTER TABLE o_userrating 
 ADD CONSTRAINT FKF26C8375236F20X 
 FOREIGN KEY (creator_id) REFERENCES o_bs_identity (id);
@@ -5220,7 +5244,7 @@ ADD ressubpath_prefix AS LEFT(ressubpath, 255);
 CREATE INDEX rtn_subpath_idx ON o_userrating (ressubpath_prefix);
 
 
--- Comment Table
+-- Comment
 ALTER TABLE o_usercomment 
 ADD CONSTRAINT FK92B6864A18251F0 
 FOREIGN KEY (parent_key) REFERENCES o_usercomment (comment_id);
@@ -5237,7 +5261,7 @@ ADD ressubpath_prefix AS LEFT(ressubpath, 255);
 
 CREATE INDEX cmt_subpath_idx ON o_usercomment (ressubpath_prefix);
 
--- Checkpoint Table
+-- Checkpoint
 ALTER TABLE o_checkpoint_results 
 ADD CONSTRAINT FK9E30F4B661159ZZY 
 FOREIGN KEY (checkpoint_fk) REFERENCES o_checkpoint (checkpoint_id);
@@ -5250,12 +5274,11 @@ ALTER TABLE o_checkpoint
 ADD CONSTRAINT FK9E30F4B661159ZZZ 
 FOREIGN KEY (checklist_fk) REFERENCES o_checklist (checklist_id);
 
--- Plock Table
+-- Plock
 CREATE INDEX asset_idx ON o_plock (asset);
 
 
-
--- Property Table
+-- Property
 ALTER TABLE o_property 
 ADD CONSTRAINT FKB60B1BA5190E5 
 FOREIGN KEY (grp) REFERENCES o_gp_business (group_id);
@@ -5270,7 +5293,7 @@ CREATE INDEX idx_prop_name_idx ON o_property (name);
 CREATE INDEX idx_prop_restype_idx ON o_property (resourcetypename);
 
 
--- Group Table
+-- Group
 ALTER TABLE o_bs_group_member 
 ADD CONSTRAINT member_identity_ctx 
 FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
@@ -5294,7 +5317,7 @@ ADD CONSTRAINT gp_to_group_business_ctx
 FOREIGN KEY (fk_group_id) REFERENCES o_bs_group (id);
 
 
--- Business Group Table
+-- Business Group
 ALTER TABLE o_gp_business 
 ADD CONSTRAINT idx_bgp_rsrc 
 FOREIGN KEY (fk_resource) REFERENCES o_olatresource (resource_id);
@@ -5318,7 +5341,7 @@ ADD CONSTRAINT gb_bus_softdeletedby_idx
 FOREIGN KEY (fk_softdeletedby_id) REFERENCES o_bs_identity (id);
 
 
--- Area Table
+-- Area
 ALTER TABLE o_gp_bgarea 
 ADD CONSTRAINT idx_area_to_resource 
 FOREIGN KEY (fk_resource) REFERENCES o_olatresource (resource_id);
@@ -5334,8 +5357,7 @@ ADD CONSTRAINT FK9B663F2DD381B9B7
 FOREIGN KEY (area_fk) REFERENCES o_gp_bgarea (area_id);
 
 
--- BS Table
--- Adding constraints and indexes for o_bs_authentication table
+-- BS
 ALTER TABLE o_bs_authentication
 ADD CONSTRAINT FKC6A5445652595FE6 FOREIGN KEY (identity_fk) REFERENCES o_bs_identity (id);
 
@@ -5349,32 +5371,26 @@ CREATE INDEX provider_idx ON o_bs_authentication (provider);
 CREATE INDEX credential_idx ON o_bs_authentication (credential);
 CREATE INDEX authusername_idx ON o_bs_authentication (authusername);
 
--- Adding foreign key constraint for o_bs_authentication_history table
 ALTER TABLE o_bs_authentication_history
 ADD CONSTRAINT auth_hist_to_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
 
--- Adding foreign key constraint for o_bs_recovery_key table
 ALTER TABLE o_bs_recovery_key
 ADD CONSTRAINT rec_key_to_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity(id);
 
--- Adding foreign key constraint for o_bs_webauthn_stats table
 ALTER TABLE o_bs_webauthn_stats
 ADD CONSTRAINT weba_counter_toident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity(id);
 
--- Adding indexes on o_bs_identity table
 CREATE INDEX name_idx ON o_bs_identity (name);
 CREATE INDEX identstatus_idx ON o_bs_identity (status);
 CREATE INDEX idx_ident_creationdate_idx ON o_bs_identity (creationdate);
 CREATE INDEX idx_id_lastlogin_idx ON o_bs_identity (lastlogin);
 
--- Adding constraints for o_bs_membership table
 ALTER TABLE o_bs_membership
 ADD CONSTRAINT FK7B6288B45259603C FOREIGN KEY (identity_id) REFERENCES o_bs_identity (id);
 
 ALTER TABLE o_bs_membership
 ADD CONSTRAINT FK7B6288B4B85B522C FOREIGN KEY (secgroup_id) REFERENCES o_bs_secgroup (id);
 
--- Adding constraints for o_bs_invitation table
 ALTER TABLE o_bs_invitation
 ADD CONSTRAINT inv_to_group_group_ctx FOREIGN KEY (fk_group_id) REFERENCES o_bs_group (id);
 
@@ -5382,10 +5398,8 @@ ALTER TABLE o_bs_invitation
 ADD CONSTRAINT invit_to_id_idx FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
 
 
--- Creating index for o_bs_relation_right table
 CREATE INDEX idx_right_idx ON o_bs_relation_right (g_right);
 
--- Adding constraints for o_bs_relation_role_to_right table
 ALTER TABLE o_bs_relation_role_to_right
 ADD CONSTRAINT role_to_right_role_idx FOREIGN KEY (fk_role_id) REFERENCES o_bs_relation_role (id);
 
@@ -5393,7 +5407,6 @@ ALTER TABLE o_bs_relation_role_to_right
 ADD CONSTRAINT role_to_right_right_idx FOREIGN KEY (fk_right_id) REFERENCES o_bs_relation_right (id);
 
 
--- Adding constraints for o_bs_identity_to_identity table
 ALTER TABLE o_bs_identity_to_identity
 ADD CONSTRAINT id_to_id_source_idx FOREIGN KEY (fk_source_id) REFERENCES o_bs_identity (id);
 
@@ -5405,8 +5418,7 @@ ADD CONSTRAINT id_to_role_idx FOREIGN KEY (fk_role_id) REFERENCES o_bs_relation_
 
 
 
--- user
--- Creating indexes for o_user table
+-- User
 CREATE INDEX usr_notification_interval_idx ON o_user (notification_interval);
 CREATE INDEX idx_user_firstname_idx ON o_user (u_firstname);
 CREATE INDEX idx_user_lastname_idx ON o_user (u_lastname);
@@ -5418,37 +5430,32 @@ CREATE INDEX idx_user_instemail_idx ON o_user (u_institutionalemail);
 CREATE INDEX idx_user_creationdate_idx ON o_user (creationdate);
 
 
--- Adding unique constraint for o_user table
 ALTER TABLE o_user
 ADD CONSTRAINT iuni_user_nickname_idx UNIQUE (u_nickname);
 
--- Adding foreign key constraint for o_user table
 ALTER TABLE o_user
 ADD CONSTRAINT user_to_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
 
--- Adding unique constraint for o_user table
 ALTER TABLE o_user
 ADD CONSTRAINT idx_un_user_to_ident_idx UNIQUE (fk_identity);
 
--- Adding foreign key constraint for o_user_data_export table
 ALTER TABLE o_user_data_export
 ADD CONSTRAINT usr_dataex_to_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
 
 ALTER TABLE o_user_data_export
 ADD CONSTRAINT usr_dataex_to_requ_idx FOREIGN KEY (fk_request_by) REFERENCES o_bs_identity (id);
 
--- Adding foreign key constraint for o_user_absence_leave table
 ALTER TABLE o_user_absence_leave
 ADD CONSTRAINT abs_leave_to_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
 
 
--- csp
+-- CSP
 CREATE INDEX idx_csp_log_to_ident_idx ON o_csp_log (fk_identity);
 
--- temporary key
+-- Temporary Key
 CREATE INDEX idx_tempkey_identity_idx ON o_temporarykey (fk_identity_id);
 
--- pub sub
+-- Pub Sub
 CREATE INDEX name_idx ON o_noti_pub (resname, resid, subident);
 
 ALTER TABLE o_noti_sub
@@ -5457,7 +5464,7 @@ ADD CONSTRAINT FK4FB8F04749E53702 FOREIGN KEY (fk_publisher) REFERENCES o_noti_p
 ALTER TABLE o_noti_sub
 ADD CONSTRAINT FK4FB8F0476B1F22F8 FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
 
--- catalog entry
+-- Catalog Entry
 ALTER TABLE o_catentry
 ADD CONSTRAINT FKF4433C2C7B66B0D0 FOREIGN KEY (parent_id) REFERENCES o_catentry (id);
 
@@ -5467,18 +5474,18 @@ ADD CONSTRAINT FKF4433C2CA1FAC766 FOREIGN KEY (fk_ownergroup) REFERENCES o_bs_se
 ALTER TABLE o_catentry
 ADD CONSTRAINT FKF4433C2CDDD69946 FOREIGN KEY (fk_repoentry) REFERENCES o_repositoryentry (repositoryentry_id);
 
--- references
+-- References
 ALTER TABLE o_references
 ADD CONSTRAINT FKE971B4589AC44FBF FOREIGN KEY (source_id) REFERENCES o_olatresource (resource_id);
 
 ALTER TABLE o_references
 ADD CONSTRAINT FKE971B458CF634A89 FOREIGN KEY (target_id) REFERENCES o_olatresource (resource_id);
 
--- resources
+-- Resources
 CREATE INDEX name_idx ON o_olatresource (resname);
 CREATE INDEX id_idx ON o_olatresource (resid);
 
--- repository
+-- Repository
 ALTER TABLE o_repositoryentry
 ADD CONSTRAINT FK2F9C439888C31018 FOREIGN KEY (fk_olatresource) REFERENCES o_olatresource (resource_id);
 
@@ -5512,7 +5519,7 @@ ADD CONSTRAINT idx_re_edu_type_fk FOREIGN KEY (fk_educational_type) REFERENCES o
 
 CREATE UNIQUE INDEX idc_re_edu_type_ident ON o_re_educational_type (r_identifier);
 
--- access control
+-- Access Control
 CREATE INDEX ac_offer_to_resource_idx ON o_ac_offer (fk_resource_id);
 CREATE INDEX idx_offer_guest_idx ON o_ac_offer (guest_access);
 CREATE INDEX idx_offer_open_idx ON o_ac_offer (open_access);
@@ -5560,21 +5567,21 @@ CREATE INDEX idx_ac_aao_ident_idx ON o_ac_auto_advance_order (fk_identity);
 ALTER TABLE o_ac_auto_advance_order
 ADD CONSTRAINT aao_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
 
--- reservations
+-- Reservations
 ALTER TABLE o_ac_reservation
 ADD CONSTRAINT idx_rsrv_to_rsrc_rsrc FOREIGN KEY (fk_resource) REFERENCES o_olatresource (resource_id);
 
 ALTER TABLE o_ac_reservation
 ADD CONSTRAINT idx_rsrv_to_rsrc_identity FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
 
--- catalog
+-- Catalog
 ALTER TABLE o_ca_launcher_to_organisation
 ADD CONSTRAINT rel_lto_launcher_idx FOREIGN KEY (fk_launcher) REFERENCES o_ca_launcher (id);
 
 ALTER TABLE o_ca_launcher_to_organisation
 ADD CONSTRAINT rel_lto_org_idx FOREIGN KEY (fk_organisation) REFERENCES o_org_organisation (id);
 
--- note
+-- Note
 ALTER TABLE o_note
 ADD CONSTRAINT FKC2D855C263219E27 FOREIGN KEY (owner_id) REFERENCES o_bs_identity (id);
 
@@ -5582,7 +5589,7 @@ CREATE INDEX resid_idx ON o_note (resourcetypeid);
 CREATE INDEX owner_idx ON o_note (owner_id);
 CREATE INDEX restype_idx ON o_note (resourcetypename);
 
--- ex_task
+-- Ex Task
 ALTER TABLE o_ex_task
 ADD CONSTRAINT idx_ex_task_ident_id FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
 
@@ -5595,7 +5602,7 @@ ADD CONSTRAINT idx_ex_task_mod_ident_id FOREIGN KEY (fk_identity_id) REFERENCES 
 ALTER TABLE o_ex_task_modifier
 ADD CONSTRAINT idx_ex_task_mod_task_id FOREIGN KEY (fk_task_id) REFERENCES o_ex_task (id);
 
--- checklist
+-- Checklist
 ALTER TABLE o_cl_check
 ADD CONSTRAINT check_identity_ctx FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
 
@@ -5607,7 +5614,7 @@ ADD CONSTRAINT check_identity_unique_ctx UNIQUE (fk_identity_id, fk_checkbox_id)
 
 CREATE INDEX idx_checkbox_uuid_idx ON o_cl_checkbox (c_checkboxid);
 
--- group tasks
+-- Group Tasks
 ALTER TABLE o_gta_task
 ADD CONSTRAINT gtask_to_tasklist_idx FOREIGN KEY (fk_tasklist) REFERENCES o_gta_task_list (id);
 
@@ -5635,7 +5642,7 @@ ADD CONSTRAINT gtaskrev_to_task_idx FOREIGN KEY (fk_task) REFERENCES o_gta_task 
 ALTER TABLE o_gta_mark
 ADD CONSTRAINT gtamark_tasklist_idx FOREIGN KEY (fk_tasklist_id) REFERENCES o_gta_task_list (id);
 
--- reminders
+-- Reminders
 ALTER TABLE o_rem_reminder
 ADD CONSTRAINT rem_reminder_to_repo_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
 
@@ -5648,12 +5655,12 @@ ADD CONSTRAINT rem_sent_rem_to_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_
 ALTER TABLE o_rem_sent_reminder
 ADD CONSTRAINT rem_sent_rem_to_reminder_idx FOREIGN KEY (fk_reminder) REFERENCES o_rem_reminder (id);
 
--- lifecycle
+-- Lifecycle
 CREATE INDEX lc_pref_idx ON o_lifecycle (persistentref);
 CREATE INDEX lc_type_idx ON o_lifecycle (persistenttypename);
 CREATE INDEX lc_action_idx ON o_lifecycle (action);
 
--- mark
+-- Mark
 ALTER TABLE o_mark
 ADD CONSTRAINT FKF26C8375236F21X FOREIGN KEY (creator_id) REFERENCES o_bs_identity (id);
 
@@ -5672,7 +5679,7 @@ ADD businesspath_short AS LEFT(businesspath, 255) PERSISTED;
 CREATE INDEX mark_subpath_idx ON o_mark (ressubpath_short);
 CREATE INDEX mark_businesspath_idx ON o_mark (businesspath_short);
 
--- forum
+-- Forum
 CREATE INDEX idx_forum_ref_idx ON o_forum (f_refresid, f_refresname);
 
 ALTER TABLE o_message
@@ -5697,14 +5704,14 @@ CREATE INDEX readmessage_identity_idx ON o_readmessage (identity_id);
 
 CREATE INDEX forum_pseudonym_idx ON o_forum_pseudonym (p_pseudonym);
 
--- project broker
+-- Project Broker
 CREATE INDEX projectbroker_project_broker_idx ON o_projectbroker_project (projectbroker_fk);
 CREATE INDEX projectbroker_project_id_idx ON o_projectbroker_project (project_id);
 CREATE INDEX o_projectbroker_customfields_idx ON o_projectbroker_customfields (fk_project_id);
 
 
 
--- info messages
+-- Info Messages
 ALTER TABLE o_info_message ADD CONSTRAINT FKF85553465A4FA5DC FOREIGN KEY (fk_author_id) REFERENCES o_bs_identity (id);
 ALTER TABLE o_info_message ADD CONSTRAINT FKF85553465A4FA5EF FOREIGN KEY (fk_modifier_id) REFERENCES o_bs_identity (id);
 
@@ -5716,14 +5723,14 @@ ALTER TABLE o_info_message_to_group ADD CONSTRAINT o_info_message_to_group_group
 ALTER TABLE o_info_message_to_cur_el ADD CONSTRAINT o_info_message_to_cur_el_msg_idx FOREIGN KEY (fk_info_message_id) REFERENCES o_info_message (info_id);
 ALTER TABLE o_info_message_to_cur_el ADD CONSTRAINT o_info_message_to_cur_el_curel_idx FOREIGN KEY (fk_cur_element_id) REFERENCES o_cur_curriculum_element (id);
 
--- db course
+-- Db Course
 ALTER TABLE o_co_db_entry ADD CONSTRAINT FK_DB_ENTRY_TO_IDENT FOREIGN KEY (idprofile) REFERENCES o_bs_identity (id);
 
 CREATE INDEX o_co_db_course_idx ON o_co_db_entry (courseid);
 CREATE INDEX o_co_db_cat_idx ON o_co_db_entry (category);
 CREATE INDEX o_co_db_name_idx ON o_co_db_entry (name);
 
--- open meeting
+-- Open Meeting
 ALTER TABLE o_om_room_reference ADD CONSTRAINT idx_omroom_to_bgroup FOREIGN KEY (businessgroup) REFERENCES o_gp_business (group_id);
 CREATE INDEX idx_omroom_residname ON o_om_room_reference (resourcetypename, resourcetypeid);
 
@@ -5757,7 +5764,7 @@ ALTER TABLE o_teams_attendee ADD CONSTRAINT teams_att_ident_idx FOREIGN KEY (fk_
 ALTER TABLE o_teams_attendee ADD CONSTRAINT teams_att_user_idx FOREIGN KEY (fk_teams_user_id) REFERENCES o_teams_user (id);
 ALTER TABLE o_teams_attendee ADD CONSTRAINT teams_att_meet_idx FOREIGN KEY (fk_meeting_id) REFERENCES o_teams_meeting (id);
 
--- tag
+-- Tag
 CREATE UNIQUE INDEX idx_tag_name_idx ON o_tag_tag (t_display_name);
 
 -- ToDo
@@ -5766,7 +5773,7 @@ CREATE INDEX idx_todo_origin_id_idx ON o_todo_task (t_origin_id);
 CREATE INDEX idx_todo_tag_todo_idx ON o_todo_task_tag (fk_todo_task);
 CREATE INDEX idx_todo_tag_tag_idx ON o_todo_task_tag (fk_tag);
 
--- mail
+-- Mail
 ALTER TABLE o_mail ADD CONSTRAINT FKF86663165A4FA5DC FOREIGN KEY (fk_from_id) REFERENCES o_mail_recipient (recipient_id);
 CREATE INDEX idx_mail_meta_id_idx ON o_mail (meta_mail_id);
 
@@ -5784,7 +5791,7 @@ CREATE INDEX idx_mail_path_idx ON o_mail_attachment (datas_path_computed);
 
 CREATE INDEX idx_mail_att_siblings_idx ON o_mail_attachment (datas_checksum, mimetype, datas_size, datas_name);
 
--- instant messaging
+-- Instant Messaging
 ALTER TABLE o_im_message ADD CONSTRAINT idx_im_msg_to_fromid FOREIGN KEY (fk_from_identity_id) REFERENCES o_bs_identity (id);
 CREATE INDEX idx_im_msg_res_idx ON o_im_message (msg_resid, msg_resname);
 CREATE INDEX idx_im_msg_channel_idx ON o_im_message (msg_resid, msg_resname, msg_ressubpath, msg_channel);
@@ -5803,12 +5810,12 @@ CREATE INDEX idx_im_rost_sub_idx ON o_im_roster_entry (r_resid, r_resname, r_res
 
 ALTER TABLE o_im_preferences ADD CONSTRAINT idx_im_prfs_to_id FOREIGN KEY (fk_from_identity_id) REFERENCES o_bs_identity (id);
 
--- efficiency statements
+-- Efficiency Statements
 ALTER TABLE o_as_eff_statement ADD CONSTRAINT eff_statement_id_cstr FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
 CREATE INDEX eff_statement_repo_key_idx ON o_as_eff_statement (course_repo_key);
 CREATE INDEX idx_eff_stat_course_ident_idx ON o_as_eff_statement (fk_identity, course_repo_key);
 
--- course infos
+-- Course Infos
 ALTER TABLE o_as_user_course_infos ADD CONSTRAINT user_course_infos_id_cstr FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
 CREATE INDEX user_course_infos_res_cstr ON o_as_user_course_infos (fk_resource_id);
 ALTER TABLE o_as_user_course_infos ADD CONSTRAINT user_course_infos_res_cstr FOREIGN KEY (fk_resource_id) REFERENCES o_olatresource (resource_id);
@@ -5830,13 +5837,13 @@ CREATE INDEX idx_satrigger_org_idx ON o_as_score_accounting_trigger (e_organisat
 CREATE INDEX idx_satrigger_curele_idx ON o_as_score_accounting_trigger (e_curriculum_element_key);
 CREATE INDEX idx_satrigger_userprop_idx ON o_as_score_accounting_trigger (e_user_property_value, e_user_property_name);
 
--- Assessment message
+-- Assessment Message
 ALTER TABLE o_as_message ADD CONSTRAINT as_msg_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
 
 ALTER TABLE o_as_message_log ADD CONSTRAINT as_msg_log_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
 ALTER TABLE o_as_message_log ADD CONSTRAINT as_msg_log_msg_idx FOREIGN KEY (fk_message) REFERENCES o_as_message (id);
 
--- disadvantage compensation
+-- Disadvantage Compensation
 ALTER TABLE o_as_compensation ADD CONSTRAINT compensation_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
 ALTER TABLE o_as_compensation ADD CONSTRAINT compensation_crea_idx FOREIGN KEY (fk_creator) REFERENCES o_bs_identity (id);
 ALTER TABLE o_as_compensation ADD CONSTRAINT compensation_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
@@ -5851,7 +5858,7 @@ ALTER TABLE o_gr_performance_class ADD CONSTRAINT perf_to_grsys_idx FOREIGN KEY 
 ALTER TABLE o_gr_grade_scale ADD CONSTRAINT grscale_to_grsys_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
 ALTER TABLE o_gr_breakpoint ADD CONSTRAINT grbp_to_grsys_idx FOREIGN KEY (fk_grade_scale) REFERENCES o_gr_grade_scale (id);
 
--- gotomeeting
+-- Gotomeeting
 ALTER TABLE o_goto_organizer ADD CONSTRAINT goto_organ_owner_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
 CREATE INDEX idx_goto_organ_okey_idx ON o_goto_organizer (g_organizer_key);
 CREATE INDEX idx_goto_organ_uname_idx ON o_goto_organizer (g_username);
@@ -5863,7 +5870,7 @@ ALTER TABLE o_goto_meeting ADD CONSTRAINT goto_meet_organizer_idx FOREIGN KEY (f
 ALTER TABLE o_goto_registrant ADD CONSTRAINT goto_regis_meeting_idx FOREIGN KEY (fk_meeting_id) REFERENCES o_goto_meeting (id);
 ALTER TABLE o_goto_registrant ADD CONSTRAINT goto_regis_ident_idx FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
 
--- video
+-- Video
 ALTER TABLE o_vid_transcoding ADD CONSTRAINT fk_resource_id_idx FOREIGN KEY (fk_resource_id) REFERENCES o_olatresource (resource_id);
 CREATE INDEX vid_status_trans_idx ON o_vid_transcoding (vid_status);
 CREATE INDEX vid_transcoder_trans_idx ON o_vid_transcoding (vid_transcoder);
@@ -5872,7 +5879,7 @@ ALTER TABLE o_vid_metadata ADD CONSTRAINT vid_meta_rsrc_idx FOREIGN KEY (fk_reso
 ALTER TABLE o_vid_to_organisation ADD CONSTRAINT vid_entry_to_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
 ALTER TABLE o_vid_to_organisation ADD CONSTRAINT vid_entry_to_org_idx FOREIGN KEY (fk_organisation) REFERENCES o_org_organisation (id);
 
--- video task
+-- Video Task
 ALTER TABLE o_vid_task_session ADD CONSTRAINT vid_sess_to_repo_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
 ALTER TABLE o_vid_task_session ADD CONSTRAINT vid_sess_to_vid_entry_idx FOREIGN KEY (fk_reference_entry) REFERENCES o_repositoryentry (repositoryentry_id);
 ALTER TABLE o_vid_task_session ADD CONSTRAINT vid_sess_to_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
@@ -5880,7 +5887,7 @@ ALTER TABLE o_vid_task_session ADD CONSTRAINT vid_sess_to_as_entry_idx FOREIGN K
 
 ALTER TABLE o_vid_task_selection ADD CONSTRAINT vid_sel_to_session_idx FOREIGN KEY (fk_task_session) REFERENCES o_vid_task_session (id);
 
--- calendar
+-- Calendar
 ALTER TABLE o_cal_use_config ADD CONSTRAINT cal_u_conf_to_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
 CREATE INDEX idx_cal_u_conf_cal_id_idx ON o_cal_use_config (c_calendar_id);
 CREATE INDEX idx_cal_u_conf_cal_type_idx ON o_cal_use_config (c_calendar_type);
@@ -5892,11 +5899,11 @@ CREATE INDEX idx_cal_imp_cal_type_idx ON o_cal_import (c_calendar_type);
 CREATE INDEX idx_cal_imp_to_cal_id_idx ON o_cal_import_to (c_to_calendar_id);
 CREATE INDEX idx_cal_imp_to_cal_type_idx ON o_cal_import_to (c_to_calendar_type);
 
--- mapper
+-- Mapper
 CREATE INDEX o_mapper_uuid_idx ON o_mapper (mapper_uuid);
 
 
--- qti 2.1
+-- QTI 2.1
 ALTER TABLE o_qti_assessmenttest_session ADD CONSTRAINT qti_sess_to_repo_entry_idx FOREIGN KEY (fk_entry) REFERENCES o_repositoryentry (repositoryentry_id);
 ALTER TABLE o_qti_assessmenttest_session ADD CONSTRAINT qti_sess_to_course_entry_idx FOREIGN KEY (fk_reference_entry) REFERENCES o_repositoryentry (repositoryentry_id);
 ALTER TABLE o_qti_assessmenttest_session ADD CONSTRAINT qti_sess_to_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
@@ -5925,7 +5932,7 @@ ALTER TABLE o_practice_global_item_ref ADD CONSTRAINT pract_global_ident_idx FOR
 
 CREATE INDEX idx_pract_global_id_uu_idx ON o_practice_global_item_ref (fk_identity, p_identifier);
 
--- portfolio
+-- Portfolio
 ALTER TABLE o_pf_binder ADD CONSTRAINT pf_binder_resource_idx FOREIGN KEY (fk_olatresource_id) REFERENCES o_olatresource (resource_id);
 ALTER TABLE o_pf_binder ADD CONSTRAINT pf_binder_group_idx FOREIGN KEY (fk_group_id) REFERENCES o_bs_group (id);
 ALTER TABLE o_pf_binder ADD CONSTRAINT pf_binder_course_idx FOREIGN KEY (fk_entry_id) REFERENCES o_repositoryentry (repositoryentry_id);
@@ -6436,6 +6443,23 @@ ALTER TABLE o_badge_entry_config ADD CONSTRAINT badge_entry_config_entry_idx FOR
 ALTER TABLE o_gui_prefs ADD CONSTRAINT o_gui_prefs_identity_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
 CREATE INDEX idx_o_gui_prefs_attrclass_idx ON o_gui_prefs (g_pref_attributed_class);
 CREATE INDEX idx_o_gui_prefs_key_idx ON o_gui_prefs (g_pref_key);
+
+-- Booking
+ALTER TABLE o_booking ADD CONSTRAINT b_created_to_identity_idx FOREIGN KEY (fk_created_by) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_b_created_to_identity_idx ON o_booking (fk_created_by);
+
+ALTER TABLE o_booking ADD CONSTRAINT b_deleted_to_identity_idx FOREIGN KEY (fk_deleted_by) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_b_deleted_to_identity_idx ON o_booking (fk_deleted_by);
+
+ALTER TABLE o_booking ADD CONSTRAINT b_room_idx FOREIGN KEY (fk_room) REFERENCES o_room(room_id);
+CREATE INDEX idx_b_room_idx ON o_booking (fk_room);
+
+-- Room
+ALTER TABLE o_room ADD CONSTRAINT r_created_to_identity_idx FOREIGN KEY (fk_created_by) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_r_created_to_identity_idx ON o_room (fk_created_by);
+
+ALTER TABLE o_room ADD CONSTRAINT r_deleted_to_identity_idx FOREIGN KEY (fk_deleted_by) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_r_deleted_to_identity_idx ON o_room (fk_deleted_by);
 
 -- Hibernate Unique Key
 INSERT INTO hibernate_unique_key (next_hi) VALUES (0);
