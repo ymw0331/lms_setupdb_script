@@ -5049,6 +5049,9 @@ CREATE TABLE o_room (
    status NVARCHAR(16),
    deletiondate DATETIME2 DEFAULT NULL,
    fk_deleted_by BIGINT DEFAULT NULL,
+   endtime NVARCHAR(255),         -- Added new column
+   starttime NVARCHAR(255),       -- Added new column
+   operateday NVARCHAR(255),      -- Added new column
    PRIMARY KEY (room_id)
 );
 
