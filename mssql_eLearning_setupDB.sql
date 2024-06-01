@@ -1682,8 +1682,8 @@ CREATE TABLE o_as_eff_statement (
     lastusermodified DATETIME2,
     creationdate DATETIME2,
     passed BIT DEFAULT NULL,  -- Changed BOOL to BIT
-    score NVARCHAR(MAX),  -- Changed FLOAT(65,30) to NVARCHAR(MAX) to handle high precision
-    weighted_score NVARCHAR(MAX),  -- Changed FLOAT(65,30) to NVARCHAR(MAX) to handle high precision
+    score FLOAT DEFAULT NULL,  -- Changed back to FLOAT
+    weighted_score FLOAT DEFAULT NULL,  -- Changed back to FLOAT
     grade NVARCHAR(100),
     grade_system_ident NVARCHAR(64),
     performance_class_ident NVARCHAR(50),
@@ -1693,7 +1693,7 @@ CREATE TABLE o_as_eff_statement (
     total_nodes INT,  -- Changed from MEDIUMINT to INT
     attempted_nodes INT,  -- Changed from MEDIUMINT to INT
     passed_nodes INT,  -- Changed from MEDIUMINT to INT
-    completion NVARCHAR(MAX),  -- Changed FLOAT(65,30) to NVARCHAR(MAX) to handle high precision
+    completion FLOAT DEFAULT NULL,  -- Changed back to FLOAT
     course_title NVARCHAR(255),
     course_short_title NVARCHAR(128),
     course_repo_key BIGINT,
@@ -1732,11 +1732,11 @@ CREATE TABLE o_as_entry (
    lastusermodified DATETIME2,
    a_attemtps BIGINT DEFAULT NULL,
    a_last_attempt DATETIME2 DEFAULT NULL,
-   a_score NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
-   a_weighted_score NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
-   a_score_scale NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
-   a_max_score NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
-   a_weighted_max_score NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
+   a_score FLOAT DEFAULT NULL,  -- Changed back to FLOAT
+   a_weighted_score FLOAT DEFAULT NULL,  -- Changed back to FLOAT
+   a_score_scale FLOAT DEFAULT NULL,  -- Changed back to FLOAT
+   a_max_score FLOAT DEFAULT NULL,  -- Changed back to FLOAT
+   a_weighted_max_score FLOAT DEFAULT NULL,  -- Changed back to FLOAT
    a_grade NVARCHAR(100),
    a_grade_system_ident NVARCHAR(64),
    a_performance_class_ident NVARCHAR(50),
@@ -1752,8 +1752,8 @@ CREATE TABLE o_as_entry (
    a_fully_assessed BIT DEFAULT NULL,
    a_date_fully_assessed DATETIME2,
    a_assessment_id BIGINT DEFAULT NULL,
-   a_completion NVARCHAR(MAX),  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
-   a_current_run_completion NVARCHAR(MAX),  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
+   a_completion FLOAT DEFAULT NULL,  -- Changed back to FLOAT
+   a_current_run_completion FLOAT DEFAULT NULL,  -- Changed back to FLOAT
    a_current_run_status NVARCHAR(16),
    a_current_run_start DATETIME2,
    a_comment NVARCHAR(MAX),  -- Changed TEXT to NVARCHAR(MAX)
@@ -2217,10 +2217,10 @@ CREATE TABLE o_vid_task_session (
    lastmodified DATETIME2 NOT NULL,
    v_author_mode BIT DEFAULT 0,  -- Changed BOOLEAN to BIT
    v_finish_time DATETIME2,
-   v_score NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
-   v_max_score NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
+   v_score FLOAT DEFAULT NULL,  -- Changed back to FLOAT
+   v_max_score FLOAT DEFAULT NULL,  -- Changed back to FLOAT
    v_passed BIT DEFAULT NULL,  -- Changed BOOLEAN to BIT
-   v_result NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
+   v_result FLOAT DEFAULT NULL,  -- Changed back to FLOAT
    v_segments BIGINT NOT NULL DEFAULT 0,
    v_attempt BIGINT NOT NULL DEFAULT 1,
    v_cancelled BIT DEFAULT 0,  -- Changed BOOLEAN to BIT
@@ -2384,9 +2384,9 @@ CREATE TABLE o_qti_assessmenttest_session (
    q_finish_time DATETIME2,
    q_termination_time DATETIME2,
    q_duration BIGINT,
-   q_score NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
-   q_manual_score NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
-   q_max_score NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
+   q_score FLOAT DEFAULT NULL,  -- Changed back to FLOAT
+   q_manual_score FLOAT DEFAULT NULL,  -- Changed back to FLOAT
+   q_max_score FLOAT DEFAULT NULL,  -- Changed back to FLOAT
    q_passed BIT DEFAULT NULL,
    q_num_questions BIGINT,
    q_num_answered_questions BIGINT,
@@ -2412,8 +2412,8 @@ CREATE TABLE o_qti_assessmentitem_session (
    q_sectionidentifier NVARCHAR(255) DEFAULT NULL,
    q_testpartidentifier NVARCHAR(255) DEFAULT NULL,
    q_duration BIGINT,
-   q_score NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
-   q_manual_score NVARCHAR(MAX) DEFAULT NULL,  -- Changed FLOAT(65,30) to NVARCHAR(MAX)
+   q_score FLOAT DEFAULT NULL,  -- Changed back to FLOAT
+   q_manual_score FLOAT DEFAULT NULL,  -- Changed back to FLOAT
    q_coach_comment NVARCHAR(MAX) DEFAULT NULL,  -- Changed MEDIUMTEXT to NVARCHAR(MAX)
    q_to_review BIT DEFAULT 0,
    q_passed BIT DEFAULT NULL,
@@ -3966,12 +3966,12 @@ CREATE TABLE o_lecture_participant_summary (
   creationdate DATETIME2 NOT NULL,
   lastmodified DATETIME2 NOT NULL,
   l_first_admission_date DATETIME2 DEFAULT NULL,
-  l_required_attendance_rate DECIMAL(38,30) DEFAULT NULL,  -- Changed FLOAT(65,30) to DECIMAL(38,30)
+  l_required_attendance_rate FLOAT DEFAULT NULL,  -- Changed back to FLOAT
   l_attended_lectures BIGINT NOT NULL DEFAULT 0,
   l_absent_lectures BIGINT NOT NULL DEFAULT 0,
   l_excused_lectures BIGINT NOT NULL DEFAULT 0,
   l_planneds_lectures BIGINT NOT NULL DEFAULT 0,
-  l_attendance_rate DECIMAL(38,30) DEFAULT NULL,  -- Changed FLOAT(65,30) to DECIMAL(38,30)
+  l_attendance_rate FLOAT DEFAULT NULL,  -- Changed back to FLOAT
   l_cal_sync BIT DEFAULT 0,
   l_cal_last_sync_date DATETIME2 DEFAULT NULL,
   l_awarded_cpd_hour BIGINT NULL,  -- Added new column
@@ -3991,7 +3991,7 @@ CREATE TABLE o_lecture_entry_config (
   l_override_module_def BIT DEFAULT 0,
   l_rollcall_enabled BIT DEFAULT NULL,
   l_calculate_attendance_rate BIT DEFAULT NULL,
-  l_required_attendance_rate DECIMAL(38,30) DEFAULT NULL,  -- Changed FLOAT(65,30) to DECIMAL(38,30)
+  l_required_attendance_rate FLOAT DEFAULT NULL,  -- Changed back to FLOAT
   l_sync_calendar_teacher BIT DEFAULT NULL,
   l_sync_calendar_participant BIT DEFAULT NULL,
   l_sync_calendar_course BIT DEFAULT NULL,
@@ -4116,8 +4116,8 @@ CREATE TABLE o_tax_taxonomy_competence (
   creationdate DATETIME2 NOT NULL,
   lastmodified DATETIME2 NOT NULL,
   t_type NVARCHAR(16),
-  t_achievement DECIMAL(38,30) DEFAULT NULL,  -- Changed FLOAT(65,30) to DECIMAL(38,30)
-  t_reliability DECIMAL(38,30) DEFAULT NULL,  -- Changed FLOAT(65,30) to DECIMAL(38,30)
+  t_achievement FLOAT DEFAULT NULL,  -- Changed back to FLOAT
+  t_reliability FLOAT DEFAULT NULL,  -- Changed back to FLOAT
   t_expiration_date DATETIME2,
   t_external_id NVARCHAR(64),
   t_source_text NVARCHAR(255),
@@ -4467,7 +4467,7 @@ CREATE TABLE o_course_element (
   c_grade BIT NOT NULL DEFAULT 0,  -- Changed BOOLEAN to BIT
   c_auto_grade BIT NOT NULL DEFAULT 0,  -- Changed BOOLEAN to BIT
   c_passed_mode NVARCHAR(16) NOT NULL,
-  c_cut_value DECIMAL(38,30),  -- Changed FLOAT(65,30) to DECIMAL(38,30)
+  c_cut_value FLOAT,  -- Changed back to FLOAT
   c_coach_assignment BIT DEFAULT 0 NOT NULL,  -- Changed BOOLEAN to BIT
   fk_entry BIGINT NOT NULL,
   c_subident NVARCHAR(64) NOT NULL,
