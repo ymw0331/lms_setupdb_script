@@ -3883,6 +3883,8 @@ CREATE TABLE o_lecture_block (
   l_roll_call_status NVARCHAR(16) NOT NULL,
   l_qr_scan_enable BIT DEFAULT 0 NULL,  -- Added new column, Changed BOOLEAN to BIT
   l_attendance_review_status NVARCHAR(16) NULL,  -- Added new column
+  l_qr_id NVARCHAR(50) NULL, -- Added new column
+  l_late_buffer BIGINT NULL, -- Added new column
   fk_reason BIGINT,
   fk_entry BIGINT NOT NULL,
   fk_teacher_group BIGINT NOT NULL,
