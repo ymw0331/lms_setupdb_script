@@ -5072,7 +5072,8 @@ CREATE VIEW o_bs_identity_short_v AS (
       us.u_firstname AS first_name,
       us.u_lastname AS last_name,
       us.u_nickname AS nick_name,
-      us.u_email AS email
+      us.u_email AS email,
+      us.u_fullname AS full_name
    FROM o_bs_identity AS ident
    INNER JOIN o_user AS us ON (ident.id = us.fk_identity)
 );
