@@ -1055,7 +1055,7 @@ CREATE TABLE o_bs_invitation (
    token NVARCHAR(64) NOT NULL,
    first_name NVARCHAR(64),
    last_name NVARCHAR(64),
-   full_name NVARCHAR(255);
+   full_name NVARCHAR(255),
    mail NVARCHAR(128),
    i_type NVARCHAR(32) DEFAULT 'binder' NOT NULL,
    i_status NVARCHAR(32) DEFAULT 'active',
