@@ -5367,8 +5367,9 @@ ADD CONSTRAINT FKC6A5445652595FE6 FOREIGN KEY (identity_fk) REFERENCES o_bs_iden
 ALTER TABLE o_bs_authentication
 ADD CONSTRAINT unique_pro_iss_authusername UNIQUE (provider, issuer, authusername);
 
-ALTER TABLE o_bs_authentication
-ADD CONSTRAINT unique_pro_iss_externalid UNIQUE (provider, issuer, externalid);
+-- remove this key, no longer needed
+-- ALTER TABLE o_bs_authentication
+-- ADD CONSTRAINT unique_pro_iss_externalid UNIQUE (provider, issuer, externalid);
 
 CREATE INDEX provider_idx ON o_bs_authentication (provider);
 CREATE INDEX credential_idx ON o_bs_authentication (credential);
