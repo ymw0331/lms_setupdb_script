@@ -352,7 +352,7 @@ CREATE TABLE o_catentry (
    fk_ownergroup BIGINT UNIQUE,
    type INT NOT NULL,
    parent_id BIGINT,
-   order_index BIGINT, 
+   order_index BIGINT,
    short_title NVARCHAR(255),
    add_entry_position INT,
    add_category_position INT,
@@ -3565,7 +3565,7 @@ CREATE TABLE o_lti_content_item (
    l_expires_at DATETIME2,
    fk_tool_id BIGINT NOT NULL,
    fk_tool_deployment_id BIGINT,
-   fk_context_id BIGINT, 
+   fk_context_id BIGINT,
    PRIMARY KEY (id)
 );
 
@@ -5227,8 +5227,8 @@ GO
 CREATE INDEX ocl_asset_idx ON oc_lock (asset);
 GO
 
-ALTER TABLE oc_lock 
-ADD CONSTRAINT FK9E30F4B66115906D 
+ALTER TABLE oc_lock
+ADD CONSTRAINT FK9E30F4B66115906D
 FOREIGN KEY (identity_fk) REFERENCES o_bs_identity (id);
 GO
 
@@ -5236,8 +5236,8 @@ CREATE INDEX FK9E30F4B66115906D ON oc_lock (identity_fk);
 GO
 
 -- Rating Table
-ALTER TABLE o_userrating 
-ADD CONSTRAINT FKF26C8375236F20X 
+ALTER TABLE o_userrating
+ADD CONSTRAINT FKF26C8375236F20X
 FOREIGN KEY (creator_id) REFERENCES o_bs_identity (id);
 
 CREATE INDEX rtn_id_idx ON o_userrating (resid);
@@ -5252,12 +5252,12 @@ CREATE INDEX rtn_subpath_idx ON o_userrating (ressubpath_prefix);
 
 
 -- Comment
-ALTER TABLE o_usercomment 
-ADD CONSTRAINT FK92B6864A18251F0 
+ALTER TABLE o_usercomment
+ADD CONSTRAINT FK92B6864A18251F0
 FOREIGN KEY (parent_key) REFERENCES o_usercomment (comment_id);
 
-ALTER TABLE o_usercomment 
-ADD CONSTRAINT FKF26C8375236F20A 
+ALTER TABLE o_usercomment
+ADD CONSTRAINT FKF26C8375236F20A
 FOREIGN KEY (creator_id) REFERENCES o_bs_identity (id);
 
 CREATE INDEX cmt_id_idx ON o_usercomment (resid);
@@ -5269,16 +5269,16 @@ ADD ressubpath_prefix AS LEFT(ressubpath, 255);
 CREATE INDEX cmt_subpath_idx ON o_usercomment (ressubpath_prefix);
 
 -- Checkpoint
-ALTER TABLE o_checkpoint_results 
-ADD CONSTRAINT FK9E30F4B661159ZZY 
+ALTER TABLE o_checkpoint_results
+ADD CONSTRAINT FK9E30F4B661159ZZY
 FOREIGN KEY (checkpoint_fk) REFERENCES o_checkpoint (checkpoint_id);
 
-ALTER TABLE o_checkpoint_results 
-ADD CONSTRAINT FK9E30F4B661159ZZX 
+ALTER TABLE o_checkpoint_results
+ADD CONSTRAINT FK9E30F4B661159ZZX
 FOREIGN KEY (identity_fk) REFERENCES o_bs_identity (id);
 
-ALTER TABLE o_checkpoint 
-ADD CONSTRAINT FK9E30F4B661159ZZZ 
+ALTER TABLE o_checkpoint
+ADD CONSTRAINT FK9E30F4B661159ZZZ
 FOREIGN KEY (checklist_fk) REFERENCES o_checklist (checklist_id);
 
 -- Plock
@@ -5286,12 +5286,12 @@ CREATE INDEX asset_idx ON o_plock (asset);
 
 
 -- Property
-ALTER TABLE o_property 
-ADD CONSTRAINT FKB60B1BA5190E5 
+ALTER TABLE o_property
+ADD CONSTRAINT FKB60B1BA5190E5
 FOREIGN KEY (grp) REFERENCES o_gp_business (group_id);
 
-ALTER TABLE o_property 
-ADD CONSTRAINT FKB60B1BA5F7E870BE 
+ALTER TABLE o_property
+ADD CONSTRAINT FKB60B1BA5F7E870BE
 FOREIGN KEY (idprofile) REFERENCES o_bs_identity (id);
 
 CREATE INDEX idx_prop_indexresid_idx ON o_property (resourcetypeid);
@@ -5301,66 +5301,66 @@ CREATE INDEX idx_prop_restype_idx ON o_property (resourcetypename);
 
 
 -- Group
-ALTER TABLE o_bs_group_member 
-ADD CONSTRAINT member_identity_ctx 
+ALTER TABLE o_bs_group_member
+ADD CONSTRAINT member_identity_ctx
 FOREIGN KEY (fk_identity_id) REFERENCES o_bs_identity (id);
 
-ALTER TABLE o_bs_group_member 
-ADD CONSTRAINT member_group_ctx 
+ALTER TABLE o_bs_group_member
+ADD CONSTRAINT member_group_ctx
 FOREIGN KEY (fk_group_id) REFERENCES o_bs_group (id);
 
 CREATE INDEX group_role_member_idx ON o_bs_group_member (fk_group_id, g_role, fk_identity_id);
 
-ALTER TABLE o_re_to_group 
-ADD CONSTRAINT re_to_group_group_ctx 
+ALTER TABLE o_re_to_group
+ADD CONSTRAINT re_to_group_group_ctx
 FOREIGN KEY (fk_group_id) REFERENCES o_bs_group (id);
 
-ALTER TABLE o_re_to_group 
-ADD CONSTRAINT re_to_group_re_ctx 
+ALTER TABLE o_re_to_group
+ADD CONSTRAINT re_to_group_re_ctx
 FOREIGN KEY (fk_entry_id) REFERENCES o_repositoryentry (repositoryentry_id);
 
-ALTER TABLE o_gp_business 
-ADD CONSTRAINT gp_to_group_business_ctx 
+ALTER TABLE o_gp_business
+ADD CONSTRAINT gp_to_group_business_ctx
 FOREIGN KEY (fk_group_id) REFERENCES o_bs_group (id);
 
 
 -- Business Group
-ALTER TABLE o_gp_business 
-ADD CONSTRAINT idx_bgp_rsrc 
+ALTER TABLE o_gp_business
+ADD CONSTRAINT idx_bgp_rsrc
 FOREIGN KEY (fk_resource) REFERENCES o_olatresource (resource_id);
 
 CREATE INDEX gp_name_idx ON o_gp_business (groupname);
 CREATE INDEX idx_grp_lifecycle_soft_idx ON o_gp_business (external_id);
 CREATE INDEX gp_tech_type_idx ON o_gp_business (technical_type);
 
-ALTER TABLE o_bs_namedgroup 
-ADD CONSTRAINT FKBAFCBBC4B85B522C 
+ALTER TABLE o_bs_namedgroup
+ADD CONSTRAINT FKBAFCBBC4B85B522C
 FOREIGN KEY (secgroup_id) REFERENCES o_bs_secgroup (id);
 
 CREATE INDEX groupname_idx ON o_bs_namedgroup (groupname);
 
-ALTER TABLE o_gp_business 
-ADD CONSTRAINT gb_bus_inactivateby_idx 
+ALTER TABLE o_gp_business
+ADD CONSTRAINT gb_bus_inactivateby_idx
 FOREIGN KEY (fk_inactivatedby_id) REFERENCES o_bs_identity (id);
 
-ALTER TABLE o_gp_business 
-ADD CONSTRAINT gb_bus_softdeletedby_idx 
+ALTER TABLE o_gp_business
+ADD CONSTRAINT gb_bus_softdeletedby_idx
 FOREIGN KEY (fk_softdeletedby_id) REFERENCES o_bs_identity (id);
 
 
 -- Area
-ALTER TABLE o_gp_bgarea 
-ADD CONSTRAINT idx_area_to_resource 
+ALTER TABLE o_gp_bgarea
+ADD CONSTRAINT idx_area_to_resource
 FOREIGN KEY (fk_resource) REFERENCES o_olatresource (resource_id);
 
 CREATE INDEX name_idx ON o_gp_bgarea (name);
 
-ALTER TABLE o_gp_bgtoarea_rel 
-ADD CONSTRAINT FK9B663F2D1E2E7685 
+ALTER TABLE o_gp_bgtoarea_rel
+ADD CONSTRAINT FK9B663F2D1E2E7685
 FOREIGN KEY (group_fk) REFERENCES o_gp_business (group_id);
 
-ALTER TABLE o_gp_bgtoarea_rel 
-ADD CONSTRAINT FK9B663F2DD381B9B7 
+ALTER TABLE o_gp_bgtoarea_rel
+ADD CONSTRAINT FK9B663F2DD381B9B7
 FOREIGN KEY (area_fk) REFERENCES o_gp_bgarea (area_id);
 
 
