@@ -356,6 +356,7 @@ CREATE TABLE o_catentry (
    short_title NVARCHAR(255),
    add_entry_position INT,
    add_category_position INT,
+   target_role VARCHAR(50),
    PRIMARY KEY (id)
 );
 
@@ -814,6 +815,8 @@ CREATE TABLE o_loggingtable (
     targetrestype NVARCHAR(32),
     targetresid NVARCHAR(64),
     targetresname NVARCHAR(255),
+    ipaddress NVARCHAR(255),
+    useragent NVARCHAR(255),
     PRIMARY KEY (log_id)
 );
 
@@ -2126,6 +2129,7 @@ CREATE TABLE o_goto_organizer (
    g_username NVARCHAR(128) NOT NULL,
    g_firstname NVARCHAR(128) DEFAULT NULL,
    g_lastname NVARCHAR(128) DEFAULT NULL,
+   g_fullname NVARCHAR(128),
    g_email NVARCHAR(128) DEFAULT NULL,
    fk_identity BIGINT DEFAULT NULL,
    PRIMARY KEY (id)
@@ -3158,6 +3162,7 @@ CREATE TABLE o_eva_form_session (
    e_email NVARCHAR(1024),
    e_firstname NVARCHAR(1024),
    e_lastname NVARCHAR(1024),
+   e_fullname NVARCHAR(1024),
    e_age NVARCHAR(1024),
    e_gender NVARCHAR(1024),
    e_org_unit NVARCHAR(1024),
@@ -5058,6 +5063,46 @@ CREATE TABLE o_room (
    PRIMARY KEY (room_id)
 );
 
+-- Check and create o_agent_info table
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_agent_info' AND xtype='U')
+CREATE TABLE o_agent_info (
+    agentinfo_id BIGINT NOT NULL PRIMARY KEY,
+    code NVARCHAR(255) NOT NULL,
+    name NVARCHAR(255) NOT NULL,
+    rank NVARCHAR(255),
+    agency_no NVARCHAR(255),
+    email NVARCHAR(255),
+    gender NVARCHAR(255),
+    reappointment DATETIME2,
+    reinstatement DATETIME2,
+    appointment_date DATETIME2,
+    status NVARCHAR(255),
+    min_cpd_hours INT,
+    d_termination DATETIME2,
+    lastupdateby NVARCHAR(255),
+    creationdate DATETIME2 NOT NULL,
+    lastmodified DATETIME2 NOT NULL,
+    fk_identity BIGINT
+);
+
+-- Check and create o_agent_hierarchy table
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_agent_hierarchy' AND xtype='U')
+CREATE TABLE o_agent_hierarchy (
+    agent_hierarchy_id BIGINT NOT NULL PRIMARY KEY,
+    agent_code NVARCHAR(255) NOT NULL,
+    v_rank_code NVARCHAR(255),
+    n_manager_no INT,
+    n_manager_code NVARCHAR(255),
+    v_manager_rank NVARCHAR(255),
+    n_manager_level INT,
+    n_level INT,
+    lastupdateby NVARCHAR(255),
+    creationdate DATETIME2 NOT NULL,
+    lastmodified DATETIME2 NOT NULL,
+    fk_agent_info BIGINT
+);
+
+
 -- Create Views
 -- User View
 IF EXISTS (SELECT * FROM sysobjects WHERE name='o_bs_identity_short_v' AND xtype='V')
@@ -5170,6 +5215,7 @@ CREATE VIEW o_gp_contactext_v AS (
       id_member.name AS member_name,
       us_member.u_firstname AS member_firstname,
       us_member.u_lastname AS member_lastname,
+      us_member.u_fullname AS member_fullname,
       bg_me.fk_identity_id AS me_id,
       bgroup.group_id AS bg_id,
       bgroup.groupname AS bg_name
