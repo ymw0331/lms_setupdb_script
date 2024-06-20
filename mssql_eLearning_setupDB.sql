@@ -652,6 +652,7 @@ CREATE TABLE o_repositoryentry (
    deletiondate DATETIME2 DEFAULT NULL,
    coursecode NVARCHAR(255),  -- Added coursecode column
    cpdhours DECIMAL(10, 1),  -- Added cpdhours column
+   is_auto_award BIT DEFAULT 0 NULL,
    fk_deleted_by BIGINT DEFAULT NULL,
    fk_educational_type BIGINT DEFAULT NULL,
    PRIMARY KEY (repositoryentry_id)
@@ -3890,6 +3891,8 @@ CREATE TABLE o_lecture_block (
   l_attendance_review_status NVARCHAR(16) NULL,  -- Added new column
   l_qr_id NVARCHAR(50) NULL, -- Added new column
   l_late_buffer BIGINT NULL, -- Added new column
+  l_has_webinar_attendance BIT DEFAULT 0 NULL,  -- Added l_has_webinar_attendance column
+  fk_teams_meeting BIGINT NULL,  -- Added fk_teams_meeting column
   fk_reason BIGINT,
   fk_entry BIGINT NOT NULL,
   fk_teacher_group BIGINT NOT NULL,
