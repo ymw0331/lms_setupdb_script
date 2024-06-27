@@ -3715,6 +3715,7 @@ CREATE TABLE o_rem_reminder (
    r_email_body NVARCHAR(MAX),  -- Changed MEDIUMTEXT to NVARCHAR(MAX)
    r_email_copy NVARCHAR(32),
    r_email_custom_copy NVARCHAR(1024),
+   r_sms_body NVARCHAR(255), -- Added new column
    fk_creator BIGINT NOT NULL,
    fk_entry BIGINT NOT NULL,
    PRIMARY KEY (id)
@@ -5075,6 +5076,7 @@ CREATE TABLE o_agent_info (
     rank NVARCHAR(255),
     agency_no NVARCHAR(255),
     email NVARCHAR(255),
+    phone NVARCHAR(255), -- Added new column
     gender NVARCHAR(255),
     reappointment DATETIME2,
     reinstatement DATETIME2,
