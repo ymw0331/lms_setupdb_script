@@ -651,6 +651,7 @@ CREATE TABLE o_repositoryentry (
    lti_deployment_owner_enabled BIT DEFAULT 0 NOT NULL,  -- Changed BOOL to BIT
    deletiondate DATETIME2 DEFAULT NULL,
    coursecode NVARCHAR(255),  -- Added coursecode column
+   course_type NVARCHAR(255), -- Added course_type column
    cpdhours DECIMAL(5, 2),  -- Added cpdhours column
    is_auto_award BIT DEFAULT 0 NULL,
    fk_deleted_by BIGINT DEFAULT NULL,
