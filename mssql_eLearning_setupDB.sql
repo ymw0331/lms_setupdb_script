@@ -5085,6 +5085,8 @@ CREATE TABLE o_agent_info (
     status NVARCHAR(255),
     min_cpd_hours INT,
     d_termination DATETIME2,
+    unit_no NVARCHAR(50), -- Added new column
+    branch_code NVARCHAR(50), -- Added new column
     lastupdateby NVARCHAR(255),
     creationdate DATETIME2 NOT NULL,
     lastmodified DATETIME2 NOT NULL,
