@@ -1791,6 +1791,7 @@ CREATE TABLE o_as_entry (
    fk_identity_status_done BIGINT,
    a_anon_identifier NVARCHAR(128) DEFAULT NULL,
    a_coach_assignment_date DATETIME2 DEFAULT NULL,
+   awarded_cpd_hour BIGINT NULL,
    fk_coach BIGINT DEFAULT NULL,
    PRIMARY KEY (id),
    UNIQUE (fk_identity, fk_entry, a_subident)
@@ -5111,6 +5112,24 @@ CREATE TABLE o_agent_hierarchy (
 );
 
 
+-- Check and create o_announcement table
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_announcement' AND xtype='U')
+CREATE TABLE o_announcement (
+   announcement_id BIGINT NOT NULL,
+   version INT NOT NULL,
+   creationdate DATETIME2,
+   lastmodified DATETIME2,
+   fk_created_by BIGINT DEFAULT NULL,
+   fk_olatresource BIGINT UNIQUE,
+   title NVARCHAR(255),
+   content NVARCHAR(255),
+   icon NVARCHAR(255),
+   starttime DATETIME2 NOT NULL,
+   endtime DATETIME2 NOT NULL,
+   status NVARCHAR(16),
+   PRIMARY KEY (announcement_id)
+);
+
 -- Create Views
 -- User View
 IF EXISTS (SELECT * FROM sysobjects WHERE name='o_bs_identity_short_v' AND xtype='V')
@@ -6522,6 +6541,12 @@ CREATE INDEX idx_r_created_to_identity_idx ON o_room (fk_created_by);
 
 ALTER TABLE o_room ADD CONSTRAINT r_deleted_to_identity_idx FOREIGN KEY (fk_deleted_by) REFERENCES o_bs_identity (id);
 CREATE INDEX idx_r_deleted_to_identity_idx ON o_room (fk_deleted_by);
+
+
+-- Announcement
+ALTER TABLE o_announcement ADD CONSTRAINT announcement_created_to_identity_idx FOREIGN KEY (fk_created_by) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_announcement_created_to_identity_idx ON o_announcement (fk_created_by);
+ALTER TABLE o_announcementADD CONSTRAINT FK2F9C439888C31098 FOREIGN KEY (fk_olatresource) REFERENCES o_olatresource (resource_id);
 
 -- Hibernate Unique Key
 INSERT INTO hibernate_unique_key (next_hi) VALUES (0);
