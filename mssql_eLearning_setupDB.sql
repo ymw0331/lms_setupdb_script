@@ -5050,6 +5050,24 @@ CREATE TABLE o_booking (
    PRIMARY KEY (booking_id)
 );
 
+-- Check and create o_announcement table
+IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_announcement' AND xtype='U')
+CREATE TABLE o_announcement (
+   announcement_id BIGINT NOT NULL,
+   version INT NOT NULL,
+   creationdate DATETIME2,
+   lastmodified DATETIME2,
+   fk_created_by BIGINT DEFAULT NULL,
+   fk_olatresource BIGINT UNIQUE,
+   title NVARCHAR(255),
+   content NVARCHAR(255),
+   icon NVARCHAR(255),
+   starttime DATETIME2 NOT NULL,
+   endtime DATETIME2 NOT NULL,
+   status NVARCHAR(16),
+   PRIMARY KEY (announcement_id)
+);
+
 -- Check and create o_room table
 IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_room' AND xtype='U')
 CREATE TABLE o_room (
@@ -5112,23 +5130,6 @@ CREATE TABLE o_agent_hierarchy (
 );
 
 
--- Check and create o_announcement table
-IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='o_announcement' AND xtype='U')
-CREATE TABLE o_announcement (
-   announcement_id BIGINT NOT NULL,
-   version INT NOT NULL,
-   creationdate DATETIME2,
-   lastmodified DATETIME2,
-   fk_created_by BIGINT DEFAULT NULL,
-   fk_olatresource BIGINT UNIQUE,
-   title NVARCHAR(255),
-   content NVARCHAR(255),
-   icon NVARCHAR(255),
-   starttime DATETIME2 NOT NULL,
-   endtime DATETIME2 NOT NULL,
-   status NVARCHAR(16),
-   PRIMARY KEY (announcement_id)
-);
 
 -- Create Views
 -- User View
@@ -6525,6 +6526,11 @@ ALTER TABLE o_gui_prefs ADD CONSTRAINT o_gui_prefs_identity_idx FOREIGN KEY (fk_
 CREATE INDEX idx_o_gui_prefs_attrclass_idx ON o_gui_prefs (g_pref_attributed_class);
 CREATE INDEX idx_o_gui_prefs_key_idx ON o_gui_prefs (g_pref_key);
 
+-- Announcement
+ALTER TABLE o_announcement ADD CONSTRAINT announcement_created_to_identity_idx FOREIGN KEY (fk_created_by) REFERENCES o_bs_identity (id);
+CREATE INDEX idx_announcement_created_to_identity_idx ON o_announcement (fk_created_by);
+ALTER TABLE o_announcement ADD CONSTRAINT FK2F9C439888C31098 FOREIGN KEY (fk_olatresource) REFERENCES o_olatresource (resource_id);
+
 -- Booking
 ALTER TABLE o_booking ADD CONSTRAINT b_created_to_identity_idx FOREIGN KEY (fk_created_by) REFERENCES o_bs_identity (id);
 CREATE INDEX idx_b_created_to_identity_idx ON o_booking (fk_created_by);
@@ -6542,11 +6548,6 @@ CREATE INDEX idx_r_created_to_identity_idx ON o_room (fk_created_by);
 ALTER TABLE o_room ADD CONSTRAINT r_deleted_to_identity_idx FOREIGN KEY (fk_deleted_by) REFERENCES o_bs_identity (id);
 CREATE INDEX idx_r_deleted_to_identity_idx ON o_room (fk_deleted_by);
 
-
--- Announcement
-ALTER TABLE o_announcement ADD CONSTRAINT announcement_created_to_identity_idx FOREIGN KEY (fk_created_by) REFERENCES o_bs_identity (id);
-CREATE INDEX idx_announcement_created_to_identity_idx ON o_announcement (fk_created_by);
-ALTER TABLE o_announcementADD CONSTRAINT FK2F9C439888C31098 FOREIGN KEY (fk_olatresource) REFERENCES o_olatresource (resource_id);
 
 -- Hibernate Unique Key
 INSERT INTO hibernate_unique_key (next_hi) VALUES (0);
