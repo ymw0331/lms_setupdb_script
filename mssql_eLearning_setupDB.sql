@@ -5062,9 +5062,11 @@ CREATE TABLE o_announcement (
    title NVARCHAR(255),
    content NVARCHAR(255),
    icon NVARCHAR(255),
-   starttime DATETIME2 NOT NULL,
-   endtime DATETIME2 NOT NULL,
+   starttime DATETIME2(7) NULL,
+   endtime DATETIME2(7) NULL,
    status NVARCHAR(16),
+   published BIT DEFAULT 0,
+   unpublished BIT DEFAULT 0,
    PRIMARY KEY (announcement_id)
 );
 
