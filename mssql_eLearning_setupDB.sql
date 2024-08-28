@@ -5514,8 +5514,7 @@ CREATE INDEX idx_user_instemail_idx ON o_user (u_institutionalemail);
 CREATE INDEX idx_user_creationdate_idx ON o_user (creationdate);
 
 
-ALTER TABLE o_user
-ADD CONSTRAINT iuni_user_nickname_idx UNIQUE (u_nickname);
+CREATE UNIQUE INDEX idx_unique_nonnull_nickname ON o_user (u_nickname) WHERE u_nickname IS NOT NULL;
 
 ALTER TABLE o_user
 ADD CONSTRAINT user_to_ident_idx FOREIGN KEY (fk_identity) REFERENCES o_bs_identity (id);
